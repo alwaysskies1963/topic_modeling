@@ -1,0 +1,27 @@
+def find_similar_words(input_text, top_n=10):
+    # Process the input text with the spaCy transformer model
+    doc = trf_model(input_text)
+    
+    # Initialize a list to store similar words and phrases
+    similar_words = []
+    
+    # Iterate through tokens in the processed text
+    for token in doc:
+        # Check if the token has vector representation (e.g., excluding stopwords)
+        if token.has_vector:
+            # Calculate the similarity score between the input token and all tokens in the vocabulary
+            similarity_scores = [token.similarity(other_token) for other_token in doc]
+            
+            # Sort tokens by similarity score in descending order
+            sorted_tokens = sorted(enumerate(similarity_scores), key=lambda x: x[1], reverse=True)
+            
+            # Extract the top N similar tokens (excluding the input token itself)
+            similar_tokens = [doc[i[0]].text for i in sorted_tokens if i[0] != token.i][:top_n]
+            
+            # Add the similar tokens to the list
+            similar_words.extend(similar_tokens)
+    
+    # Remove duplicates from the list
+    similar_words = list(set(similar_words))
+    
+    return similar_words
