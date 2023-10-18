@@ -54,3 +54,417 @@ def find_similar(keyword, threshold=0.89):
 # Example usage:
 keyword = "house"
 find_similar(keyword)
+-----------------------------------------------------------------------------------------------
+import torch
+from transformers import BartTokenizer, BartForSequenceClassification, BartForQuestionAnswering
+from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
+from sklearn.model_selection import train_test_split
+import numpy as np
+
+# Define model names and paths
+model_name = "facebook/bart-large-mnli"
+saved_model_path = "./saved_model"  # Replace with your desired model save path
+
+# Load a pre-trained BART model for sequence classification
+tokenizer = BartTokenizer.from_pretrained(model_name)
+classification_model = BartForSequenceClassification.from_pretrained(model_name, num_labels=num_categories)
+
+# Sample data
+texts = ["Sample text 1", "Sample text 2", "Sample text 3"]  # Replace with your text data
+labels = [[1, 0, 1], [0, 1, 0], [1, 1, 0]]  # Replace with your labels, using 1 for positive classes and 0 for others
+
+# Tokenize and format your annotated data for classification
+def tokenize_and_format_data(texts, labels):
+    input_ids = []
+    attention_masks = []
+    encoded_labels = []
+
+    for text, label in zip(texts, labels):
+        encoding = tokenizer(text, truncation=True, padding=True, return_tensors="pt")
+        input_ids.append(encoding.input_ids)
+        attention_masks.append(encoding.attention_mask)
+        encoded_labels.append(label)
+
+    input_ids = torch.cat(input_ids, dim=0)
+    attention_masks = torch.cat(attention_masks, dim=0)
+    encoded_labels = torch.tensor(encoded_labels)
+
+    return input_ids, attention_masks, encoded_labels
+
+input_ids, attention_masks, labels = tokenize_and_format_data(texts, labels)
+
+# Split data into training and validation sets
+train_inputs, val_inputs, train_masks, val_masks, train_labels, val_labels = train_test_split(
+    input_ids, attention_masks, labels, test_size=0.2, random_state=42
+)
+
+# Create data loaders
+batch_size = 32  # Adjust as needed
+train_data = TensorDataset(train_inputs, train_masks, train_labels)
+train_sampler = RandomSampler(train_data)
+train_dataloader = DataLoader(train_data, sampler=train_sampler, batch_size=batch_size)
+
+val_data = TensorDataset(val_inputs, val_masks, val_labels)
+val_sampler = SequentialSampler(val_data)
+val_dataloader = DataLoader(val_data, sampler=val_sampler, batch_size=batch_size)
+
+# Fine-tune the classification model
+# You can use the code from previous responses for fine-tuning
+
+# Save the fine-tuned classification model
+classification_model.save_pretrained(saved_model_path)
+tokenizer.save_pretrained(saved_model_path)
+
+# Step 2: Question Answering
+
+# Load the fine-tuned classification model
+qa_model = BartForQuestionAnswering.from_pretrained(saved_model_path)
+
+def find_keywords_and_phrases(texts, class_names):
+    keyword_ranges = []
+
+    for text, class_name in zip(texts, class_names):
+        # Construct an auxiliary question
+        question = f"Which part of the text relates to {class_name}?"
+
+        # Tokenize the text and question
+        inputs = tokenizer.encode(question, text, return_tensors="pt", max_length=256, truncation=True)
+
+        # Use the QA model to predict the answer (i.e., keywords or phrases)
+        with torch.no_grad():
+            outputs = qa_model(input_ids=inputs.input_ids, attention_mask=inputs.attention_mask)
+
+        # Extract the predicted answer
+        start_index = torch.argmax(outputs.start_logits, dim=1).item()
+        end_index = torch.argmax(outputs.end_logits, dim=1).item()
+
+        # Get the corresponding text span
+        keyword_span = text[inputs.input_ids[0][start_index:end_index + 1]]
+
+        keyword_ranges.append((class_name, keyword_span))
+
+    return keyword_ranges
+
+# Use the combined model for question answering
+classification_model.eval()
+keyword_ranges = find_keywords_and_phrases(texts, class_names)
+
+# Print the results
+for class_name, keyword_span in keyword_ranges:
+    print(f"Class: {class_name}")
+    print(f"Keywords/Phrases: {keyword_span}")
+    print("\n")
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+import torch
+from transformers import BertTokenizer, BertForSequenceClassification, BartTokenizer, BartForQuestionAnswering
+from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
+from sklearn.model_selection import train_test_split
+
+# Define model names and paths
+classification_model_name = "bert-base-uncased"  # Replace with your classification model name
+qa_model_name = "facebook/bart-large-cnn"  # Replace with your QA model name
+saved_model_path = "./saved_model"  # Replace with your desired model save path
+
+# Load a pre-trained BERT model for sequence classification
+classification_tokenizer = BertTokenizer.from_pretrained(classification_model_name)
+classification_model = BertForSequenceClassification.from_pretrained(classification_model_name, num_labels=num_categories)
+
+# Load a pre-trained BART model for question answering
+qa_tokenizer = BartTokenizer.from_pretrained(qa_model_name)
+qa_model = BartForQuestionAnswering.from_pretrained(qa_model_name)
+
+# Sample data
+texts = ["Sample text 1", "Sample text 2", "Sample text 3"]  # Replace with your text data
+class_names = ["Class 1", "Class 2", "Class 3"]  # Replace with your class names
+
+# Step 1: Classification
+
+# Tokenize and format your annotated data
+def tokenize_and_format_data(texts, labels):
+    input_ids = []
+    attention_masks = []
+    encoded_labels = []
+
+    for text, label in zip(texts, labels):
+        encoding = classification_tokenizer(text, truncation=True, padding=True, return_tensors="pt")
+        input_ids.append(encoding.input_ids)
+        attention_masks.append(encoding.attention_mask)
+        encoded_labels.append(label)
+
+    input_ids = torch.cat(input_ids, dim=0)
+    attention_masks = torch.cat(attention_masks, dim=0)
+    encoded_labels = torch.tensor(encoded_labels)
+
+    return input_ids, attention_masks, encoded_labels
+
+input_ids, attention_masks, labels = tokenize_and_format_data(texts, class_names)
+
+# Split data into training and validation sets
+train_inputs, val_inputs, train_masks, val_masks, train_labels, val_labels = train_test_split(
+    input_ids, attention_masks, labels, test_size=0.2, random_state=42
+)
+
+# Create data loaders
+batch_size = 32  # Adjust as needed
+train_data = TensorDataset(train_inputs, train_masks, train_labels)
+train_sampler = RandomSampler(train_data)
+train_dataloader = DataLoader(train_data, sampler=train_sampler, batch_size=batch_size)
+
+val_data = TensorDataset(val_inputs, val_masks, val_labels)
+val_sampler = SequentialSampler(val_data)
+val_dataloader = DataLoader(val_data, sampler=val_sampler, batch_size=batch_size)
+
+# Fine-tune the classification model (use the code from previous responses)
+
+# Step 2: Question Answering
+
+def find_keywords_and_phrases(texts, class_names):
+    keyword_ranges = []
+
+    for text, class_name in zip(texts, class_names):
+        # Tokenize the text and class name
+        inputs = qa_tokenizer(class_name, text, return_tensors="pt")
+
+        # Use the QA model to predict the answer (i.e., keywords or phrases)
+        with torch.no_grad():
+            outputs = qa_model(**inputs)
+
+        # Extract the start and end positions of the answer
+        start_index = torch.argmax(outputs.start_logits, dim=1).item()
+        end_index = torch.argmax(outputs.end_logits, dim=1).item()
+
+        # Get the corresponding text span
+        keyword_span = text[inputs.input_ids[0][start_index:end_index + 1]]
+
+        keyword_ranges.append((class_name, keyword_span))
+
+    return keyword_ranges
+
+# Use the combined model
+for epoch in range(num_epochs):  # You can define num_epochs as needed
+    classification_model.train()
+    total_loss = 0
+
+    for batch in train_dataloader:
+        inputs, masks, labels = batch
+        outputs = classification_model(inputs, attention_mask=masks, labels=labels)
+        loss = outputs.loss
+
+        loss.backward()
+        total_loss += loss.item()
+
+        torch.nn.utils.clip_grad_norm_(classification_model.parameters(), max_grad_norm)
+
+        optimizer.step()
+        scheduler.step()
+        optimizer.zero_grad()
+
+    # Calculate average training loss for this epoch
+    avg_train_loss = total_loss / len(train_dataloader)
+
+    # Validation
+    classification_model.eval()
+    val_loss = 0
+
+    for batch in val_dataloader:
+        inputs, masks, labels = batch
+        with torch.no_grad():
+            outputs = classification_model(inputs, attention_mask=masks, labels=labels)
+            val_loss += outputs.loss.item()
+
+    # Calculate average validation loss for this epoch
+    avg_val_loss = val_loss / len(val_dataloader)
+
+    # Print training and validation loss for this epoch
+    print(f'Epoch {epoch + 1}/{num_epochs}, Train Loss: {avg_train_loss:.4f}, Validation Loss: {avg_val_loss:.4f}')
+
+    # Step 2: Question Answering
+    keyword_ranges = find_keywords_and_phrases(texts, class_names)
+
+    # Print the results
+    for class_name, keyword_span in keyword_ranges:
+        print(f"Class: {class_name}")
+        print(f"Keywords/Phrases: {keyword_span}")
+        print("\n")
+
+# Save the combined model
+classification_model.save_pretrained(saved_model_path)
+qa_model.save_pretrained(saved_model_path)
+classification_tokenizer.save_pretrained(saved_model_path)
+qa_tokenizer.save_pretrained(saved_model_path)
+
+---------------------------------------------------------------------------------------------
+from transformers import BartForSequenceClassification, BartTokenizer
+
+model_name = "facebook/bart-large-mnli"
+tokenizer = BartTokenizer.from_pretrained(model_name)
+model = BartForSequenceClassification.from_pretrained(model_name, num_labels=num_categories)
+def tokenize_and_format_data(texts, labels):
+    formatted_data = []
+
+    for text, label in zip(texts, labels):
+        inputs = tokenizer.encode("classification: " + text, truncation=True, padding=True, return_tensors="pt")
+        formatted_data.append((inputs, label))
+
+    return formatted_data
+
+formatted_data = tokenize_and_format_data(texts, labels)
+from torch.utils.data import DataLoader, RandomSampler, SequentialSampler, TensorDataset
+
+train_data, val_data = train_test_split(formatted_data, test_size=0.2, random_state=42)
+
+train_inputs = torch.stack([item[0] for item in train_data])
+train_labels = torch.tensor([item[1] for item in train_data])
+
+val_inputs = torch.stack([item[0] for item in val_data])
+val_labels = torch.tensor([item[1] for item in val_data])
+
+train_dataset = TensorDataset(train_inputs, train_labels)
+train_sampler = RandomSampler(train_dataset)
+train_dataloader = DataLoader(train_dataset, sampler=train_sampler, batch_size=batch_size)
+
+val_dataset = TensorDataset(val_inputs, val_labels)
+val_sampler = SequentialSampler(val_dataset)
+val_dataloader = DataLoader(val_dataset, sampler=val_sampler, batch_size=batch_size)
+
+
+from transformers import AdamW, get_linear_schedule_with_warmup
+
+# Define optimizer and learning rate scheduler
+optimizer = AdamW(model.parameters(), lr=learning_rate, eps=epsilon)
+scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=num_warmup_steps, num_training_steps=num_training_steps)
+
+# Training loop
+for epoch in range(num_epochs):
+    model.train()
+    total_loss = 0
+
+    for batch in train_dataloader:
+        inputs, labels = batch
+        outputs = model(inputs, labels=labels)
+        loss = outputs.loss
+
+        loss.backward()
+        total_loss += loss.item()
+
+        torch.nn.utils.clip_grad_norm_(model.parameters(), max_grad_norm)
+
+        optimizer.step()
+        scheduler.step()
+        optimizer.zero_grad()
+
+    # Calculate average training loss for this epoch
+    avg_train_loss = total_loss / len(train_dataloader)
+
+    # Validation
+    model.eval()
+    val_loss = 0
+
+    for batch in val_dataloader:
+        inputs, labels = batch
+        with torch.no_grad():
+            outputs = model(inputs, labels=labels)
+            val_loss += outputs.loss.item()
+
+    # Calculate average validation loss for this epoch
+    avg_val_loss = val_loss / len(val_dataloader)
+
+    # Print training and validation loss for this epoch
+    print(f'Epoch {epoch + 1}/{num_epochs}, Train Loss: {avg_train_loss:.4f}, Validation Loss: {avg_val_loss:.4f}')
+
+
+model.save_pretrained(saved_model_path)
+tokenizer.save_pretrained(saved_model_path)
+
+=============================================================================================
+
+from transformers import BertTokenizer, BertForSequenceClassification
+
+# Load the pre-trained model and tokenizer
+model_name = "bert-base-uncased"
+tokenizer = BertTokenizer.from_pretrained(model_name)
+model = BertForSequenceClassification.from_pretrained(model_name, num_labels=num_categories)
+# Tokenize and format your data
+def tokenize_and_format_data(texts, labels):
+    input_ids = []
+    attention_masks = []
+    encoded_labels = []
+
+    for text, label in zip(texts, labels):
+        encoding = tokenizer(text, truncation=True, padding=True, return_tensors="pt")
+        input_ids.append(encoding.input_ids)
+        attention_masks.append(encoding.attention_mask)
+        encoded_labels.append(label)
+
+    input_ids = torch.cat(input_ids, dim=0)
+    attention_masks = torch.cat(attention_masks, dim=0)
+    encoded_labels = torch.tensor(encoded_labels)
+
+    return input_ids, attention_masks, encoded_labels
+
+input_ids, attention_masks, labels = tokenize_and_format_data(texts, labels)
+from sklearn.model_selection import train_test_split
+
+train_inputs, val_inputs, train_masks, val_masks, train_labels, val_labels = train_test_split(
+    input_ids, attention_masks, labels, test_size=0.2, random_state=42
+)
+from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
+
+train_data = TensorDataset(train_inputs, train_masks, train_labels)
+train_sampler = RandomSampler(train_data)
+train_dataloader = DataLoader(train_data, sampler=train_sampler, batch_size=batch_size)
+
+val_data = TensorDataset(val_inputs, val_masks, val_labels)
+val_sampler = SequentialSampler(val_data)
+val_dataloader = DataLoader(val_data, sampler=val_sampler, batch_size=batch_size)
+from transformers import AdamW, get_linear_schedule_with_warmup
+
+# Define optimizer and learning rate scheduler
+optimizer = AdamW(model.parameters(), lr=learning_rate, eps=epsilon)
+scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=num_warmup_steps, num_training_steps=num_training_steps)
+
+# Training loop
+for epoch in range(num_epochs):
+    model.train()
+    total_loss = 0
+    
+    for batch in train_dataloader:
+        # Forward pass
+        inputs, masks, labels = batch
+        outputs = model(inputs, attention_mask=masks, labels=labels)
+        loss = outputs.loss
+        
+        # Backward pass
+        loss.backward()
+        total_loss += loss.item()
+        
+        # Gradient clipping if needed
+        torch.nn.utils.clip_grad_norm_(model.parameters(), max_grad_norm)
+        
+        # Update parameters
+        optimizer.step()
+        scheduler.step()
+        optimizer.zero_grad()
+
+    # Calculate average training loss for this epoch
+    avg_train_loss = total_loss / len(train_dataloader)
+
+    # Validation
+    model.eval()
+    val_loss = 0
+
+    for batch in val_dataloader:
+        inputs, masks, labels = batch
+        with torch.no_grad():
+            outputs = model(inputs, attention_mask=masks, labels=labels)
+            val_loss += outputs.loss.item()
+
+    # Calculate average validation loss for this epoch
+    avg_val_loss = val_loss / len(val_dataloader)
+
+    # Print training and validation loss for this epoch
+    print(f'Epoch {epoch + 1}/{num_epochs}, Train Loss: {avg_train_loss:.4f}, Validation Loss: {avg_val_loss:.4f}')
+model.save_pretrained(saved_model_path)
+tokenizer.save_pretrained(saved_model_path)
+
