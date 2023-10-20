@@ -54,6 +54,272 @@ def find_similar(keyword, threshold=0.89):
 # Example usage:
 keyword = "house"
 find_similar(keyword)
+
+
+
+=-=-=-=-=------===================----------------------------===========================---------------
+# in mortgage industry, we have appraisal to a house or recommendation memos for multi-family.
+# sometimes the agents writing these appraisals or rec memos, or lender narratives, or sponsor narratives use some language that are prohibited, 
+# for example they should not describe the desirability of neighborhood, or any subjective high-level categories such as race, gender, religion, familial status, age, income, disability, neighborhood description related to applicant, neighborhood,
+# like that makes it biased and adds subjectivity on report regarding the above mentioned high-level categories. 
+# for removing these prohibited terms related to above high-level categories, 
+# we need to parse the appraisal report into sentence and them classified each sentence into one of above multi_categories or none of them if the sentence does not contain none of them. 
+# for example following phrases such as good neighborhood, Muslim community , potential district, immigrant community, Chinese neighborhood, black street, good school, kids neighborhood, standards neighborhood, poor subdivision, gentrified neighborhood, fast growing district, gay applicant, young owner , ancient landlord, single loan applicant, 24 years old owner, ... 
+# that are implicitly has some meaning related to description of neighborhood, applicant, owner,  ... . 
+
+multi_categories = ['race / ethnicity / national origin / color skin / ... descriptors',
+'religion',
+'gender identity / sexual orientation / sex / ... descriptors',
+'familial status / marital status / familial descriptors',
+'neighborhood / community / district / block / subdivision / town / zone / urban / rural / suburban / village / tenants / families / enclave / pockets / ... descriptors',
+'age demographics / age descriptors',
+'income descriptors and financial status',
+'disability descriptors',
+'None of above']
+
+binary_category = ['baised', 'not_baised']
+
+# for each sentence in the report, we need to classify it into one of above categories or none of them.
+# for example:
+# sentence = 'the neighborhood is good'
+# category = 'neighborhood / community / district / block / subdivision / town / zone / urban / rural / suburban / village / tenants / families / enclave / pockets / ... descriptors'
+
+# load the a dataframe contains columns such as document name, text, and their categories and binary category from a csv file
+import pandas as pd
+import torch
+import re
+import spacy
+import torch.nn as nn
+from transformers import AutoTokenizer, AutoModel
+from sentence_transformers import SentenceTransformer
+from torch.utils.data import DataLoader
+import torch
+import torch.optim as optim
+
+df = pd.read_csv('MF_prohibited.csv')
+df.head()
+
+# we need to clean the text column by removing white space and replace them with space, remove urls, non-ascii characters. 
+# we need to convert entities in the text into date_, loc_, org_, person_, time_, money_, percent_, gpe_ , etc. 
+# write the function with regex for above rules and apply them on text column.
+def text_processing():
+    # remove white space
+    text = re.sub(r'\s+', ' ', text)
+    # remove urls
+    text = re.sub(r"http\S+", "", text)
+    # remove non-ascii characters
+    text = ''.join([i if ord(i) < 128 else ' ' for i in text])
+    # convert entities into date_, loc_, org_, person_, time_, money_, percent_, gpe_ , etc.
+    doc = nlp(text)
+    for ent in doc.ents:
+        text = text.replace(ent.text, ent.label_)
+    # ...
+    return text
+
+df.text.apply(lambda x: text_processing(x))
+
+# load the following huggingface transformers and sentence transformers models for embedding the text into vectors 
+# bert-base-uncased, bart-large-mnli, sentence transformers all-MiniLM-L6-V2
+
+model_name1 = 'bert-base-uncased'
+model_name2 = 'bart-large-mnli'
+model_name3 = 'setence-transformers/all-MiniLM-L6-V2'
+tokenizer1 = AutoTokenizer.from_pretrained(model_name1)
+tokenizer2 = AutoTokenizer.from_pretrained(model_name2)
+tokenizer3 = AutoTokenizer.from_pretrained(model_name3)
+model1 = AutoModel.from_pretrained(model_name1)
+model2 = AutoModel.from_pretrained(model_name2)
+model3 = AutoModel.from_pretrained(model_name3)
+
+# convert the text into sentences, and then use the above models to embed the sentences into vectors
+# load the following models for classification
+# bert-base-uncased, bart-large-mnli, sentence transformers all-MiniLM-L6-V2
+# and then fine-tune them on the above data
+
+def convert_text_into_sentences(text):
+    # convert the text into sentences
+    # use sentence transformers to parse the text into sentences
+    # use spacy en-web-core-trf model to parse the text into sentences
+    nlp = spacy.load("en_core_web_trf")
+    doc = nlp(text)
+    sentences = [sent.text for sent in doc.sents]
+
+    return sentences
+
+# use input_attention_mask and model output to average and max pooling the outputs with tensor size of 128
+# write a max_pooling and average_pooling function, the input is model_output and input_attention_mask
+def pooling(input_attention_mask, model_output):
+    # use input_attention_mask to mask the model_output
+    # use max pooling and average pooling to convert the model_output into a single vector representation for the entire sequence (sentence)
+    input_attention_mask = input_attention_mask.unsqueeze(-1).expand(model_output.size()).float()
+    model_output = model_output * input_attention_mask
+    max_pooling = torch.max(model_output, 1)[0]
+    average_pooling = torch.mean(model_output, 1)
+    # concate both max pooling and average pooling
+    pooling = torch.cat((max_pooling, average_pooling), 1)
+    return pooling
+
+def pool_embeddings(embeddings, attention_mask):
+    # Max pooling
+    max_pooled = torch.max(embeddings, dim=1)[0]
+
+    # Average pooling using attention mask
+    sum_embeddings = torch.sum(embeddings * attention_mask.unsqueeze(-1), dim=1)
+    avg_pooled = sum_embeddings / attention_mask.sum(dim=1, keepdim=True)
+
+    # Concatenate pooled features
+    combined = torch.cat([max_pooled, avg_pooled], dim=1)
+
+    return combined
+
+# data object for training the model use def convert_text_into_sentences(text) function
+#Pooling strategies are often employed to convert token-level embeddings into a single vector representation for the entire sequence (sentence). Here, we'll use a combination of average and max pooling, taking into account the attention mask to ensure we don't pool over padding tokens.
+# use attention mask to ensure we don't pool over padding tokens
+class Data(torch.utils.data.Dataset):
+
+    
+    def __init__(self, df, tokenizer1, tokenizer2, tokenizer3, model1, model2, model3):
+        self.text = df.text.values
+        self.sentences = []
+        for text in self.text:
+            sentences = convert_text_into_sentences(text)
+            self.sentences.append(sentences)
+        self.categories = df.categories.values
+        self.binary_category = df.binary_category.values
+        self.tokenizer1 = tokenizer1
+        self.tokenizer2 = tokenizer2
+        self.tokenizer3 = tokenizer3
+        self.model1 = model1
+        self.model2 = model2
+        self.model3 = model3
+
+    def __len__(self):
+        return len(self.text)
+
+    def __getitem__(self, idx):
+        text = self.text[idx]
+        sentences = self.sentences[idx]
+        categories = self.categories[idx]
+        binary_category = self.binary_category[idx]
+
+        # embed the sentences into vectors
+        embeddings_sentences1 = []
+        embeddings_sentences2a = []
+        embeddings_sentences2b = []
+        embeddings_sentences3 = []
+        embeddings_stack = []
+        for sentence in sentences:
+            # use max-length of sentence to pad the sentence, padding =True, truncation=True, max_length=512            
+            input_ids1 = self.tokenizer1(sentence, padding=True, truncation=True, max_length=512, return_tensors="pt")
+            input_ids2 = self.tokenizer2(sentence, padding=True, truncation=True, max_length=512, return_tensors="pt")
+            input_ids3 = self.tokenizer3(sentence, padding=True, truncation=True, max_length=512, return_tensors="pt")
+            with torch.no_grad():
+                model_output1 = self.model1(**input_ids1)['last_hidden_state']
+                model_output2a = self.model2(**input_ids2)['last_hidden_state']
+                model_output2b = self.model2(**input_ids2)['encoder_last_hidden_state']
+                model_output3 = self.model3(**input_ids3)['last_hidden_state']
+                        
+            # use max pooling and average pooling and convert 
+            embeddings_sentences1.append(pooling(input_ids1['attention_mask'], model_output1))
+            embeddings_sentences2a.append(pooling(input_ids2['attention_mask'], model_output2a))
+            embeddings_sentences2b.append(pooling(input_ids2['attention_mask'], model_output2b))
+            embeddings_sentences3.append(pooling(input_ids3['attention_mask'], model_output3))
+            stack = torch.stack((embeddings_sentences1, embeddings_sentences2a, embeddings_sentences2b, embeddings_sentences3), dim=1)
+            embeddings_stack.appedn(torch.mean(stack, dim=1))
+                        
+        return text, sentences, categories, binary_category, embeddings_stack
+
+# Step 3: Multi-Task Deep Neural Network
+# The architecture of the neural network would be:
+
+# An input layer that accepts the concatenated embeddings from the three models.
+# A few dense layers for feature extraction.
+# Three branches:
+# a. Multi-label classification for the high-level categories.
+# b. Binary classification for biased/non-biased sentences.
+# c. Question-answering task to identify the biased section of the sentence (this is more complex and may require additional considerations).
+class MultiTaskModel(nn.Module):
+    def __init__(self, embedding_size, num_categories):
+        super(MultiTaskModel, self).__init__()
+
+        self.feature_extractor = nn.Sequential(
+            nn.Linear(embedding_size, 512),
+            nn.ReLU(),
+            nn.Dropout(0.5),
+            nn.Linear(512, 256),
+            nn.ReLU(),
+            nn.Dropout(0.5)
+        )
+
+        # Multi-label classification branch
+        self.multi_label_classifier = nn.Linear(256, num_categories)
+
+        # Binary classification branch
+        self.binary_classifier = nn.Linear(256, 1)
+
+        # For QA task, a more sophisticated mechanism is needed. 
+        # For the sake of this explanation, I'm using a placeholder.
+        self.qa_task = nn.Linear(256, 2)
+
+    def forward(self, x):
+        x = self.feature_extractor(x)
+
+        multi_label_output = self.multi_label_classifier(x)
+        binary_output = self.binary_classifier(x)
+        qa_output = self.qa_task(x)
+
+        return multi_label_output, binary_output, qa_output
+    
+# Data Preparation
+# Assuming you have a PyTorch dataset, you can use the DataLoader for batching
+# Instantiate the dataset and dataloader
+dataset = AppraisalDataset(your_dataframe, 'text_column_name', 'label_column_name')
+dataloader = DataLoader(dataset, batch_size=32, shuffle=True)
+# Training Loop
+# Instantiate the model
+model = MultiTaskModel(embedding_size=768*3, num_categories=number_of_high_level_categories)  # Assuming 768 dims for each model's embeddings
+optimizer = optim.Adam(model.parameters(), lr=0.001)
+criterion_multi_label = nn.BCEWithLogitsLoss()  # BCEWithLogitsLoss is typically used for multi-label tasks
+criterion_binary = nn.BCEWithLogitsLoss()
+
+num_epochs = 5
+for epoch in range(num_epochs):
+    for batch in dataloader:
+        optimizer.zero_grad()
+
+        # Extract embeddings
+        embeddings = get_embeddings(batch['text'])
+        
+        # Forward pass
+        multi_label_output, binary_output, _ = model(embeddings)
+
+        # Compute loss
+        loss_multi_label = criterion_multi_label(multi_label_output, batch['multi_label_targets'])
+        loss_binary = criterion_binary(binary_output, batch['binary_targets'])
+        
+        # Combine the two losses
+        combined_loss = loss_multi_label + loss_binary
+        combined_loss.backward()
+        
+        optimizer.step()
+# Note: This is a high-level outline. The actual implementation would require handling various details, such as:
+# Moving data and the model to the GPU (if available).
+# Tracking and logging metrics.
+# Implementing validation and early stopping.
+# Adjusting hyperparameters.
+# For inference:
+def infer(sentence):
+    model.eval()
+    with torch.no_grad():
+        embeddings = get_embeddings(sentence)
+        multi_label_pred, binary_pred, qa_pred = model(embeddings)
+    
+    # Convert predictions to desired format
+    # ...
+
+    return multi_label_pred, binary_pred, qa_pred
+
+
 -----------------------------------------------------------------------------------------------
 import torch
 from transformers import BartTokenizer, BartForSequenceClassification, BartForQuestionAnswering
