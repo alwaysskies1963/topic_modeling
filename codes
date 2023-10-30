@@ -127,6 +127,25 @@ model.compile(optimizer='adam',
 model.summary()
 
 
+def compute_fbeta(y_true, y_pred, beta=0.5):
+    # Convert tensors to binary class matrices
+    y_true_class = tf.argmax(y_true, axis=-1)
+    y_pred_class = tf.argmax(y_pred, axis=-1)
+
+    # Compute TP, FP, FN
+    TP = tf.math.count_nonzero(y_pred_class * y_true_class, axis=0)
+    FP = tf.math.count_nonzero(y_pred_class * (y_true_class - 1), axis=0)
+    FN = tf.math.count_nonzero((y_pred_class - 1) * y_true_class, axis=0)
+
+    # Compute Precision and Recall
+    precision = TP / (TP + FP + tf.keras.backend.epsilon())
+    recall = TP / (TP + FN + tf.keras.backend.epsilon())
+
+    # Compute F-beta
+    fbeta = (1 + beta**2) * (precision * recall) / (beta**2 * precision + recall + tf.keras.backend.epsilon())
+
+    # Return the mean F-beta score for the batch
+    return tf.reduce_mean(fbeta)
 
 
 
