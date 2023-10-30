@@ -56,6 +56,76 @@ keyword = "house"
 find_similar(keyword)
 
 
+-------------------------------------------------------------
+import tensorflow as tf
+from transformers import BertTokenizer, TFBertModel
+
+# Constants
+MAX_LEN = 512
+EMBEDDING_DIM = 8000
+NUM_ASPECTS = 9
+DROPOUT_RATE = 0.5
+
+# Custom attention layer
+class AttentionLayer(tf.keras.layers.Layer):
+    def __init__(self, **kwargs):
+        super(AttentionLayer, self).__init__(**kwargs)
+
+    def build(self, input_shape):
+        self.W = self.add_weight(name="att_weight", shape=(input_shape[-1], 1),
+                                 initializer="normal")
+        self.b = self.add_weight(name="att_bias", shape=(input_shape[1], 1),
+                                 initializer="zeros")
+        super(AttentionLayer, self).build(input_shape)
+
+    def call(self, x):
+        e = tf.keras.backend.tanh(tf.keras.backend.dot(x, self.W) + self.b)
+        a = tf.keras.backend.softmax(e, axis=1)
+        output = x * a
+        return tf.keras.backend.sum(output, axis=1)
+
+    def compute_output_shape(self, input_shape):
+        return (input_shape[0], input_shape[-1])
+
+# Tokenizer
+tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+
+# Input Layer
+input_text = tf.keras.layers.Input(shape=(MAX_LEN,), dtype=tf.int32, name="input_text")
+
+# BERT for contextual embeddings
+bert_model = TFBertModel.from_pretrained('bert-base-uncased')
+bert_output = bert_model(input_text)[0]
+
+# Attention layer
+attention_output = AttentionLayer()(bert_output)
+
+# Dropout layer after attention
+attention_output = tf.keras.layers.Dropout(DROPOUT_RATE)(attention_output)
+
+# Custom layer to concatenate attention outputs to desired dimension
+concat_layer = tf.keras.layers.Dense(EMBEDDING_DIM, activation='relu')(attention_output)
+concat_layer = tf.keras.layers.Dropout(DROPOUT_RATE)(concat_layer)
+
+# ... [Rest of the model remains the same]
+
+# Print model summary
+model.summary()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 =-=-=-=-=------===================----------------------------===========================---------------
 # in mortgage industry, we have appraisal to a house or recommendation memos for multi-family.
