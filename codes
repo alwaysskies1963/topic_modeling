@@ -114,7 +114,17 @@ model.summary()
 
 
 
+-=--=========================
+# Compile the model with F1-Score as a metric
+f1_score = tfa.metrics.F1Score(num_classes=3, average='macro')  # For multi-class tasks
+binary_f1_score = tfa.metrics.F1Score(num_classes=1, threshold=0.5)  # For binary tasks
 
+model.compile(optimizer='adam', 
+              loss=['categorical_crossentropy'] * NUM_ASPECTS + ['binary_crossentropy'] + ['categorical_crossentropy'] * NUM_ASPECTS,
+              metrics=[f1_score] * NUM_ASPECTS + [binary_f1_score] + [f1_score] * NUM_ASPECTS)
+
+# Print model summary
+model.summary()
 
 
 
