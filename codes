@@ -182,6 +182,32 @@ def compute_fbeta(y_true, y_pred, beta=0.5):
 
 
 
+=--------------------9076875643576243567890-=
+zeroshot bart 
+import torch
+from transformers import pipeline
+from multiprocessing import Pool
+
+# Ensure you have a GPU for faster inference (optional but recommended)
+device = 0 if torch.cuda.is_available() else -1
+
+# Create the zero-shot classification pipeline
+classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli", device=device)
+
+def classify(text):
+    # Define the possible labels for classification
+    candidate_labels = ["label1", "label2", "label3"]  # Replace with your labels
+    result = classifier(text, candidate_labels)
+    return result["labels"][0]  # Return the top label
+
+if __name__ == "__main__":
+    texts = ["Your list of texts to classify..."]  # Replace with your list of texts
+
+    # Use multiprocessing to classify texts in parallel
+    with Pool(processes=4) as pool:  # Adjust the number of processes as needed
+        results = pool.map(classify, texts)
+
+    print(results)
 
 
 
