@@ -52,6 +52,38 @@ metrics_C = compute_metrics(9, 0, 24, 158)
 print("Metrics for Model C:")
 for metric, value in metrics_C.items():
     print(f"{metric}: {value:.4f}")
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Get input values
+TP = int(input("Enter the number of True Positives (TP): "))
+TN = int(input("Enter the number of True Negatives (TN): "))
+FP = int(input("Enter the number of False Positives (FP): "))
+FN = int(input("Enter the number of False Negatives (FN): "))
+
+# Calculate metrics
+accuracy = (TP + TN) / (TP + TN + FP + FN)
+recall = TP / (TP + FN) if TP + FN != 0 else 0
+precision = TP / (TP + FP) if TP + FP != 0 else 0
+f1_score = 2 * (precision * recall) / (precision + recall) if precision + recall != 0 else 0
+total_instances = TP + TN + FP + FN
+
+# Visualize the confusion matrix
+confusion_matrix = np.array([[TP, FP], [FN, TN]])
+ax = sns.heatmap(confusion_matrix, annot=True, fmt='g', cmap='Blues', cbar=False)
+ax.set_xlabel('Predicted labels')
+ax.set_ylabel('True labels')
+ax.xaxis.set_ticklabels(['Positive', 'Negative'])
+ax.yaxis.set_ticklabels(['Positive', 'Negative'])
+plt.show()
+
+# Display metrics
+print(f"\n\n{'Accuracy:':<15} {accuracy:.4f}")
+print(f"{'Recall:':<15} {recall:.4f}")
+print(f"{'Precision:':<15} {precision:.4f}")
+print(f"{'F1-score:':<15} {f1_score:.4f}")
+print(f"{'Total instances:':<15} {total_instances}")
 
 -------------------------------======================================5555555555555555555555555555
 
