@@ -26,7 +26,34 @@ def find_similar_words(input_text, top_n=10):
     
     return similar_words
 
+-=-===================================----------------55555555555555555555555555555555555555555
+def compute_metrics(TP, FN, FP, TN):
+    accuracy = (TP + TN) / (TP + TN + FP + FN)
+    precision = TP / (TP + FP) if TP + FP != 0 else 0
+    recall = TP / (TP + FN) if TP + FN != 0 else 0
+    f1_score = 2 * (precision * recall) / (precision + recall) if precision + recall != 0 else 0
+    balanced_accuracy = 0.5 * ((TP / (TP + FN) if TP + FN != 0 else 0) + (TN / (TN + FP) if TN + FP != 0 else 0))
+    mcc_denom = ((TP + FP) * (TP + FN) * (TN + FP) * (TN + FN)) ** 0.5
+    mcc = (TP * TN - FP * FN) / mcc_denom if mcc_denom != 0 else 0
+    fbeta = (1 + 2**2) * (precision * recall) / ((2**2 * precision) + recall) if precision + recall != 0 else 0
+    
+    return {
+        "Accuracy": accuracy,
+        "Precision": precision,
+        "Recall": recall,
+        "F1 Score": f1_score,
+        "Balanced Accuracy": balanced_accuracy,
+        "MCC": mcc,
+        "F-beta (beta=2)": fbeta
+    }
 
+metrics_C = compute_metrics(9, 0, 24, 158)
+
+print("Metrics for Model C:")
+for metric, value in metrics_C.items():
+    print(f"{metric}: {value:.4f}")
+
+-------------------------------======================================5555555555555555555555555555
 
 import spacy
 
