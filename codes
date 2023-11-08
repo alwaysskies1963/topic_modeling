@@ -85,6 +85,44 @@ print(f"{'Precision:':<15} {precision:.4f}")
 print(f"{'F1-score:':<15} {f1_score:.4f}")
 print(f"{'Total instances:':<15} {total_instances}")
 
+-===================================44444444444444444444444444444444444444444444444444444444444
+import pandas as pd
+
+# Define the function to read an .xlsm file and read all text-related data from all sheet tabs ignoring null, non-textual, and numeric values.
+def read_xlsm_text_advanced(file_path):
+    # Load the Excel file
+    xl = pd.ExcelFile(file_path)
+
+    # Create an empty list to store text data
+    text_data = []
+
+    # Define a function to check if a cell contains text data (ignoring purely numeric and mixed alphanumeric strings)
+    def is_text(cell):
+        if isinstance(cell, str):
+            # Check if all characters in the string are alphabetic or whitespace
+            return all(char.isalpha() or char.isspace() for char in cell)
+        return False
+
+    # Iterate through each sheet in the workbook
+    for sheet in xl.sheet_names:
+        # Read the sheet into a pandas DataFrame
+        df = xl.parse(sheet)
+
+        # Iterate through the DataFrame to extract text values
+        for column in df.columns:
+            for item in df[column]:
+                # Check if the item is text-related data
+                if pd.notnull(item) and is_text(item):
+                    # Add the text to the list, stripping leading/trailing whitespace
+                    text_data.append(item.strip())
+
+    # Return the list of text data
+    return text_data
+
+# Example usage:
+# text_from_xlsm = read_xlsm_text_advanced('path_to_file.xlsm')
+# This is commented out to prevent an error since there is no file to read in this environment.
+
 -------------------------------======================================5555555555555555555555555555
 
 import spacy
