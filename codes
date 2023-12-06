@@ -90,6 +90,124 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
+# Load and prepare the multi-class dataset
+data_multiclass = pd.read_csv('your_multiclass_data.csv')  # Adjust the file path
+X_multi = data_multiclass.drop('label', axis=1)
+y_multi = data_multiclass['label']
+
+# Load and prepare the binary classification dataset
+data_binary = pd.read_csv('your_binary_data.csv')  # Adjust the file path
+X_binary = data_binary.drop('label', axis=1)
+y_binary = data_binary['label']
+
+# Standardize the features
+scaler = StandardScaler()
+X_multi_scaled = scaler.fit_transform(X_multi)
+X_binary_scaled = scaler.fit_transform(X_binary)
+
+# Split the multi-class data
+X_multi_train, X_multi_temp, y_multi_train, y_multi_temp = train_test_split(X_multi_scaled, y_multi, test_size=0.4, stratify=y_multi, random_state=42)
+X_multi_val, X_multi_test, y_multi_val, y_multi_test = train_test_split(X_multi_temp, y_multi_temp, test_size=0.5, stratify=y_multi_temp, random_state=42)
+
+# Split the binary classification data
+X_binary_train, X_binary_temp, y_binary_train, y_binary_temp = train_test_split(X_binary_scaled, y_binary, test_size=0.4, stratify=y_binary, random_state=42)
+X_binary_val, X_binary_test, y_binary_val, y_binary_test = train_test_split(X_binary_temp, y_binary_temp, test_size=0.5, stratify=y_binary_temp, random_state=42)
+
+
+from xgboost import XGBClassifier
+from sklearn.ensemble import RandomForestClassifier
+
+# Initialize multi-class models
+xgb_multi_model = XGBClassifier()  # Add parameters as needed
+rf_multi_model = RandomForestClassifier()  # Add parameters as needed
+
+# Train multi-class models
+xgb_multi_model.fit(X_multi_train, y_multi_train)
+rf_multi_model.fit(X_multi_train, y_multi_train)
+
+
+from sklearn.model_selection import GridSearchCV
+
+# Example: Grid search for XGBoost multi-class model
+param_grid_multi_xgb = {
+    'max_depth': [3, 5, 7],
+    'learning_rate': [0.01, 0.1, 0.2],
+    'n_estimators': [100, 200, 300]
+}
+
+grid_search_multi_xgb = GridSearchCV(xgb_multi_model, param_grid_multi_xgb, cv=3, scoring='accuracy', verbose=2)
+grid_search_multi_xgb.fit(X_multi_val, y_multi_val)
+
+# Update multi-class XGBoost model with the best parameters
+xgb_multi_model = grid_search_multi_xgb.best_estimator_
+
+# Similar tuning for the RandomForest multi-class model...
+
+
+# Generate multi-class predictions as a feature for the binary classification dataset
+multi_predictions_train = xgb_multi_model.predict(X_multi_train)  # You can also try using rf_multi_model
+multi_predictions_val = xgb_multi_model.predict(X_multi_val)
+multi_predictions_test = xgb_multi_model.predict(X_multi_test)
+
+# Add multi-class predictions as a feature to the binary dataset
+X_binary_train_with_multi = np.column_stack((X_binary_train, multi_predictions_train))
+X_binary_val_with_multi = np.column_stack((X_binary_val, multi_predictions_val))
+X_binary_test_with_multi = np.column_stack((X_binary_test, multi_predictions_test))
+
+
+
+# Initialize binary classification models
+xgb_binary_model = XGBClassifier(scale_pos_weight = sum(y_binary_train == 0) / sum(y_binary_train == 1)) 
+rf_binary_model = RandomForestClassifier(class_weight='balanced')
+
+# Train binary models using the modified dataset
+xgb_binary_model.fit(X_binary_train_with_multi, y_binary_train)
+rf_binary_model.fit(X_binary_train_with_multi, y_binary_train)
+
+Step 6: Hyperparameter Tuning for Binary Models
+
+
+
+from sklearn.metrics import classification_report, accuracy_score
+
+# Predict
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-========================----------------43=3444444444444444------------------------------==============================
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
 # Load data
 data = pd.read_csv('your_data.csv')  # Adjust the file path
 
