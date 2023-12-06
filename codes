@@ -85,6 +85,151 @@ print(f"{'Precision:':<15} {precision:.4f}")
 print(f"{'F1-score:':<15} {f1_score:.4f}")
 print(f"{'Total instances:':<15} {total_instances}")
 
+=------------------------------===================================-------------------------------------5678090
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+# Load data
+data = pd.read_csv('your_data.csv')  # Adjust the file path
+
+# Separate features and target
+X = data.drop('label', axis=1)
+y = data['label']
+
+# Standardize the features (optional but recommended)
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Split the data into train, validation, and test sets
+X_train, X_temp, y_train, y_temp = train_test_split(X_scaled, y, test_size=0.4, stratify=y, random_state=42)
+X_val, X_test, y_val, y_test = train_test_split(X_temp, y_temp, test_size=0.5, stratify=y_temp, random_state=42)
+
+from xgboost import XGBClassifier
+from sklearn.ensemble import RandomForestClassifier
+
+# Initialize models
+xgb_model = XGBClassifier(scale_pos_weight = sum(y_train == 0) / sum(y_train == 1))  # Adjust for imbalance
+rf_model = RandomForestClassifier(class_weight='balanced')  # Adjust for imbalance
+
+# Train models
+xgb_model.fit(X_train, y_train)
+rf_model.fit(X_train, y_train)
+
+
+from sklearn.model_selection import GridSearchCV
+
+# Define parameter grid
+param_grid = {
+    'max_depth': [3, 5, 7],
+    'learning_rate': [0.01, 0.1, 0.2],
+    'n_estimators': [100, 200, 300]
+}
+
+# Grid search
+grid_search = GridSearchCV(xgb_model, param_grid, cv=3, scoring='roc_auc', verbose=2)
+grid_search.fit(X_val, y_val)
+
+# Update model with best parameters
+xgb_model = grid_search.best_estimator_
+
+
+
+from sklearn.model_selection import GridSearchCV
+
+# Parameter grid for Random Forest
+param_grid_rf = {
+    'n_estimators': [100, 200, 300],
+    'max_depth': [None, 10, 20, 30],
+    'min_samples_split': [2, 5, 10],
+    'min_samples_leaf': [1, 2, 4]
+}
+
+# Create GridSearchCV object for Random Forest
+grid_search_rf = GridSearchCV(rf_model, param_grid_rf, cv=3, scoring='roc_auc', verbose=2)
+grid_search_rf.fit(X_val, y_val)
+
+# Update Random Forest model with the best parameters
+rf_model = grid_search_rf.best_estimator_
+
+
+from sklearn.model_selection import GridSearchCV
+
+# Define parameter grid
+param_grid = {
+    'max_depth': [3, 5, 7],
+    'learning_rate': [0.01, 0.1, 0.2],
+    'n_estimators': [100, 200, 300]
+}
+
+# Grid search
+grid_search = GridSearchCV(xgb_model, param_grid, cv=3, scoring='roc_auc', verbose=2)
+grid_search.fit(X_val, y_val)
+
+# Update model with best parameters
+xgb_model = grid_search.best_estimator_
+
+
+from sklearn.ensemble import VotingClassifier
+
+# Create a voting classifier
+voting_clf = VotingClassifier(
+    estimators=[('xgb', xgb_model), ('rf', rf_model)],
+    voting='soft'
+)
+
+# Fit the voting classifier
+voting_clf.fit(X_train, y_train)
+
+
+from sklearn.metrics import classification_report, accuracy_score
+
+# Predictions
+y_pred = voting_clf.predict(X_test)
+
+# Evaluation
+print(classification_report(y_test, y_pred))
+print("Accuracy:", accuracy_score(y_test, y_pred))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 -===================================44444444444444444444444444444444444444444444444444444444444
 import pandas as pd
 
