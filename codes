@@ -149,6 +149,26 @@ multi_predictions_train = xgb_multi_model.predict(X_multi_train)  # You can also
 multi_predictions_val = xgb_multi_model.predict(X_multi_val)
 multi_predictions_test = xgb_multi_model.predict(X_multi_test)
 
+--------------------------=============---------------------------------------=
+from sklearn.preprocessing import OneHotEncoder
+
+# Assuming your categorical variable is in a column named 'category'
+
+# Initialize OneHotEncoder with known categories
+encoder = OneHotEncoder(categories=[range(0, 9)], sparse=False)
+
+# Fit the encoder on the entire data (if available) or just use the known categories
+# If you have a dataset that contains all categories, use it to fit. Otherwise, the line below is fine.
+encoder.fit([[0], [1], [2], [3], [4], [5], [6], [7], [8]])
+
+# Transform the data in train, validation, and test sets
+train_encoded = encoder.transform(train['category'].values.reshape(-1, 1))
+val_encoded = encoder.transform(val['category'].values.reshape(-1, 1))
+test_encoded = encoder.transform(test['category'].values.reshape(-1, 1))
+
+-================================---------------------------
+
+
 # Add multi-class predictions as a feature to the binary dataset
 X_binary_train_with_multi = np.column_stack((X_binary_train, multi_predictions_train))
 X_binary_val_with_multi = np.column_stack((X_binary_val, multi_predictions_val))
