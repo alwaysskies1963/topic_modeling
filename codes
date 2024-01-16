@@ -1273,3 +1273,28 @@ for epoch in range(num_epochs):
 model.save_pretrained(saved_model_path)
 tokenizer.save_pretrained(saved_model_path)
 
+
+
+
+-======================-----------------------------------------------------------------------==================================
+
+data = {
+    'Column1': [[1, 2, 3], [4, 5, 6]],
+    'Column2': [['a', 'b', 'c'], ['d', 'e', 'f']],
+    'Column3': [['x', 'y', 'z'], ['u', 'v', 'w']]
+}
+
+df = pd.DataFrame(data)
+
+# Ensure all lists in each row are of the same length
+# Explode the DataFrame
+df['combined'] = list(zip(df['Column1'], df['Column2'], df['Column3']))
+df_exploded = df.explode('combined')
+
+# Create separate columns from the tuples
+df_exploded[['Column1', 'Column2', 'Column3']] = pd.DataFrame(df_exploded['combined'].tolist(), index=df_exploded.index)
+
+# Drop the combined column if not needed
+df_exploded = df_exploded.drop('combined', axis=1)
+
+print(df_exploded)
