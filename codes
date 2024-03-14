@@ -1,3 +1,109 @@
+import numpy as np
+from sklearn.metrics import roc_curve, auc
+import matplotlib.pyplot as plt
+
+# Sample predicted scores and true labels for Model 1 and Model 2
+y_true = np.array([1, 0, 1, 1, 0, 1, 0, 0, 1, 0])  # Example true labels
+y_scores_model1 = np.array([0.9, 0.1, 0.8, 0.72, 0.3, 0.67, 0.24, 0.45, 0.85, 0.15])  # Predicted scores from Model 1
+y_scores_model2 = np.array([0.85, 0.2, 0.75, 0.8, 0.25, 0.7, 0.3, 0.4, 0.9, 0.05])  # Predicted scores from Model 2
+
+# Function to plot ROC curve
+def plot_roc_curve(y_true, y_scores, title):
+    fpr, tpr, thresholds = roc_curve(y_true, y_scores)
+    roc_auc = auc(fpr, tpr)
+
+    plt.figure()
+    plt.plot(fpr, tpr, color='darkorange', lw=2, label='ROC curve (area = %0.2f)' % roc_auc)
+    plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title(title)
+    plt.legend(loc="lower right")
+    plt.show()
+
+# Plot ROC curve for each model
+plot_roc_curve(y_true, y_scores_model1, 'ROC Curve for Model 1')
+plot_roc_curve(y_true, y_scores_model2, 'ROC Curve for Model 2')
+
+
+
+def plot_combined_roc_curve(y_true, y_scores_model1, y_scores_model2):
+    fpr1, tpr1, thresholds1 = roc_curve(y_true, y_scores_model1)
+    roc_auc1 = auc(fpr1, tpr1)
+
+    fpr2, tpr2, thresholds2 = roc_curve(y_true, y_scores_model2)
+    roc_auc2 = auc(fpr2, tpr2)
+
+    plt.figure()
+    plt.plot(fpr1, tpr1, color='darkorange', lw=2, label='Model 1 (area = %0.2f)' % roc_auc1)
+    plt.plot(fpr2, tpr2, color='green', lw=2, label='Model 2 (area = %0.2f)' % roc_auc2)
+    plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('Combined ROC Curves')
+    plt.legend(loc="lower right")
+    plt.show()
+
+# Plot combined ROC curve
+plot_combined_roc_curve(y_true, y_scores_model1, y_scores_model2)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def find_similar_words(input_text, top_n=10):
     # Process the input text with the spaCy transformer model
     doc = trf_model(input_text)
