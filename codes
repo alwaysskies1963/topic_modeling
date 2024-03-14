@@ -1,3 +1,26 @@
+focusing on the rates of false negatives relative to false positives. Remember, this visualization emphasizes the cost of false negatives (missed detections) versus false positives (false alarms), which might be particularly relevant in contexts where missing a positive case has serious implications, like in medical diagnostics or fraud detection.
+
+
+
+fpr, tpr, thresholds = roc_curve(y_true, y_scores)
+roc_auc = auc(fpr, tpr)
+
+# Plotting the ROC curve with emphasis on FNR
+plt.figure()
+plt.plot(fpr, 1 - tpr, label='FNR vs. FPR (area = %0.2f)' % roc_auc)
+plt.plot([0, 1], [1, 0], linestyle='--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate (FPR)')
+plt.ylabel('False Negative Rate (FNR)')
+plt.title('FNR vs. FPR Curve')
+plt.legend(loc="lower left")
+plt.show()
+
+================================================================================
+
+
+
 import numpy as np
 from sklearn.metrics import roc_curve, auc
 import matplotlib.pyplot as plt
