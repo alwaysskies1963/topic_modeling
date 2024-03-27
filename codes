@@ -1,39 +1,35 @@
-expanded_abbreviation_list = [
-    'e.g', 'i.e', 'etc', 'mr', 'mrs', 'dr', 'ph.d', 'prof', 'inc', 'ltd',
-    'co', 'jr', 'sr', 'vs', 'dept', 'univ', 'assn', 'bros', 'ph', 'md', 
-    'do', 'dvm', 'od', 'dds', 'llc', 'llp', 'corp', 'jan', 'feb', 'mar', 
-    'apr', 'jun', 'jul', 'aug', 'sep', 'sept', 'oct', 'nov', 'dec', 
-    'mon', 'tue', 'tues', 'wed', 'thu', 'thurs', 'fri', 'sat', 'sun', 
-    'no', 'vol', 'ed', 'pp', 'est', 'fig', 'eq', 'ex', 'cf', 'ref', 
-    'refs', 'ch', 'sec', 'viz', 'al', 'ave', 'blvd', 'st', 'rd', 'mt',
-    'ft', 'yr', 'yrs', 'min', 'hr', 'hrs', 'wk', 'wks', 'mo', 'mos',
-    'sq', 'mi', 'lb', 'lbs', 'oz', 'mg', 'kg', 'mm', 'cm', 'm', 'km',
-    'g', 'mg', 'l', 'ml', 'kl', 'tsp', 'tbsp', 'fl', 'oz', 'gal', 'pt',
-    'qt', 'l', 'dl', 'ml', 'cu', 'm', 'mm', 'cm', 'in', 'ft', 'yd', 'ac',
-    'ha', 'cc', 'cf', 'cu', 'mm', 'mb', 'kb', 'gb', 'tb', 'ppm', 'dpi',
-    'mpg', 'mph', 'rpm', 'hr', 'min', 'sec', 'ms', 'ns', 'ps', 'kHz', 
-    'MHz', 'GHz', 'THz', 'ul', 'uv', 'ir', 'x-ray', 'x-rays', 'gps', 
-    'isbn', 'issn', 'esq', 'jr', 'snr', 'svc', 'qc'
-]
-
 import nltk
 from nltk.tokenize.punkt import PunktSentenceTokenizer, PunktParameters
-from nltk.corpus import stopwords
 import re
 
 nltk.download('punkt')
-nltk.download('stopwords')
 
 def advanced_sentence_tokenizer(text):
     punkt_param = PunktParameters()
-    abbreviation = ['e.g', 'i.e', 'etc', 'mr', 'mrs', 'dr', 'ph.d']
-    punkt_param.abbrev_types = set(abbreviation)
+    expanded_abbreviation_list = [
+        'e.g', 'i.e', 'etc', 'mr', 'mrs', 'dr', 'ph.d', 'prof', 'inc', 'ltd',
+        'co', 'jr', 'sr', 'vs', 'dept', 'univ', 'assn', 'bros', 'ph', 'md', 
+        'do', 'dvm', 'od', 'dds', 'llc', 'llp', 'corp', 'jan', 'feb', 'mar', 
+        'apr', 'jun', 'jul', 'aug', 'sep', 'sept', 'oct', 'nov', 'dec', 
+        'mon', 'tue', 'tues', 'wed', 'thu', 'thurs', 'fri', 'sat', 'sun', 
+        'no', 'vol', 'ed', 'pp', 'est', 'fig', 'eq', 'ex', 'cf', 'ref', 
+        'refs', 'ch', 'sec', 'viz', 'al', 'ave', 'blvd', 'st', 'rd', 'mt',
+        # Add more abbreviations as needed
+    ]
+    punkt_param.abbrev_types = set(expanded_abbreviation_list)
     tokenizer = PunktSentenceTokenizer(punkt_param)
     
-    # Additional preprocessing to handle specific cases
-    # For example, replacing certain punctuation with placeholders
-    text = re.sub(r'\n+', '. ', text)  # Replace newlines with periods (to separate statements)
-    text = re.sub(r'(\d)\.(\d)', r'\1DECIMAL\2', text)  # Protect decimal points in numbers
+    # Replace curly quotes with straight quotes
+    text = text.replace('“', '"').replace('”', '"').replace("‘", "'").replace("’", "'")
+    
+    # Remove special characters (optional, based on need)
+    # Be careful with this step as it may remove characters that are meaningful in certain contexts
+    # For example, keeping periods, commas, question marks, etc., is important for sentence tokenization
+    # text = re.sub(r"[^a-zA-Z0-9.,!?\'\"]", " ", text)
+    
+    # Additional preprocessing to handle specific cases, e.g., protecting decimal points in numbers
+    text = re.sub(r'(\d)\.(\d)', r'\1DECIMAL\2', text)
+    text = re.sub(r'\n+', '. ', text)  # Replace newlines with periods to separate statements properly
     
     sentences = tokenizer.tokenize(text)
     
@@ -41,13 +37,6 @@ def advanced_sentence_tokenizer(text):
     sentences = [sent.replace('DECIMAL', '.') for sent in sentences]
     
     return sentences
-
-
-
-
-
-
-
 
 
 
