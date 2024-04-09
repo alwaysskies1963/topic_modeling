@@ -1588,6 +1588,51 @@ Furthermore, the addition of a machine learning model in the second stage marks 
 4. Model Overview
 The MFPLD model is a sophisticated AI solution designed to automate the detection of prohibited language within appraisal comments for multifamily properties. It operates in two distinct stages to ensure high accuracy and efficiency. In the first stage, the model receives user-defined biased categories along with the appraisal files. It then parses these files into sentences and employs a pre-defined keyword list to detect sentences that may contain biased language related to the specified categories.
 
+
+
+====================================================================================================
+1.1 Background, Purpose, and Scope
+Background: Fannie Mae processes thousands of documents annually as part of its multifamily property loan underwriting procedures. These documents, including recommendation memos and sponsor credit reviews, play a critical role in evaluating the collateral worth of properties. A recurring challenge has been the presence of biased language within these reports, which can affect the accuracy of property valuations. This biased language, often subtle and rooted in subjective opinions or protected characteristics, contravenes fair lending laws and regulations.
+
+Purpose: The purpose of developing the MFPLD (Multifamily Prohibited Language Detector) model is to automate the detection of prohibited language within appraisal comments, thereby enhancing the accuracy and fairness of property valuations. This initiative stems from the need to improve efficiency and reduce the manual labor involved in reviewing appraisal reports for biased language, a process that is both time-consuming and costly.
+
+Scope: The model is designed to automatically scan and detect biased language in multifamily appraisal comments, leveraging a two-stage AI solution for this purpose. It is an internal solution closely related to the APLD model developed for the Collateral Risk team, aimed at significantly reducing the workload associated with manual reviews of appraisal reports for potential bias. The MFPLD model applies specifically to the multifamily property loan underwriting process at Fannie Mae, addressing a previously unaddressed problem of automated bias detection in appraisal reports.
+
+Model Development: This is a new model, developed to address the challenges of manually detecting biased language in appraisal reports—a process previously unautomated. The MFPLD model represents an innovative approach to enhancing the accuracy and fairness of property valuations at Fannie Mae.
+
+1.2 Model Usage
+Application: The MFPLD model is used within the loan underwriting process, specifically in assessing the collateral worth of multifamily properties. Its primary function is to automate the detection of prohibited language in appraisal comments, contributing to more accurate and unbiased property valuations.
+
+Product Types and Segmentation: The model is applicable to multifamily property appraisals, serving as a critical tool in the loan underwriting process for these properties.
+
+Expected Results: By automating the detection of biased language, the model aims to improve the efficiency, accuracy, and fairness of property valuations. This contributes to a more equitable lending process, in line with fair lending laws and regulations.
+
+Known and Planned Usages: Currently, the MFPLD model is used to scan and detect prohibited language in multifamily appraisal comments. Future enhancements and broader applications within Fannie Mae's loan underwriting processes are anticipated as the model's capabilities evolve.
+
+1.3 Scope of Model Changes
+Major Changes: Given that the MFPLD model is a new development, this section would typically outline any significant changes from previous versions or related models. In the case of the MFPLD, it can be noted that it introduces a two-stage AI solution for detecting prohibited language, an advancement over manual review processes previously employed.
+
+Minor Changes: Any minor changes or enhancements made during the development phase would be detailed in Appendix E, as per the document structure.
+
+1.4 Model Overview
+Reasons for Creation: The MFPLD model was created to address the inefficiencies and inaccuracies associated with manually reviewing appraisal reports for biased language. By automating this process, Fannie Mae aims to enhance the fairness and accuracy of property valuations for multifamily properties.
+
+Enhancements in Modeling Methodology: The model introduces a two-stage AI solution, incorporating both keyword detection and text classification to accurately identify prohibited language in appraisal comments. This methodology represents a significant enhancement over previous manual processes.
+
+Improvements in Model Performance: The automation of biased language detection is expected to significantly reduce the time and cost associated with manual reviews, while also improving the accuracy and fairness of property valuations.
+
+Upstream and Downstream Models: The MFPLD model works in conjunction with other models in the loan underwriting process, such as the APLD model for the Collateral Risk team. A depiction of model interdependencies, including data flows, would illustrate how the MFPLD model integrates within Fannie Mae's broader risk management framework.
+
+Component Model Information Systems: The development and operation of the MFPLD model involve various programs, software, and technologies, including AI and machine learning platforms, which enable the parsing of appraisal reports and the detection of biased language.
+
+This content provides a structured outline for each of the segments based on the executive summary provided.
+
+
+
+
+
+
+
 The second stage involves a machine learning (ML) model that scrutinizes the results from the first stage, identifying and filtering out false positives. This dual-stage approach enhances the model's capability to accurately detect prohibited language, thereby significantly reducing the manual review workload.
 
 The development of the MFPLD model is a testament to Fannie Mae's commitment to leveraging technology for improving efficiency and accuracy in the underwriting process. By automating the detection of biased language in appraisal documents, the MFPLD model represents a critical step forward in streamlining operations and upholding the integrity of property valuations under fair lending laws and regulations.
