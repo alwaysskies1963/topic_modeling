@@ -1503,3 +1503,68 @@ df_exploded[['Column1', 'Column2', 'Column3']] = pd.DataFrame(df_exploded['combi
 df_exploded = df_exploded.drop('combined', axis=1)
 
 print(df_exploded)
+
+
+
+
+Background, Purpose, and Scope:
+Fannie Mae, a leading provider of mortgage financing, receives thousands of recommendation memos, sponsor credit reviews, and sponsor and lender narratives as part of the loan underwriting process for multifamily properties. This voluminous documentation is essential for assessing the collateral worth of these properties. However, not all the information contained within these reports is necessarily useful for creating an accurate property valuation. In some instances, the appraisals may include subjective opinions or biases based on protected characteristics under fair lending laws and regulations, and these biases can manifest in non-obvious ways.
+
+To address this issue, Fannie Mae's MF Lender Risk Management team has been manually reviewing these reports since 2021, identifying and flagging language that violates the Fannie Mae Selling Guide or contains subjective terminology that should not affect the property's value. While this manual review process has been effective, it is time-consuming and represents a significant cost to the organization.
+
+The purpose of this project is to develop an internal solution that can automatically scan multifamily appraisal comments and detect prohibited language within them. This solution is closely related to the Automated Property Linguistic Detection (APLD) model developed for Fannie Mae's Collateral Risk team, which addresses similar challenges in the single-family mortgage market.
+
+The scope of this project is to create a robust, two-stage AI-based solution, the Multifamily Prohibited Language Detection (MFPLD) model, that can efficiently and reliably identify prohibited language in multifamily appraisal comments, reducing the workload for manual review and ensuring fair and equitable collateral valuation.
+
+Model Usage:
+The MFPLD model is designed to be used by Fannie Mae's MF Lender Risk Management team to automate the process of detecting prohibited language in multifamily appraisal comments. The model will receive a list of biased language categories from the Fair Lending team, as well as the appraisal files to be analyzed.
+
+In the first stage of the model, the MFPLD model will parse the appraisal reports into sentences and compare them to a pre-defined keyword list provided by the Fair Lending team. This will allow the model to identify any sentences that contain prohibited language related to the input categories.
+
+In the second stage, a text classification model will be used to reduce the number of false positives and false negatives in the results of the first stage. This two-stage approach is similar to the APLD model developed for the Collateral Risk team and is designed to create an effective solution that significantly reduces or eliminates the need for manual review of appraisals for potential bias.
+
+Scope of Model Changes:
+The MFPLD model is designed to be a flexible and adaptable solution that can evolve over time to meet the changing needs of Fannie Mae's MF Lender Risk Management team. The model's scope can be expanded to include additional biased language categories, as identified by the Fair Lending team, or to incorporate new sources of appraisal data as they become available.
+
+Furthermore, the text classification model used in the second stage of the MFPLD solution can be fine-tuned and retrained over time to improve its accuracy in detecting false positives and false negatives. This ongoing model refinement will ensure that the MFPLD solution remains effective and efficient in identifying prohibited language in multifamily appraisal comments.
+
+Model Overview:
+The MFPLD model is a two-stage AI-based solution that is designed to automatically detect prohibited language in multifamily appraisal comments. The key components of the model are as follows:
+
+Stage 1: Keyword-based Detection
+
+The model receives a list of biased language categories from the Fair Lending team.
+The model parses the appraisal reports into sentences and compares them to a pre-defined keyword list provided by the Fair Lending team.
+The model identifies any sentences that contain prohibited language related to the input categories.
+Stage 2: Text Classification
+
+A text classification model is used to analyze the results of the first stage and identify any false positives or false negatives.
+The text classification model is trained on a dataset of appraisal comments, both those containing prohibited language and those that do not, to improve the overall accuracy of the MFPLD solution.
+The two-stage approach of the MFPLD model is designed to provide a comprehensive and reliable solution for detecting prohibited language in multifamily appraisal comments. By combining keyword-based detection with machine learning-based text classification, the model can efficiently and accurately identify biased language, reducing the workload for manual review and ensuring fair and equitable collateral valuation.
+
+
+1. Background, Purpose, and Scope
+Background
+Fannie Mae is a pivotal entity in the housing finance system, tasked with the significant responsibility of underwriting multifamily property loans. This process requires the examination of thousands of documents annually, including recommendation memos, sponsor credit reviews, and sponsor and lender narrative reports. These documents are crucial for assessing the collateral worth of properties, yet they often contain extraneous or biased information that can skew property valuations. Recognizing the potential for subjective opinions and biases, especially those infringing upon fair lending laws by focusing on protected characteristics, Fannie Mae has historically engaged in manual reviews to identify and address prohibited language within these appraisals.
+
+Purpose
+The core aim of introducing an automated solution is to streamline the identification of biased or prohibited language in appraisal comments. This initiative not only seeks to enhance the efficiency and reliability of the process but also aims to mitigate the risk of bias affecting property valuations. By automating this critical review process, Fannie Mae intends to uphold the integrity of its underwriting process while significantly reducing the operational burden and associated costs of manual reviews.
+
+Scope
+The project's scope encompasses the development and implementation of an internal solution designed to automatically scan multifamily (MF) appraisal comments for prohibited language. Leveraging a two-stage artificial intelligence model, this solution will closely mirror the functionality of the existing APLD model used by the Single Family Collateral Risk team. The scope includes parsing appraisal reports into sentences, detecting biased phrases based on a predefined keyword list, and employing a text classification model to minimize false positives and negatives in the appraisal review process.
+
+2. Model Usage
+The proposed model operates on a two-stage principle to ensure thorough and accurate detection of prohibited language within multifamily appraisal comments. The first stage involves receiving a list of biased categories from the user, alongside the appraisal files. The model then parses these reports into sentences, utilizing a keyword list provided by the Fair Lending team to identify phrases closely resembling prohibited language related to the input categories. This initial stage allows users to maintain control over the categories deemed prohibited, ensuring that the model's focus aligns with current regulatory standards and organizational policies.
+
+In the second stage, the model employs a sophisticated text classification algorithm to sift through the results from the first stage, aiming to accurately distinguish between true and false positives. This dual-stage approach not only enhances the precision of the detection process but also significantly reduces the likelihood of overlooking genuine instances of biased language or erroneously flagging innocuous content.
+
+3. Scope of Model Changes
+The introduction of the MFPLD model signifies a significant advancement in Fannie Mae's approach to managing collateral risk and ensuring fair lending practices. While the model inherits its foundational principles from the Single Family's APLD model, it incorporates several key enhancements to address the unique challenges presented by multifamily appraisal comments. The most notable change lies in the adaptation and expansion of the keyword list, tailored to reflect the nuanced language commonly found in multifamily appraisals. Additionally, the inclusion of a machine learning model in the second stage represents a strategic enhancement aimed at improving the accuracy of bias detection by reducing false positives and negatives. These modifications are expected to augment the model's effectiveness, enabling a more streamlined, accurate, and efficient review process.
+
+4. Model Overview
+The MFPLD model represents a cutting-edge solution designed to automate the detection of prohibited language in multifamily appraisal comments. At its core, the model is structured around a two-stage artificial intelligence system that mirrors the proven efficacy of the APLD model used within the Single Family sector. The first stage focuses on parsing appraisal reports into sentences and identifying phrases that closely match a predefined list of biased keywords. This approach allows for precise detection of potentially prohibited language, with a significant emphasis on user-defined categories.
+
+The second stage introduces an advanced text classification model, which meticulously reviews the findings from the first stage to discern between true and false positives. This layered approach ensures a high degree of accuracy in identifying biased language, effectively minimizing the risks associated with manual review processes. Through its innovative design and strategic implementation, the MFPLD model is poised to revolutionize Fannie Mae's appraisal review process, offering a scalable, efficient, and reliable solution for upholding the highest standards of fairness and integrity in property valuation.
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
