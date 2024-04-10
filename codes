@@ -1876,5 +1876,98 @@ Despite its innovative approach, the model has inherent limitations that must be
 - **Sensitivity Analysis**: Conducting sensitivity analyses on the similarity threshold and other model parameters can help identify the model's robustness and areas for improvement.
 
 In conclusion, while the model presents a novel approach to detecting bias in mortgage appraisal documents, it is not without its limitations. Acknowledging, monitoring, and compensating for these limitations through continuous improvement and adaptation is crucial for maintaining the model's relevance and effectiveness.
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 
+White Paper: Multifamily Prohibited Language Detection (MFPLD) Model
 
+3. Modeling Data (MD)
+
+3.1 Sources of Data
+
+The MFPLD model primarily relies on two main data sources:
+
+1. Biased Language Categories and Mapping Dictionary:
+   - Source: Fair Lending team
+   - Description: The model receives a list of 10 high-level biased language categories and a mapping dictionary that associates 620 corresponding biased phrases with each category.
+   - Rationale: The Fair Lending team's expertise in identifying prohibited language based on fair lending laws and regulations is crucial for the effective operation of the MFPLD model.
+
+2. Multifamily Appraisal and Related Documents:
+   - Source: Fannie Mae's MF Lender Risk Management team
+   - Description: The model receives multifamily appraisal reports, sponsor credit reviews, and other related documents as input for the bias detection process.
+   - Rationale: These documents are the primary source of information for assessing the collateral worth of multifamily properties and are the focus of the MFPLD model's bias detection efforts.
+
+No external data sources are used in the development of the MFPLD model. The model relies solely on the inputs provided by the Fair Lending team and the MF Lender Risk Management team.
+
+Data Dictionary:
+
+| Data Element | Description | Data Type |
+| --- | --- | --- |
+| Biased Language Categories | List of 10 high-level categories of prohibited language | List of Strings |
+| Biased Language Mapping Dictionary | Mapping of 620 biased phrases to the 10 high-level categories | Dictionary |
+| Appraisal and Related Documents | Multifamily appraisal reports, sponsor credit reviews, and other related documents | Collection of Text Documents |
+
+3.2 Data Scrubbing, Filtering, & Transformation
+
+The MFPLD model does not require extensive data scrubbing, filtering, or transformation, as the input data is primarily textual in nature.
+
+The biased language categories and mapping dictionary provided by the Fair Lending team are used as-is, without any further processing. The appraisal and related documents received from the MF Lender Risk Management team are parsed into individual sentences, which are then used as the input for the model's bias detection process.
+
+Missing values or incomplete data are not a concern, as the model is designed to operate on the available textual content of the documents. However, in the event of any issues with the input data (e.g., missing or corrupted files), the model will report the affected documents and the MF Lender Risk Management team will be notified to address the data quality concerns.
+
+3.3 Data Applicability / Representativeness
+
+The data used in the MFPLD model is highly applicable and representative of the intended use case. The biased language categories and mapping dictionary are developed by the Fair Lending team, who have expertise in identifying prohibited language based on fair lending laws and regulations. This ensures that the model is focused on detecting the appropriate types of biased language that can influence property valuations.
+
+The appraisal and related documents provided by the MF Lender Risk Management team are representative of the actual documents that Fannie Mae receives and reviews as part of the multifamily loan underwriting process. This ensures that the model is trained and evaluated on data that is directly relevant to its intended use.
+
+3.4 Data Sampling & Approach
+
+The MFPLD model does not require any specific data sampling approaches, as it operates on the full set of appraisal and related documents provided by the MF Lender Risk Management team. The model processes all available documents to ensure comprehensive coverage and detection of prohibited language.
+
+3.5 Data Limitations
+
+The primary data limitation of the MFPLD model is the potential for incompleteness or inaccuracy in the biased language categories and mapping dictionary provided by the Fair Lending team. If the list of prohibited language is not comprehensive or if the mapping between biased phrases and high-level categories is incomplete, the model may fail to detect certain types of prohibited language.
+
+To mitigate this limitation, the Fair Lending team should regularly review and update the biased language categories and mapping dictionary to ensure that the model remains current and effective in detecting prohibited language. Additionally, the MF Lender Risk Management team should provide feedback on the model's performance, which can be used to identify any gaps or limitations in the input data.
+
+Another potential data limitation is the quality and completeness of the appraisal and related documents provided to the model. If the input documents are missing key information or contain errors, the model's ability to accurately detect prohibited language may be impaired. To address this, the MF Lender Risk Management team should ensure that the input documents are of high quality and representative of the full scope of information available.
+
+Overall, the data used in the MFPLD model is directly relevant and applicable to its intended use case, but ongoing monitoring and refinement of the input data sources will be necessary to maintain the model's effectiveness over time.
+
+### 3. Modeling Data (MD)
+
+#### 3.1 Sources of Data
+
+The model leverages a variety of data sources to identify and analyze biases in mortgage appraisal documents. These sources include:
+
+- **Primary Data**: Mortgage appraisal documents and related textual content provided by financial institutions. This data comprises detailed property descriptions, valuations, and other relevant information.
+- **Bias Phrase Dictionary**: A comprehensive dictionary mapping ten high-level bias categories to 620 specific biased phrases. This dictionary was compiled through extensive literature review, analysis of historical bias cases, and consultations with subject matter experts.
+- **External Data**: Public datasets and research publications on property valuations, bias studies, and demographic information to refine and validate the bias phrase dictionary.
+
+Data extraction involves parsing the textual content of appraisal documents into sentences. Aggregation processes combine these sentences with the bias phrase dictionary to facilitate bias detection. Data proxies, such as standardized descriptions for property features or neighborhood desirability, are used to address variations in language and ensure consistent analysis. These proxies were selected based on their prevalence in appraisal literature and proven correlation with valuation biases.
+
+A data dictionary detailing the structure of appraisal documents, the bias categories, and the associated phrases was developed to standardize the model's input data.
+
+Comparisons of external data against alternative sources were conducted to validate the comprehensiveness and relevance of the bias phrase dictionary and to ensure that the model's assumptions align with current industry practices and research findings.
+
+#### 3.2 Data Scrubbing, Filtering, & Transformation
+
+Raw appraisal documents undergo a series of preprocessing steps, including normalization of text (e.g., converting to lowercase), removal of irrelevant sections (e.g., boilerplate legal language), and handling of missing values or outliers through imputation or exclusion. Sentences that do not contain sufficient information for analysis (e.g., those with fewer than three words) are excluded.
+
+Summary statistics before and after cleansing highlight the impact of these processes, with key metrics such as the number of sentences analyzed and the distribution of sentence lengths providing insights into the data's transformation.
+
+#### 3.3 Data Applicability / Representativeness
+
+A descriptive analysis of the appraisal documents and the bias phrase dictionary ensures that the model's inputs are both adequate and representative of the diversity found in mortgage appraisals. Quality checks confirm the completeness and accuracy of the data, with non-representative data (e.g., documents with incomplete information or those not pertaining to residential properties) being identified and excluded from the analysis.
+
+#### 3.4 Data Sampling & Approach
+
+Given the vast quantity of available appraisal documents, a stratified random sampling approach was adopted. This approach ensures that the sample is representative of various property types, geographical locations, and valuation ranges. The rationale behind this sampling methodology is to capture the broad spectrum of potential biases while maintaining a manageable dataset size for analysis.
+
+#### 3.5 Data Limitations
+
+Data limitations identified include variability in the structure and language of appraisal documents, potential incompleteness of the bias phrase dictionary, and the challenge of capturing subtle biases not explicitly mentioned in the text. Engagements with data owners and subject matter experts helped to mitigate these issues by refining the data extraction and preprocessing methodologies and continuously updating the bias phrase dictionary.
+
+The distinction between data and modeling limitations is crucial; while data limitations pertain to the inputs used by the model, modeling limitations relate to the model's framework and computational techniques. Acknowledging and addressing data limitations is a continuous process, essential for maintaining the model's accuracy and relevance.
+
+By thoroughly documenting and analyzing the sources, processing, and limitations of the data used, this section provides a comprehensive overview of the foundational elements that underpin the model's ability to accurately identify biases in mortgage appraisal documents.
