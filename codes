@@ -1789,3 +1789,92 @@ Intended primarily for encoding sentences and short paragraphs, the model output
 The fine-tuning process was rigorous, applying cosine similarity across possible sentence pairs and optimizing through cross-entropy loss, correlating with actual pairings. It ran for 100k steps on a TPU v3-8 with a batch size of 1024 and employed a learning rate warm-up strategy and the AdamW optimizer.
 
 Training incorporated a diverse array of datasets, aggregating to more than 1 billion sentences, sourced from academic papers, social media, question-answering forums, and more, providing a rich linguistic landscape for the model to learn from. The strategic selection of these sources aimed at maximizing the model's exposure to varied language use and context, bolstering its versatility and effectiveness in real-world applications.
+-=-=-------------------========================================================----------------------------------------------------------
+White Paper: Multifamily Prohibited Language Detection (MFPLD) Model
+
+2.2 Model Assumptions
+
+The MFPLD model is built upon the following key assumptions:
+
+Assumption ID: MFPLD-A1
+Assumption: The list of 10 high-level biased language categories and the corresponding 620 biased phrases provided by the Fair Lending team accurately represent the prohibited language that may influence property valuation.
+Rationale: The Fair Lending team's expertise and understanding of fair lending laws and regulations are crucial in defining the biased language categories and corresponding phrases that should be detected by the model. This assumption ensures that the model focuses on the appropriate language that could lead to unfair and inequitable outcomes.
+Update Frequency: The list of biased language categories and phrases should be reviewed and updated periodically (e.g., annually) by the Fair Lending team to ensure that the model remains current and effective in detecting prohibited language.
+
+Assumption ID: MFPLD-A2
+Assumption: The sentence-transformers-all-miniLM-l6v2 model provides accurate and reliable sentence embeddings for the appraisal and related documents, as well as the biased language phrases.
+Rationale: The sentence embedding model is a critical component of the MFPLD model, as it enables the calculation of semantic similarity between sentences and biased language phrases. The performance of the embedding model directly impacts the accuracy of the bias detection mechanism.
+Update Frequency: The sentence embedding model should be monitored for updates and improvements, and the MFPLD model should be re-evaluated to determine if a newer version of the embedding model would improve the overall performance.
+
+Assumption ID: MFPLD-A3
+Assumption: The global similarity threshold of 0.50 is an appropriate and effective threshold for determining the presence of biased language in a sentence.
+Rationale: The global similarity threshold is used to identify sentences that contain biased language based on their similarity to the defined biased language phrases. The threshold value of 0.50 was selected based on empirical testing and evaluation, but may need to be adjusted over time as the model is deployed and refined.
+Update Frequency: The global similarity threshold should be reviewed periodically (e.g., quarterly) and adjusted as necessary based on the model's performance and feedback from the MF Lender Risk Management team.
+
+2.3 Model Limitations
+
+The MFPLD model has the following key limitations:
+
+Limitation ID: MFPLD-L1
+Limitation: Dependence on the accuracy and completeness of the biased language categories and phrases provided by the Fair Lending team.
+Impact: If the biased language categories or phrases are incomplete or inaccurate, the model may fail to detect certain prohibited language or may flag language that is not actually biased.
+Compensating Controls: Regular review and update of the biased language categories and phrases by the Fair Lending team, as well as ongoing monitoring of the model's performance and any feedback from the MF Lender Risk Management team.
+
+Limitation ID: MFPLD-L2
+Limitation: Reliance on the performance of the sentence-transformers-all-miniLM-l6v2 model for accurate sentence embeddings.
+Impact: If the sentence embedding model performs poorly or fails to capture the nuances of language, the similarity calculations and bias detection may be inaccurate.
+Compensating Controls: Ongoing monitoring of the sentence embedding model's performance and consideration of alternative embedding models if the current one proves to be insufficient.
+
+Limitation ID: MFPLD-L3
+Limitation: Potential for false positives or false negatives in the bias detection due to the inherent challenges of natural language processing.
+Impact: The model may incorrectly flag sentences as containing biased language (false positives) or fail to detect biased language in some sentences (false negatives), leading to potential over-correction or missed instances of prohibited language.
+Compensating Controls: The inclusion of the text classification model in the second stage of the MFPLD solution is designed to address this limitation by reducing the rates of false positives and false negatives. However, ongoing monitoring and refinement of the text classification model may be necessary to maintain its effectiveness.
+
+These limitations and their potential impacts are acknowledged, and the MFPLD model includes compensating controls to mitigate the risks associated with these limitations. However, it is important to note that some level of residual risk may remain, and the model's performance should be closely monitored and adjusted as needed to ensure its continued effectiveness in detecting prohibited language in multifamily appraisal and related documents.
+
+### 2.2 Model Assumptions
+
+The development and operational efficacy of the model described hinge on a set of critical assumptions. These assumptions impact the model's design, functionality, and the interpretation of its outputs. Below, we outline these assumptions, their justification, and the protocol for their review and update.
+
+#### Assumptions Overview:
+
+1. **Language Uniformity**: Assumes that the documents are written in a consistent language and style. This is crucial for the embedding process, which is language-specific.
+2. **Contextual Relevance**: The model presumes that the pre-trained embeddings (sentence-transformers-all-miniLM-l6v2) accurately capture the nuances and contexts of the phrases and sentences within the domain of mortgage appraisal documents.
+3. **Bias Categorization Completeness**: Assumes that the ten high-level bias categories and the corresponding 620 biased phrases comprehensively cover the spectrum of potential biases in the documents.
+4. **Global Similarity Threshold Relevance**: The assumption that a global similarity threshold (set at 0.50) is adequate for identifying sentences with bias across all categories.
+5. **Document Structure Consistency**: Assumes a relatively standard structure of appraisal documents, where parsing them into sentences does not omit or distort critical information.
+
+#### Determination and Rationale:
+
+- Assumptions regarding language uniformity and contextual relevance are based on the model's reliance on NLP techniques, which are sensitive to language variations.
+- The comprehensiveness of bias categorization is determined through an extensive review of literature and industry practices, aiming to capture a wide array of biases.
+- The global similarity threshold is empirically set, based on preliminary tests indicating its effectiveness in balancing sensitivity and specificity in bias detection.
+- Document structure consistency is assumed based on standards and guidelines in the appraisal industry, facilitating the model's ability to parse and analyze documents accurately.
+
+#### Update Protocol:
+
+- **Language Uniformity and Contextual Relevance**: These assumptions are reviewed annually or upon significant updates to the NLP field or the introduction of new languages and dialects in the documents processed.
+- **Bias Categorization Completeness and Global Similarity Threshold**: Adjustments are considered bi-annually or following significant legal, social, or industry-standard changes affecting bias perception and reporting requirements.
+- **Document Structure Consistency**: Reviewed following any major changes in appraisal documentation standards or practices.
+
+### 2.3 Model Limitations
+
+Despite its innovative approach, the model has inherent limitations that must be acknowledged and managed.
+
+#### Limitations Overview:
+
+1. **Data Availability and Quality**: The model's performance is contingent on the availability and quality of appraisal documents. Poorly structured, incomplete, or low-quality documents may impair the model's effectiveness.
+2. **Modeling Methodology**: While the embedding and similarity calculation methods are advanced, they may not capture all forms of nuanced language or subtle biases.
+3. **Segmentation**: The segmentation of documents into sentences may not always reflect the contextual completeness, potentially affecting the detection of biases that span multiple sentences.
+4. **Assumption Accuracy**: The assumptions about language, bias categories, and the similarity threshold may not hold true for all documents, potentially leading to inaccuracies.
+
+#### Impact and Compensating Controls:
+
+- **Data Quality Controls**: Implementing rigorous data preprocessing and quality checks can mitigate the impact of poor data quality.
+- **Continuous Model Training**: Regularly updating the model with new data and refinements can address limitations related to methodology and segmentation.
+- **Assumption Reevaluation**: Establishing a systematic review process for model assumptions ensures that the model adapts to changes in language use, legal standards, and societal norms regarding biases.
+- **Sensitivity Analysis**: Conducting sensitivity analyses on the similarity threshold and other model parameters can help identify the model's robustness and areas for improvement.
+
+In conclusion, while the model presents a novel approach to detecting bias in mortgage appraisal documents, it is not without its limitations. Acknowledging, monitoring, and compensating for these limitations through continuous improvement and adaptation is crucial for maintaining the model's relevance and effectiveness.
+
+
