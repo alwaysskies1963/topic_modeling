@@ -1509,139 +1509,196 @@ print(df_exploded)
 
 Background, Purpose, and Scope:
 Fannie Mae, a leading provider of mortgage financing, receives thousands of recommendation memos, sponsor credit reviews, and sponsor and lender narratives as part of the loan underwriting process for multifamily properties. This voluminous documentation is essential for assessing the collateral worth of these properties. However, not all the information contained within these reports is necessarily useful for creating an accurate property valuation. In some instances, the appraisals may include subjective opinions or biases based on protected characteristics under fair lending laws and regulations, and these biases can manifest in non-obvious ways.
-
 To address this issue, Fannie Mae's MF Lender Risk Management team has been manually reviewing these reports since 2021, identifying and flagging language that violates the Fannie Mae Selling Guide or contains subjective terminology that should not affect the property's value. While this manual review process has been effective, it is time-consuming and represents a significant cost to the organization.
-
 The purpose of this project is to develop an internal solution that can automatically scan multifamily appraisal comments and detect prohibited language within them. This solution is closely related to the Automated Property Linguistic Detection (APLD) model developed for Fannie Mae's Collateral Risk team, which addresses similar challenges in the single-family mortgage market.
-
 The scope of this project is to create a robust, two-stage AI-based solution, the Multifamily Prohibited Language Detection (MFPLD) model, that can efficiently and reliably identify prohibited language in multifamily appraisal comments, reducing the workload for manual review and ensuring fair and equitable collateral valuation.
-
-Model Usage:
+Model Usage
 The MFPLD model is designed to be used by Fannie Mae's MF Lender Risk Management team to automate the process of detecting prohibited language in multifamily appraisal comments. The model will receive a list of biased language categories from the Fair Lending team, as well as the appraisal files to be analyzed.
-
 In the first stage of the model, the MFPLD model will parse the appraisal reports into sentences and compare them to a pre-defined keyword list provided by the Fair Lending team. This will allow the model to identify any sentences that contain prohibited language related to the input categories.
-
 In the second stage, a text classification model will be used to reduce the number of false positives and false negatives in the results of the first stage. This two-stage approach is similar to the APLD model developed for the Collateral Risk team and is designed to create an effective solution that significantly reduces or eliminates the need for manual review of appraisals for potential bias.
-
 Scope of Model Changes:
 The MFPLD model is designed to be a flexible and adaptable solution that can evolve over time to meet the changing needs of Fannie Mae's MF Lender Risk Management team. The model's scope can be expanded to include additional biased language categories, as identified by the Fair Lending team, or to incorporate new sources of appraisal data as they become available.
-
 Furthermore, the text classification model used in the second stage of the MFPLD solution can be fine-tuned and retrained over time to improve its accuracy in detecting false positives and false negatives. This ongoing model refinement will ensure that the MFPLD solution remains effective and efficient in identifying prohibited language in multifamily appraisal comments.
-
 Model Overview:
 The MFPLD model is a two-stage AI-based solution that is designed to automatically detect prohibited language in multifamily appraisal comments. The key components of the model are as follows:
-
 Stage 1: Keyword-based Detection
-
 The model receives a list of biased language categories from the Fair Lending team.
 The model parses the appraisal reports into sentences and compares them to a pre-defined keyword list provided by the Fair Lending team.
 The model identifies any sentences that contain prohibited language related to the input categories.
 Stage 2: Text Classification
-
 A text classification model is used to analyze the results of the first stage and identify any false positives or false negatives.
 The text classification model is trained on a dataset of appraisal comments, both those containing prohibited language and those that do not, to improve the overall accuracy of the MFPLD solution.
 The two-stage approach of the MFPLD model is designed to provide a comprehensive and reliable solution for detecting prohibited language in multifamily appraisal comments. By combining keyword-based detection with machine learning-based text classification, the model can efficiently and accurately identify biased language, reducing the workload for manual review and ensuring fair and equitable collateral valuation.
-
-
 1. Background, Purpose, and Scope
 Background
 Fannie Mae is a pivotal entity in the housing finance system, tasked with the significant responsibility of underwriting multifamily property loans. This process requires the examination of thousands of documents annually, including recommendation memos, sponsor credit reviews, and sponsor and lender narrative reports. These documents are crucial for assessing the collateral worth of properties, yet they often contain extraneous or biased information that can skew property valuations. Recognizing the potential for subjective opinions and biases, especially those infringing upon fair lending laws by focusing on protected characteristics, Fannie Mae has historically engaged in manual reviews to identify and address prohibited language within these appraisals.
-
 Purpose
 The core aim of introducing an automated solution is to streamline the identification of biased or prohibited language in appraisal comments. This initiative not only seeks to enhance the efficiency and reliability of the process but also aims to mitigate the risk of bias affecting property valuations. By automating this critical review process, Fannie Mae intends to uphold the integrity of its underwriting process while significantly reducing the operational burden and associated costs of manual reviews.
-
 Scope
 The project's scope encompasses the development and implementation of an internal solution designed to automatically scan multifamily (MF) appraisal comments for prohibited language. Leveraging a two-stage artificial intelligence model, this solution will closely mirror the functionality of the existing APLD model used by the Single Family Collateral Risk team. The scope includes parsing appraisal reports into sentences, detecting biased phrases based on a predefined keyword list, and employing a text classification model to minimize false positives and negatives in the appraisal review process.
-
 2. Model Usage
 The proposed model operates on a two-stage principle to ensure thorough and accurate detection of prohibited language within multifamily appraisal comments. The first stage involves receiving a list of biased categories from the user, alongside the appraisal files. The model then parses these reports into sentences, utilizing a keyword list provided by the Fair Lending team to identify phrases closely resembling prohibited language related to the input categories. This initial stage allows users to maintain control over the categories deemed prohibited, ensuring that the model's focus aligns with current regulatory standards and organizational policies.
-
 In the second stage, the model employs a sophisticated text classification algorithm to sift through the results from the first stage, aiming to accurately distinguish between true and false positives. This dual-stage approach not only enhances the precision of the detection process but also significantly reduces the likelihood of overlooking genuine instances of biased language or erroneously flagging innocuous content.
-
 3. Scope of Model Changes
 The introduction of the MFPLD model signifies a significant advancement in Fannie Mae's approach to managing collateral risk and ensuring fair lending practices. While the model inherits its foundational principles from the Single Family's APLD model, it incorporates several key enhancements to address the unique challenges presented by multifamily appraisal comments. The most notable change lies in the adaptation and expansion of the keyword list, tailored to reflect the nuanced language commonly found in multifamily appraisals. Additionally, the inclusion of a machine learning model in the second stage represents a strategic enhancement aimed at improving the accuracy of bias detection by reducing false positives and negatives. These modifications are expected to augment the model's effectiveness, enabling a more streamlined, accurate, and efficient review process.
-
 4. Model Overview
 The MFPLD model represents a cutting-edge solution designed to automate the detection of prohibited language in multifamily appraisal comments. At its core, the model is structured around a two-stage artificial intelligence system that mirrors the proven efficacy of the APLD model used within the Single Family sector. The first stage focuses on parsing appraisal reports into sentences and identifying phrases that closely match a predefined list of biased keywords. This approach allows for precise detection of potentially prohibited language, with a significant emphasis on user-defined categories.
-
 The second stage introduces an advanced text classification model, which meticulously reviews the findings from the first stage to discern between true and false positives. This layered approach ensures a high degree of accuracy in identifying biased language, effectively minimizing the risks associated with manual review processes. Through its innovative design and strategic implementation, the MFPLD model is poised to revolutionize Fannie Mae's appraisal review process, offering a scalable, efficient, and reliable solution for upholding the highest standards of fairness and integrity in property valuation.
-
-
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 1. Background, Purpose, and Scope
 The underwriting process at Fannie Mae involves the analysis of thousands of documents annually, including recommendation memos, sponsor credit reviews, and narratives from sponsors and lenders. These documents play a crucial role in assessing the value of multifamily properties, which is essential for determining collateral worth. However, not all information contained within these reports contributes to an accurate property valuation. Subjective opinions or biases based on protected characteristics, which are prohibited under fair lending laws and regulations, can inadvertently influence these assessments.
-
 Since 2021, the MF Lender Risk Management team at Fannie Mae has been tasked with manually reviewing these documents to identify and flag language that violates the Fannie Mae Selling Guide or introduces subjective bias that could affect property valuation. Identified violations prompt notifications to appraisers about the use of such language. This manual review process, while necessary, is both time-consuming and costly.
-
 The purpose of this initiative is to develop an automated solution capable of detecting prohibited language within MF appraisal comments efficiently and reliably. The scope includes the automation of bias detection in appraisal comments, leveraging AI technology to streamline the process previously managed through manual review. This move aims to significantly reduce the workload and associated costs of manual bias detection in appraisal documents, enhancing efficiency and accuracy in Fannie Mae's underwriting process.
-
 2. Model Usage
-The proposed solution is a two-stage AI model, designed to automate the detection of prohibited language within multifamily (MF) appraisal comments. The first stage involves receiving a list of biased categories and the appraisal files from the user. The model then parses these appraisal reports into sentences and employs a keyword list, pre-defined by the Fair Lending team, to identify sentences that contain language similar to the biased phrases related to the input categories. This process ensures that detection is aligned with the specific prohibitions defined by the individuals overseeing these categories.
+The proposed solution is a two-stage AI model, designed to automate the detection of prohibited language within multifamily (MF) appraisal comments. The first stage involves receiving a list of biased categories and the appraisal files from the user. The model then parses these appraisal reports into sentences and employs a keyword list, pre-defined by the Fair Lending team, to identify sentences that contain language similar to the biased phrases related to the input categories. This process ensures that detection is aligned with the specific prohibitions deined by the individuals overseeing these categories.
 
 The second stage of the model applies a text classification technique to sift through the results of the first stage, aiming to identify false positives. This two-pronged approach mirrors the APLD model developed for the Collateral Risk team, emphasizing the reduction of both false positives and false negatives in the detection process. By adding a machine learning (ML) model in the second stage, the solution endeavors to enhance the reliability and efficiency of detecting biased language in appraisal comments, thereby reducing the necessity for manual review.
-
 3. Scope of Model Changes
 The MFPLD model represents an evolution from the previously developed APLD model, specifically tailored for the appraisal comments of multifamily properties. This new model introduces several critical enhancements to accommodate the unique requirements of MF appraisal document review. Firstly, it incorporates a more extensive and detailed pre-defined keyword list provided by the Fair Lending team, ensuring comprehensive coverage of biased language across various categories.
-
 Furthermore, the addition of a machine learning model in the second stage marks a significant improvement aimed at refining the detection process. This ML model is tasked with reducing the rates of false positives and false negatives, addressing one of the main challenges in automated language detection. By focusing on the accuracy and reliability of the detection mechanism, the MFPLD model aims to significantly diminish the manual effort required in reviewing appraisal documents for potential bias, streamlining the process for Fannie Mae's MF Lender Risk Management team.
-
 4. Model Overview
 The MFPLD model is a sophisticated AI solution designed to automate the detection of prohibited language within appraisal comments for multifamily properties. It operates in two distinct stages to ensure high accuracy and efficiency. In the first stage, the model receives user-defined biased categories along with the appraisal files. It then parses these files into sentences and employs a pre-defined keyword list to detect sentences that may contain biased language related to the specified categories.
-
-
-
 ====================================================================================================
 1.1 Background, Purpose, and Scope
 Background: Fannie Mae processes thousands of documents annually as part of its multifamily property loan underwriting procedures. These documents, including recommendation memos and sponsor credit reviews, play a critical role in evaluating the collateral worth of properties. A recurring challenge has been the presence of biased language within these reports, which can affect the accuracy of property valuations. This biased language, often subtle and rooted in subjective opinions or protected characteristics, contravenes fair lending laws and regulations.
-
 Purpose: The purpose of developing the MFPLD (Multifamily Prohibited Language Detector) model is to automate the detection of prohibited language within appraisal comments, thereby enhancing the accuracy and fairness of property valuations. This initiative stems from the need to improve efficiency and reduce the manual labor involved in reviewing appraisal reports for biased language, a process that is both time-consuming and costly.
-
 Scope: The model is designed to automatically scan and detect biased language in multifamily appraisal comments, leveraging a two-stage AI solution for this purpose. It is an internal solution closely related to the APLD model developed for the Collateral Risk team, aimed at significantly reducing the workload associated with manual reviews of appraisal reports for potential bias. The MFPLD model applies specifically to the multifamily property loan underwriting process at Fannie Mae, addressing a previously unaddressed problem of automated bias detection in appraisal reports.
-
 Model Development: This is a new model, developed to address the challenges of manually detecting biased language in appraisal reports—a process previously unautomated. The MFPLD model represents an innovative approach to enhancing the accuracy and fairness of property valuations at Fannie Mae.
-
 1.2 Model Usage
 Application: The MFPLD model is used within the loan underwriting process, specifically in assessing the collateral worth of multifamily properties. Its primary function is to automate the detection of prohibited language in appraisal comments, contributing to more accurate and unbiased property valuations.
-
 Product Types and Segmentation: The model is applicable to multifamily property appraisals, serving as a critical tool in the loan underwriting process for these properties.
-
 Expected Results: By automating the detection of biased language, the model aims to improve the efficiency, accuracy, and fairness of property valuations. This contributes to a more equitable lending process, in line with fair lending laws and regulations.
-
 Known and Planned Usages: Currently, the MFPLD model is used to scan and detect prohibited language in multifamily appraisal comments. Future enhancements and broader applications within Fannie Mae's loan underwriting processes are anticipated as the model's capabilities evolve.
-
 1.3 Scope of Model Changes
 Major Changes: Given that the MFPLD model is a new development, this section would typically outline any significant changes from previous versions or related models. In the case of the MFPLD, it can be noted that it introduces a two-stage AI solution for detecting prohibited language, an advancement over manual review processes previously employed.
-
 Minor Changes: Any minor changes or enhancements made during the development phase would be detailed in Appendix E, as per the document structure.
-
 1.4 Model Overview
 Reasons for Creation: The MFPLD model was created to address the inefficiencies and inaccuracies associated with manually reviewing appraisal reports for biased language. By automating this process, Fannie Mae aims to enhance the fairness and accuracy of property valuations for multifamily properties.
-
 Enhancements in Modeling Methodology: The model introduces a two-stage AI solution, incorporating both keyword detection and text classification to accurately identify prohibited language in appraisal comments. This methodology represents a significant enhancement over previous manual processes.
-
 Improvements in Model Performance: The automation of biased language detection is expected to significantly reduce the time and cost associated with manual reviews, while also improving the accuracy and fairness of property valuations.
-
 Upstream and Downstream Models: The MFPLD model works in conjunction with other models in the loan underwriting process, such as the APLD model for the Collateral Risk team. A depiction of model interdependencies, including data flows, would illustrate how the MFPLD model integrates within Fannie Mae's broader risk management framework.
-
 Component Model Information Systems: The development and operation of the MFPLD model involve various programs, software, and technologies, including AI and machine learning platforms, which enable the parsing of appraisal reports and the detection of biased language.
-
 This content provides a structured outline for each of the segments based on the executive summary provided.
-
-
-
-
-
-
-
 The second stage involves a machine learning (ML) model that scrutinizes the results from the first stage, identifying and filtering out false positives. This dual-stage approach enhances the model's capability to accurately detect prohibited language, thereby significantly reducing the manual review workload.
-
 The development of the MFPLD model is a testament to Fannie Mae's commitment to leveraging technology for improving efficiency and accuracy in the underwriting process. By automating the detection of biased language in appraisal documents, the MFPLD model represents a critical step forward in streamlining operations and upholding the integrity of property valuations under fair lending laws and regulations.
 --------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------
-
-
 The MFPLD (Multifamily Prohibited Language Detector) model is designed to streamline the process of identifying biased language within appraisal reports, a crucial step in ensuring fair and accurate property evaluations. At the outset, users input specific categories of bias they wish to detect, along with the appraisal documents to be analyzed. Following this initial setup, the model meticulously segments the reports into individual sentences. It then employs an advanced algorithm to scrutinize each sentence against a comprehensive list of biased phrases. This list is meticulously curated by the Fair Lending team, ensuring it reflects the most current understanding of language that could unfairly influence property valuations. This approach empowers users with the authority to define and target specific prohibited language categories, tailoring the detection process to meet stringent fairness criteria.
-
 In the subsequent phase of analysis, the model leverages a sophisticated text classification system to sift through the preliminary findings. This is where the model's intelligence shines, as it diligently distinguishes between true instances of biased language and those sentences falsely flagged in the initial screening. This dual-layered approach, inspired by the proven efficacy of the APLD model used by the Collateral Risk team, incorporates machine learning techniques to refine its accuracy further. By minimizing the rates of both false positives (innocuous sentences incorrectly flagged as biased) and false negatives (biased sentences that go undetected), the model significantly enhances the efficiency and reliability of the detection process.
-
 This two-pronged strategy represents a potent solution to the traditionally labor-intensive task of manually reviewing appraisal reports for bias. By automating the detection of prohibited language with such precision and control, the MFPLD model promises to drastically reduce the human effort required in these analyses. Consequently, this not only speeds up the appraisal review process but also elevates the standard of fairness in property valuations, aligning closely with the overarching objectives of fair lending practices.
+111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
+Thank you for providing the detailed conceptual framework and model structure for the Multifamily Prohibited Language Detection (MFPLD) model. This is a comprehensive overview that covers the key components, mathematical specifications, and literature survey supporting the model's design. Let me summarize the key points:
+
+Biased Language Categories and Mapping Dictionary:
+The model uses 10 high-level biased language categories (e.g., sexual orientation, gender, race/ethnicity) and a mapping dictionary of 620 corresponding biased phrases.
+Sentence Parsing and Embedding:
+The model parses documents into sentences and generates 256-dimensional sentence embeddings using the sentence-transformers-all-miniLM-l6v2 model.
+The model also generates embeddings for the 620 biased phrases.
+Similarity Calculation:
+The model calculates the cosine similarity between each sentence and the 620 biased phrases.
+The maximum similarity score for each of the 10 high-level biased language categories is reported.
+Bias Detection:
+If any of the 10 similarity scores for a sentence exceeds a global similarity threshold (0.50 in this case), the model flags the sentence as containing biased language.
+The conceptual framework is based on the premise that biased language in mortgage appraisal and related documents can influence property valuation, leading to unfair and inequitable outcomes. The two-stage approach, combining keyword-based detection and text classification, is a novel and unique solution compared to alternative methodologies like rule-based, supervised machine learning, and unsupervised anomaly detection approaches.The mathematical specifications and literature survey provided demonstrate the solid theoretical and empirical foundations of the MFPLD model. The use of sentence embeddings, similarity calculations, and a global threshold for bias detection are well-supported by the referenced research.
+Overall, this is a comprehensive and well-designed framework for detecting prohibited language in mortgage-related documents, with the potential to improve fairness and equity in property valuation. The hybrid approach leverages the strengths of both rule-based and machine learning techniques to create a robust and effective solution.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+Conceptual Framework and Model Structure
+
+The Multifamily Prohibited Language Detection (MFPLD) model is a two-stage AI-based solution designed to automatically detect prohibited language in mortgage appraisal and other related documents that may affect property valuation. The model consists of the following key components:
+
+Biased Language Categories and Mapping Dictionary
+The model receives a list of 10 high-level biased language categories, such as sexual orientation, gender, location, desirability, disability, income-level, familial status, race/nationality/ethnicity, age, and demographics.
+The model also receives a mapping dictionary that maps each high-level category to 620 corresponding biased phrases, such as "poor family," "low-income community," and so on.
+Sentence Parsing and Embedding
+The model receives appraisal and other related documents and parses them into sentences.
+The model uses the sentence-transformers-all-miniLM-l6v2 model to generate 256-dimensional embedding vectors for each sentence and for the 620 biased phrases.
+Similarity Calculation
+After mean-pooling and normalizing the embedding vectors, the model calculates the cosine similarity between each sentence and the 620 biased phrases from the 10 high-level categories.
+The model then reports the 10 high-level category similarity scores by finding the maximum similarity score from the biased phrases related to each high-level category.
+Bias Detection
+If any of the 10 similarity scores for a sentence is higher than a global similarity threshold (set to 0.50 in this case), the model adds a binary variable to the report indicating that the sentence contains biased language.
+The conceptual framework of the MFPLD model is based on the premise that subjective opinions or biased language in mortgage appraisal and related documents can influence property valuation, potentially leading to unfair and inequitable outcomes. By automating the detection of such prohibited language, the model aims to reduce the workload for manual review and ensure fair and equitable collateral valuation.
+
+Mathematical Specifications
+
+The MFPLD model leverages several mathematical and statistical techniques to achieve its objectives:
+
+Sentence Embedding:
+The model uses the sentence-transformers-all-miniLM-l6v2 model to generate 256-dimensional embedding vectors for each sentence and the 620 biased phrases.
+The embedding vectors are mean-pooled and normalized to obtain the final sentence and biased phrase representations.
+Similarity Calculation:
+The model calculates the cosine similarity between each sentence and the 620 biased phrases using the formula:
+
+Copy code
+similarity = dot(sentence_embedding, biased_phrase_embedding) / (norm(sentence_embedding) * norm(biased_phrase_embedding))
+The maximum similarity score for each of the 10 high-level biased language categories is then reported.
+Bias Detection:
+The model compares the maximum similarity scores for each sentence against a global similarity threshold (set to 0.50 in this case).
+If any of the similarity scores exceed the threshold, the model adds a binary variable to the report indicating the presence of biased language in the sentence.
+Literature Survey
+
+The conceptual framework and modeling techniques used in the MFPLD model are supported by various academic and industry publications:
+
+Sentence Embedding and Similarity Calculation:
+Reimers, N., & Gurevych, I. (2019). Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks. In Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing (EMNLP-IJCNLP) (pp. 3982-3992). Link
+Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., ... & Polosukhin, I. (2017). Attention is all you need. In Advances in neural information processing systems (pp. 5998-6008). Link
+Bias Detection in Language Models:
+Bolukbasi, T., Chang, K. W., Zou, J. Y., Saligrama, V., & Kalai, A. T. (2016). Man is to computer programmer as woman is to homemaker? Debiasing word embeddings. In Advances in neural information processing systems (pp. 4349-4357). Link
+Zhao, J., Wang, T., Yatskar, M., Ordonez, V., & Chang, K. W. (2017). Men also like shopping: Reducing gender bias amplification using corpus-level constraints. In Proceedings of the 2017 Conference on Empirical Methods in Natural Language Processing (pp. 2979-2989). Link
+Bias in Mortgage Appraisals:
+Howell, J., & Korver-Glenn, E. (2020). The Increasing Effect of Neighborhood Racial Composition on Housing Values, 1980–2015. Social Problems, 68(4), 1025-1044. Link
+Perry, A. M., Rothwell, J., & Harshbarger, D. (2018). The devaluation of assets in Black neighborhoods: The case of residential property. Brookings Institution. Link
+Evaluation of Alternative Methodologies
+
+The MFPLD model's two-stage approach, combining keyword-based detection and text classification, is a novel and unique approach to the problem of detecting prohibited language in mortgage appraisal and related documents.
+
+Alternative methodologies that were considered and their strengths and weaknesses include:
+
+Rule-based Approach:
+Strengths: Simple to implement, easy to understand, and provides transparent decision-making.
+Weaknesses: Requires extensive manual curation of rules, may miss subtle or context-dependent biases, and may have high false positive rates.
+Supervised Machine Learning Approach:
+Strengths: Can learn complex patterns from data, potentially more accurate than rule-based approaches.
+Weaknesses: Requires a large annotated dataset, which can be time-consuming and expensive to obtain, and may struggle with out-of-sample data.
+Unsupervised Anomaly Detection Approach:
+Strengths: Can identify unusual or anomalous language without prior labeling, may uncover previously unknown biases.
+Weaknesses: May have high false positive rates, difficult to interpret and explain the results.
+The two-stage approach of the MFPLD model, combining the strengths of keyword-based detection and text classification, is designed to address the limitations of these alternative methodologies. The keyword-based detection provides a transparent and controllable mechanism for identifying prohibited language, while the text classification model helps to reduce false positives and false negatives. This hybrid approach leverages the benefits of both rule-based and machine learning techniques, resulting in a more robust and effective solution for detecting prohibited language in mortgage appraisal and related documents.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+The development of a model aimed at identifying and analyzing subjective opinions or biased language within mortgage appraisal documents and related content is a critical step towards ensuring fairness and objectivity in property valuation processes. The model described here uses a sophisticated blend of natural language processing (NLP) techniques and sentence embedding technologies to detect biased language across ten high-level categories. This white paper outlines the conceptual framework, mathematical specifications, and theoretical background of the model, evaluates alternative methodologies, and discusses the strengths and weaknesses of various approaches.
+
+Conceptual Framework and Model Structure
+The model is designed to process appraisal and related documents by parsing the text into sentences and analyzing these sentences for biased language corresponding to ten predetermined categories (e.g., sexual orientation, gender, location, desirability). It achieves this through the use of the sentence-transformers-all-miniLM-l6v2 for embedding both the biased phrases and sentences from the documents. By calculating the cosine similarity between sentence embeddings and pre-defined biased phrase embeddings, the model identifies and quantifies the level of bias in each sentence.
+
+Model Structure:
+Input Processing: Receives documents and a mapping dictionary linking high-level bias categories to specific biased phrases (620 in total).
+Sentence Embedding: Uses sentence-transformers-all-miniLM-l6v2 for embedding sentences and biased phrases, employing mean-pooling and normalization to process embedding vectors.
+Cosine Similarity Calculation: Computes the cosine similarity between sentence embeddings and biased phrase embeddings.
+Bias Detection: Assigns similarity scores to sentences based on their maximum similarity to biased phrases within each of the ten categories. Sentences with scores above a 0.50 threshold are flagged as biased.
+Mathematical Specifications
+The core mathematical operation in this model is the calculation of cosine similarity between the embedding vectors of sentences and biased phrases. 
+The cosine similarity is defined as:
+
+B are the embedding vectors of a sentence and a biased phrase, respectively. Mean-pooling is applied to embeddings to obtain a fixed-length vector for each sentence or phrase, followed by normalization to ensure comparability.
+
+Literature Survey and Theoretical Background
+The theoretical foundation of this model is rooted in the domain of natural language processing and machine learning, particularly in the use of embeddings for semantic analysis and bias detection. Sentence embeddings, as popularized by models like BERT and its variants (such as miniLM), have shown considerable success in capturing the contextual meanings of sentences (Devlin et al., 2018; Wang et al., 2020).
+
+The application of cosine similarity measures to compare embeddings is a well-established technique for semantic similarity assessment, offering a straightforward yet powerful means of identifying related concepts within texts (Mikolov et al., 2013).
+
+Evaluation of Alternative Methodologies
+Several alternative methodologies could be considered for this task, including rule-based systems, classic machine learning classifiers (e.g., SVMs, Random Forests), and other forms of deep learning models (e.g., RNNs, CNNs).
+
+Strengths and Weaknesses:
+Rule-Based Systems: While interpretable, they lack the flexibility and scalability of ML approaches, often missing nuanced expressions of bias.
+Classic Machine Learning: These models can be effective but require extensive feature engineering and may not capture the contextual nuances as effectively as embedding-based methods.
+Deep Learning Models (RNNs, CNNs): Though powerful for text analysis, they may require more data and computational resources than embedding-based approaches.
+Rationale for Selected Methodology
+The decision to employ sentence embeddings, particularly using the miniLM model for embedding generation, was driven by the model's ability to efficiently capture deep semantic meanings of text. The use of cosine similarity provides a straightforward and computationally efficient mechanism to assess the degree of bias within sentences. This approach balances performance with computational efficiency, making it particularly suitable for processing large volumes of text without sacrificing accuracy.
+
+Conclusion
+The described model represents a novel approach to detecting biased language within mortgage appraisal documents, leveraging the latest advancements in NLP and embedding technologies. Its design and methodology are grounded in sound mathematical principles and supported by existing literature, offering a balanced approach to bias detection that is both efficient and effective.
+Appendix D: References
+Devlin, J., Chang, M.-W., Lee, K., & Toutanova, K. (2018). BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding. arXiv.
+Wang, Y., Wang, W., Xu, J., & Shen, J. (2020). MiniLM: Deep Self-Attention Distillation for Task-Agnostic Compression of Pre-Trained Transformers. arXiv.
+Mikolov, T., Chen, K., Corrado, G., & Dean, J. (2013). Efficient Estimation of Word Representations in Vector
