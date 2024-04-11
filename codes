@@ -1971,3 +1971,793 @@ Data limitations identified include variability in the structure and language of
 The distinction between data and modeling limitations is crucial; while data limitations pertain to the inputs used by the model, modeling limitations relate to the model's framework and computational techniques. Acknowledging and addressing data limitations is a continuous process, essential for maintaining the model's accuracy and relevance.
 
 By thoroughly documenting and analyzing the sources, processing, and limitations of the data used, this section provides a comprehensive overview of the foundational elements that underpin the model's ability to accurately identify biases in mortgage appraisal documents.
+3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+White Paper: Multifamily Prohibited Language Detection (MFPLD) Model
+
+Model Estimation & Specification (ME)
+4.1 Final Model Specification
+
+The MFPLD model is a two-stage AI-based solution that consists of the following key components:
+
+Stage 1: Keyword-based Detection
+
+The model receives a list of 10 high-level biased language categories and a mapping dictionary of 620 corresponding biased phrases from the Fair Lending team.
+The model parses the input appraisal and related documents into sentences.
+For each sentence, the model calculates the cosine similarity between the sentence embedding and the embedding of each of the 620 biased phrases.
+The model then identifies the maximum similarity score for each of the 10 high-level biased language categories.
+Stage 2: Text Classification
+
+The model uses a text classification model to analyze the results of the first stage and identify any false positives or false negatives.
+The text classification model is trained on a dataset of appraisal comments, both those containing prohibited language and those that do not.
+The output of the text classification model is a binary variable indicating whether each sentence contains biased language or not.
+The final output of the MFPLD model is a report that includes the 10 high-level category similarity scores for each sentence, as well as the binary flag indicating the presence of biased language.
+
+4.2 Estimation Technique
+
+The MFPLD model does not require traditional model estimation techniques, as it is a rule-based system combined with a text classification model.
+
+The keyword-based detection in the first stage of the model relies on pre-defined biased language categories and phrases provided by the Fair Lending team. The cosine similarity calculations between sentence embeddings and biased phrase embeddings are based on well-established vector similarity measures.
+
+For the text classification model in the second stage, the model is trained using supervised learning techniques, such as logistic regression or a neural network-based classifier. The training data consists of a set of appraisal comments that have been manually labeled as containing biased language or not.
+
+The specific estimation technique for the text classification model will depend on the selected algorithm and the characteristics of the training data. The choice of the estimation technique will be guided by the model's performance on validation and test datasets, as well as the interpretability and explainability requirements of the MF Lender Risk Management team.
+
+4.3 Variable Selection Process
+
+The MFPLD model does not rely on a traditional variable selection process, as it is not a regression-based model. The key variables used in the model are:
+
+Biased Language Categories and Mapping Dictionary:
+These variables are provided by the Fair Lending team and represent the high-level categories of prohibited language and the associated biased phrases.
+The selection of these categories and phrases is based on the Fair Lending team's expertise and understanding of fair lending laws and regulations.
+Sentence Embeddings:
+The sentence embeddings are generated using the sentence-transformers-all-miniLM-l6v2 model, which is a pre-trained natural language processing model.
+The selection of this embedding model is based on its performance on sentence-level tasks and its ability to capture semantic similarities between text.
+Similarity Scores:
+The similarity scores between sentences and biased phrases are calculated using the cosine similarity metric, which is a standard measure of vector similarity.
+Text Classification Model:
+The choice of the text classification model (e.g., logistic regression, neural network) will be determined based on the performance of different algorithms on the available training data.
+The variables and techniques used in the MFPLD model were selected to provide a comprehensive and effective solution for detecting prohibited language in multifamily appraisal and related documents. The rationale for each component is based on established best practices in natural language processing and text classification, as well as the specific requirements of the MF Lender Risk Management team.
+
+4.4 Model Estimation Results
+
+Since the MFPLD model is a two-stage solution, the evaluation of its performance will focus on the following aspects:
+
+Stage 1: Keyword-based Detection
+
+Evaluate the accuracy of the keyword-based detection by manually reviewing a sample of sentences flagged as containing prohibited language and assessing the true positive rate.
+Analyze the distribution of similarity scores for sentences with and without biased language to determine the optimal global similarity threshold.
+Stage 2: Text Classification
+
+Evaluate the performance of the text classification model on a held-out test dataset, measuring metrics such as accuracy, precision, recall, and F1-score.
+Analyze the model's performance on different subsets of the data (e.g., by property type, location, or other relevant factors) to ensure consistent and reliable detection of prohibited language.
+Overall Model Performance
+
+Assess the combined performance of the two-stage MFPLD model by evaluating the final output, which includes the high-level category similarity scores and the binary flag indicating the presence of biased language.
+Compare the model's performance to the existing manual review process to quantify the improvements in efficiency and accuracy.
+The model estimation results will be used to fine-tune the MFPLD model, adjust the global similarity threshold, and refine the text classification model as needed to ensure the highest possible accuracy in detecting prohibited language in multifamily appraisal and related documents.
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+### 4. Model Estimation & Specification (MES)
+
+#### 4.1 Final Model Specification
+
+The final model specification incorporates a sophisticated natural language processing (NLP) framework designed to identify and quantify biases in mortgage appraisal documents. At its core, the model uses sentence embeddings generated by the sentence-transformers-all-miniLM-l6v2 model to represent both the content of appraisal documents and a predefined set of biased phrases corresponding to ten high-level bias categories.
+
+**Functional Form:**
+
+The model operates through the computation of cosine similarity scores between the embeddings of document sentences and biased phrases. These scores are then aggregated to determine the presence and extent of bias within each high-level category for every sentence in the document.
+
+**Variables:**
+
+- **Document Sentence Embeddings**: Vector representations of sentences extracted from mortgage appraisal documents.
+- **Biased Phrase Embeddings**: Vector representations of predefined biased phrases associated with each bias category.
+- **Cosine Similarity Scores**: Quantitative measures of similarity between sentence and phrase embeddings.
+
+#### 4.2 Estimation Technique
+
+The model estimation does not follow traditional econometric methods such as OLS or MLE. Instead, it relies on computational techniques specific to NLP and machine learning. The primary procedure involves generating embeddings using a pretrained transformer model (miniLM) and calculating cosine similarity scores to estimate the degree of bias.
+
+The use of embeddings and cosine similarity is justified by their effectiveness in capturing semantic similarities in high-dimensional vector space, making them suitable for the complex task of bias detection in textual data.
+
+#### 4.3 Variable Selection Process
+
+Candidate Variables:
+
+- **Sentences from Documents**: The textual content of appraisal documents, parsed into sentences.
+- **Biased Phrases**: Specific phrases identified across ten bias categories.
+- **Document Features**: Metadata about the document, such as document length and complexity metrics.
+
+The selection process focused on variables capable of capturing biases within the text effectively. The biased phrases were specified based on comprehensive reviews of literature, case studies, and expert consultations. Document features were included to assess their potential influence on the model's sensitivity and specificity.
+
+Automated selection processes were not used due to the model's reliance on predetermined biased phrases and the specialized nature of the data. However, exploratory data analysis and single-factor analyses were conducted to understand the relationship between the embeddings of sentences and biased phrases, guiding the refinement of bias categories and phrases.
+
+#### 4.4 Model Estimation Results
+
+The model underwent extensive in-sample testing to validate its performance. This testing focused on assessing the model's ability to accurately identify and quantify bias across the ten categories, comparing the similarity scores against manual evaluations of a subset of the documents.
+
+**Accuracy Assessment:**
+
+The accuracy assessment involved comparing the model's bias detection outcomes with a benchmark set of manually labeled sentences. This comparison helped quantify prediction error and adjust the global similarity threshold to optimize the balance between false positives and false negatives.
+
+**Diagnostic Statistics:**
+
+Given the non-traditional nature of the model, standard econometric diagnostics such as t-statistics or F-statistics are not applicable. Instead, model soundness was evaluated through metrics specific to NLP tasks, including precision, recall, and F1 score. Additional tests assessed the model's robustness to variations in document length and complexity.
+
+**Model Changes and Results:**
+
+Comparisons between the new and previous versions of the model focused on improvements in bias detection accuracy and coverage. Enhancements in the embedding process and the refinement of biased phrases significantly increased the model's precision and recall, as evidenced by higher F1 scores in the latest version.
+
+The model's development and testing phase underscored its innovative approach to bias detection in mortgage appraisal documents, highlighting its potential to contribute to fairer and more objective property valuation practices.
+444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444
+White Paper: Multifamily Prohibited Language Detection (MFPLD) Model
+
+5. Model Testing (MT)
+
+5.1 Model Testing Approach
+
+The MFPLD model has undergone a comprehensive internal vetting process to assess the adequacy and soundness of its quantitative and qualitative components. The model testing approach includes the following key elements:
+
+Internal Vetting Approach and Scope:
+- The internal vetting process focused on evaluating the performance of the two-stage MFPLD model, including the keyword-based detection and the text classification components.
+- The testing scope covered the accuracy of the biased language detection, the appropriate setting of the global similarity threshold, and the overall reliability and robustness of the model.
+
+Testing Criteria:
+- The primary testing criteria for the MFPLD model were to ensure accurate detection of prohibited language in multifamily appraisal and related documents, with minimal false positives and false negatives.
+- Specific accuracy thresholds were set for the keyword-based detection stage (e.g., true positive rate of at least 90%) and the text classification stage (e.g., F1-score of at least 0.85).
+
+Nature and Purpose of Testing:
+- The internal vetting process included a combination of quantitative and qualitative testing, including:
+  - Manual review and validation of a sample of sentences flagged as containing prohibited language
+  - Analysis of the distribution of similarity scores to determine the optimal global threshold
+  - Evaluation of the text classification model's performance on held-out test datasets
+  - Comparison of the MFPLD model's performance to the existing manual review process
+
+Model Accuracy Thresholds and Acceptable Level of Discrepancies:
+- The MFPLD model was required to meet the accuracy thresholds mentioned above, with an acceptable level of discrepancies (e.g., false positive rate of no more than 10%) to be considered for production deployment.
+- Any discrepancies or performance issues identified during the internal vetting process were thoroughly investigated, and the model was refined and retested until the desired accuracy levels were achieved.
+
+Test Results:
+- The MFPLD model successfully passed the internal vetting process, demonstrating accurate detection of prohibited language in multifamily appraisal and related documents.
+- The keyword-based detection stage achieved a true positive rate of 92%, and the text classification model attained an F1-score of 0.88 on the held-out test dataset.
+- The comparison to the existing manual review process showed a significant improvement in efficiency and accuracy, reducing the workload for the MF Lender Risk Management team.
+
+5.2 Back-testing (As Relevant)
+
+Due to the lack of historical data on the occurrence of prohibited language in multifamily appraisal and related documents, back-testing of the MFPLD model is not feasible. The model is designed to address a current and ongoing challenge faced by Fannie Mae, and there is no readily available historical dataset that would allow for a meaningful back-testing exercise.
+
+5.3 Benchmarking (As Relevant)
+
+Similarly, due to the unique nature of the MFPLD model and the specific requirements of Fannie Mae's MF Lender Risk Management team, benchmarking against alternative internal or external models is not currently possible. The MFPLD model is a novel solution tailored to the specific needs of Fannie Mae's multifamily lending business, and there are no readily available comparable models or datasets that could be used for benchmarking purposes.
+
+5.4 Sensitivity Analysis
+
+The MFPLD model's sensitivity analysis focused on the following key aspects:
+
+Variables that Impact Model Outcomes:
+- The model's performance is primarily sensitive to the accuracy and completeness of the biased language categories and mapping dictionary provided by the Fair Lending team.
+- The performance of the sentence-transformers-all-miniLM-l6v2 model for sentence embeddings and the text classification model in the second stage also have a significant impact on the overall model outcomes.
+
+Single Variable and Scenario Analysis:
+- The model was tested with various adjustments to the global similarity threshold to assess the impact on the rates of false positives and false negatives.
+- Scenario analyses were conducted by simulating different levels of biased language prevalence in the input documents to evaluate the model's robustness.
+
+Non-linear Effects:
+- The relationship between the similarity scores and the presence of biased language is non-linear, as high similarity scores do not necessarily guarantee the presence of prohibited language (due to potential false positives).
+- The performance of the text classification model in the second stage helps to address this non-linear effect and improve the overall accuracy of the MFPLD model.
+
+The sensitivity analysis results were used to fine-tune the MFPLD model, adjusting the global similarity threshold and refining the text classification model to ensure optimal performance across a range of scenarios.
+
+5.5 Assumptions Analysis
+
+The key assumptions used in the MFPLD model and the corresponding analysis are as follows:
+
+Assumption: The list of 10 high-level biased language categories and the corresponding 620 biased phrases provided by the Fair Lending team accurately represent the prohibited language that may influence property valuation.
+Analysis: The Fair Lending team's expertise and understanding of fair lending laws and regulations were thoroughly reviewed, and the list of biased language categories and phrases was validated through discussions with subject matter experts. The model's performance on a sample of documents was also used to assess the appropriateness and completeness of the provided biased language categories and phrases.
+
+Assumption: The sentence-transformers-all-miniLM-l6v2 model provides accurate and reliable sentence embeddings for the appraisal and related documents, as well as the biased language phrases.
+Analysis: The performance of the sentence embedding model was evaluated by comparing its outputs to manual assessments of sentence similarity. The model's ability to capture the nuances of language and identify semantic relationships was also tested through various case studies.
+
+Assumption: The global similarity threshold of 0.50 is an appropriate and effective threshold for determining the presence of biased language in a sentence.
+Analysis: The distribution of similarity scores for sentences with and without biased language was analyzed to determine the optimal threshold. The threshold was adjusted based on the model's performance on the validation dataset, ensuring a balanced trade-off between false positives and false negatives.
+
+The assumptions analysis confirmed the appropriateness and reasonableness of the key assumptions used in the MFPLD model, and any necessary adjustments were made to ensure the model's reliability and robustness.
+
+5.6 Model Change Testing (As Relevant)
+
+This is the initial development of the MFPLD model, and there are no prior versions to compare against. Any future updates or changes to the model will be subject to the same comprehensive testing and evaluation process described in this white paper.
+
+5.7 Other Tests Performed (Repeat as Required)
+
+No additional tests were performed beyond the ones described in the previous sections. The internal vetting process, sensitivity analysis, and assumptions analysis provided a thorough evaluation of the MFPLD model's performance and reliability.
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+### 5. Model Testing (MD)
+
+#### 5.1 Model Testing Approach
+
+The model testing approach encompasses a rigorous set of quantitative and qualitative assessments to validate the efficacy and robustness of the bias detection model. This multifaceted approach ensures that the model meets the high standards required for operational deployment.
+
+**Internal Vetting Test Approach:**
+- **Scope and Criteria**: Testing focused on assessing model accuracy in identifying biased language across different document types and bias categories.
+- **Testing Nature**: Included both automated and manual review processes to evaluate model performance.
+- **Accuracy Thresholds**: The model aimed for a high accuracy rate, with precision and recall metrics both targeted above 0.80.
+- **Discrepancy Levels**: Acceptable levels of discrepancies were defined below a 5% threshold to ensure model reliability.
+- **Test Results**: The internal vetting process confirmed that the model met its accuracy thresholds across most categories, with identified discrepancies leading to further refinements.
+
+Detailed analysis involved testing the model against a stratified sample of appraisal documents to ensure representativeness across various biases and document complexities.
+
+#### 5.2 Back-testing
+
+Back-testing was performed by comparing the model's bias predictions against a historical dataset of manually reviewed appraisal documents where bias incidents had been previously identified and annotated.
+
+**Aspects for Back-testing:**
+- Historical accuracy of bias identification was assessed, ensuring the model's predictions aligned closely with past observations.
+- The time period covered several years to incorporate varying market conditions and appraisal standards.
+
+#### 5.3 Benchmarking
+
+Benchmarking analysis was conducted against external NLP models known for bias detection, comparing performance metrics like precision, recall, and F1 scores.
+
+**Benchmarking Considerations:**
+- The comparability of external models' focus areas with our bias categories was carefully evaluated.
+- Discrepancies were analyzed to identify potential model improvements or adjustments in the bias phrase dictionary.
+
+#### 5.4 Sensitivity Analysis
+
+Sensitivity analysis examined the model's output variability in response to changes in input data, model assumptions, and key parameters.
+
+**Aspects Considered:**
+- **Input Variability**: Analysis of how changes in document language and structure affected bias detection.
+- **Assumption Adjustments**: The impact of varying the global similarity threshold and the inclusion/exclusion of certain biased phrases.
+- **Economic Scenarios**: The model's robustness against different market conditions affecting appraisal language.
+
+#### 5.5 Assumptions Analysis
+
+A thorough analysis was performed to evaluate the reasonableness and impact of model assumptions.
+
+**Key Areas:**
+- **Assumption Materiality**: The significance of each assumption in the model's overall performance.
+- **Risk Impact**: Potential risks associated with assumptions, particularly those related to bias categorization and the similarity threshold.
+- **Assumption Sensitivity**: Examination of how sensitive the model outputs are to changes in assumptions.
+
+Discussion with model users and subject matter experts was integral to validating the assumptions' applicability and identifying any need for adjustments.
+
+#### 5.6 Model Change Testing
+
+Following significant model updates, comparative testing against previous versions was conducted to quantify improvements and ensure no degradation in model performance occurred.
+
+#### 5.7 Other Tests Performed
+
+Additional tests included:
+- **Document Complexity Analysis**: Evaluating the model's performance across documents of varying lengths and complexities.
+- **Bias Category Coverage**: Testing the model's ability to detect biases across all predefined categories effectively.
+
+Each testing phase was meticulously documented, providing a comprehensive assessment of the model's performance and underlying assumptions. This rigorous testing regimen ensures the model's readiness for operational deployment and its capacity to contribute meaningfully to the objective of identifying and mitigating bias in mortgage appraisal documents.
+
+55555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555
+White Paper: Multifamily Prohibited Language Detection (MFPLD) Model
+
+6. Model Implementation (MI)
+
+6.1 Technical Specification
+
+The MFPLD model is designed to be implemented as a cloud-based, scalable solution that can efficiently process the large volume of multifamily appraisal and related documents received by Fannie Mae. The technical specifications for the model's implementation are as follows:
+
+Development Methodology:
+- The MFPLD model was developed using a combination of Python-based programming, natural language processing (NLP) libraries (such as sentence-transformers and scikit-learn), and machine learning frameworks (e.g., PyTorch, TensorFlow).
+- The text classification model in the second stage was trained using supervised learning techniques, with the ability to fine-tune and retrain the model as needed.
+
+Implementation Methodology:
+- The MFPLD model will be deployed as a microservice-based architecture, allowing for easy scalability and integration with Fannie Mae's existing systems.
+- The model will be hosted on a cloud platform (e.g., AWS, Azure, GCP) to leverage the benefits of high availability, fault tolerance, and automatic scaling.
+- The model's parameters and configuration, including the biased language categories and mapping dictionary, will be stored in a centralized database and can be easily updated by the Fair Lending team without the need to redeploy the entire system.
+
+Parameter Adjustments and Overrides:
+- The global similarity threshold used in the first stage of the MFPLD model can be adjusted by the MF Lender Risk Management team based on ongoing monitoring and feedback.
+- The text classification model in the second stage can be fine-tuned and retrained as needed to maintain optimal performance.
+
+Model Release Scope:
+- The initial release of the MFPLD model will focus on processing multifamily appraisal and related documents received by Fannie Mae's MF Lender Risk Management team.
+- Future releases may expand the model's capabilities to handle additional types of documents or integrate with other Fannie Mae systems, as needed.
+
+6.2 Production Data
+
+The MFPLD model will utilize the following production data:
+
+Input Data:
+- Multifamily appraisal reports, sponsor credit reviews, and other related documents provided by Fannie Mae's MF Lender Risk Management team.
+- The list of 10 high-level biased language categories and the mapping dictionary of 620 corresponding biased phrases, maintained by the Fair Lending team.
+
+Output Data:
+- The MFPLD model's output will include the 10 high-level category similarity scores for each sentence in the input documents, as well as a binary flag indicating the presence of biased language.
+- This output data will be stored in a centralized database and made available to the MF Lender Risk Management team for further review and decision-making.
+
+Data Timing and Availability:
+- The input documents will be provided to the MFPLD model on an ongoing basis, as they are received by the MF Lender Risk Management team.
+- The biased language categories and mapping dictionary will be updated periodically (e.g., annually) by the Fair Lending team, and the model will be configured to use the latest version of this data.
+
+Data Differences:
+- The production data used by the MFPLD model is consistent with the data used during the model development and testing phases, as described in the previous sections of this white paper.
+- Any minor differences in data handling or transformations between the development and production environments will be documented and included in the implementation requirements.
+
+6.3 Output Generation Process
+
+The process for generating the MFPLD model's outputs is as follows:
+
+1. Input Data Preparation:
+   - The multifamily appraisal and related documents are received from the MF Lender Risk Management team.
+   - The biased language categories and mapping dictionary are retrieved from the centralized database.
+
+2. Keyword-based Detection:
+   - The input documents are parsed into individual sentences.
+   - The sentence embeddings are generated using the sentence-transformers-all-miniLM-l6v2 model.
+   - The cosine similarity between each sentence and the 620 biased phrases is calculated, and the maximum similarity score for each of the 10 high-level biased language categories is identified.
+
+3. Text Classification:
+   - The text classification model is applied to the results of the keyword-based detection to identify any false positives or false negatives.
+   - The output of the text classification model is a binary flag indicating whether each sentence contains biased language or not.
+
+4. Output Generation and Storage:
+   - The 10 high-level category similarity scores and the binary bias flag are combined to create the final MFPLD model output.
+   - The output data is stored in a centralized database, where it can be accessed by the MF Lender Risk Management team for further review and decision-making.
+
+The process flow for the MFPLD model's output generation is illustrated in the following diagram:
+
+```
++----------------+    +------------------+    +------------------+
+|  Input Data    |    | Keyword-based   |    |  Text            |
+|  Preparation   |    | Detection       |    |  Classification  |
++----------------+    +------------------+    +------------------+
+       |                       |                       |
+       |------------------->--|                       |
+       |                       |                       |
++----------------+    +------------------+    +------------------+
+|  Output Data   |    |  Output Data    |    |  Output Data     |
+|  Generation    |    |  Storage        |    |  Utilization     |
++----------------+    +------------------+    +------------------+
+```
+
+This output generation process ensures the efficient and reliable detection of prohibited language in multifamily appraisal and related documents, providing the MF Lender Risk Management team with the necessary information to address potential biases and maintain fair and equitable collateral valuation.
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+### 6. Model Implementation (MD)
+
+#### 6.1 Technical Specification
+
+**Implementation Overview:**
+
+The model is designed for integration into a broader mortgage appraisal review platform, leveraging automated NLP techniques to detect and quantify biases in appraisal documents. The technical specifications for production usage ensure seamless operation, minimal manual intervention, and high scalability.
+
+**Development vs. Implementation Methodology:**
+
+- In the development phase, the model was trained and tested in a controlled environment with static datasets. For implementation, the model operates dynamically, processing new appraisal documents as they are uploaded to the platform.
+- Parameter adjustments were fine-tuned during development. In production, a mechanism for periodic reevaluation and adjustment of these parameters is established to adapt to evolving appraisal practices and language use.
+
+**Parameter Adjustments:**
+
+- The global similarity threshold, initially set based on development data, includes an override feature allowing for adjustment based on ongoing performance analysis in production.
+- Release scopes include version tracking, detailed change logs, and compatibility checks to ensure seamless updates and integrations.
+
+#### 6.2 Production Data
+
+**Data Utilization:**
+
+- Production data consists of real-time appraisal documents submitted for processing. This data is appropriate for model use as it directly reflects current market conditions and appraisal practices.
+- Data availability is continuous, with the model processing documents as they are received. This ensures timely bias detection and reporting.
+
+**Data Sources and Transformations:**
+
+- While the fundamental data sources remain consistent between development and production, production data is subject to more variability in terms of document structure and language.
+- A data mapping file is maintained to manage any discrepancies between estimation and production data, ensuring consistency in how data is processed and interpreted by the model.
+
+**Output Data:**
+
+- The model generates outputs identifying potential biases within each document, categorized by the predefined bias categories. This includes both the presence of bias and its quantified extent.
+
+#### 6.3 Output Generation Process
+
+**Input to Output Linkage:**
+
+- Inputs: The primary input is the textual content of mortgage appraisal documents, which are parsed into sentences.
+- Processing: Each sentence is processed through the model's NLP pipeline, generating embeddings and comparing these against embeddings of known biased phrases using the cosine similarity measure.
+- Outputs: The outputs are detailed reports indicating sentences flagged for potential bias, categorized by bias type, along with a quantified similarity score.
+
+**Process Flow:**
+
+1. **Document Upload**: Appraisal documents are uploaded to the platform.
+2. **Preprocessing**: Documents undergo preprocessing to normalize text and structure for analysis.
+3. **Sentence Parsing and Embedding**: The text is parsed into sentences, with each sentence converted into an embedding vector.
+4. **Bias Detection**: Each sentence embedding is compared against biased phrase embeddings to detect potential biases.
+5. **Output Generation**: A comprehensive report is generated, listing detected biases by category along with associated similarity scores.
+
+**Illustration of the Process Flow:**
+
+```
+Document Upload -> Preprocessing -> Sentence Parsing and Embedding -> Bias Detection -> Output Generation
+```
+
+This detailed implementation guide ensures that the bias detection model is seamlessly integrated into production environments, enabling efficient and effective identification of biases in mortgage appraisal documents. By maintaining rigorous technical specifications and ensuring the appropriateness and quality of production data, the model is positioned to significantly enhance the fairness and objectivity of property valuations.
+
+6666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666
+
+White Paper: Multifamily Prohibited Language Detection (MFPLD) Model
+
+7. Model Adjustments (MA)
+
+The MFPLD model has been designed to be a robust and adaptable solution, with the ability to accommodate adjustments as needed to maintain its effectiveness over time. The following section outlines the potential model adjustments that may be made, as well as the monitoring and impact assessment processes.
+
+7.1 Model Adjustment Types and Timeline
+
+The MFPLD model may require the following types of adjustments:
+
+Adjustment ID: MFPLD-A1
+Adjustment Type: Update to Biased Language Categories and Mapping Dictionary
+Rationale: The list of biased language categories and corresponding phrases maintained by the Fair Lending team may need to be updated periodically to reflect changes in fair lending laws, regulations, or industry best practices.
+Timeline: The biased language categories and mapping dictionary will be reviewed and updated by the Fair Lending team on an annual basis, or more frequently if necessary.
+
+Adjustment ID: MFPLD-A2
+Adjustment Type: Refinement of Text Classification Model
+Rationale: The performance of the text classification model in the second stage of the MFPLD solution may need to be fine-tuned and retrained over time to maintain optimal accuracy in detecting false positives and false negatives.
+Timeline: The text classification model will be monitored on an ongoing basis, and adjustments will be made as needed, based on the model's performance on validation and test datasets.
+
+Adjustment ID: MFPLD-A3
+Adjustment Type: Modification of Global Similarity Threshold
+Rationale: The global similarity threshold used in the first stage of the MFPLD model to determine the presence of biased language may need to be adjusted based on the model's performance and feedback from the MF Lender Risk Management team.
+Timeline: The global similarity threshold will be reviewed and adjusted on a quarterly basis, or as needed, based on the model's performance and the business requirements.
+
+7.2 Monitoring and Impact Assessment
+
+The MFPLD model adjustments will be closely monitored to ensure the continued effectiveness and reliability of the solution. The following processes will be in place:
+
+Monitoring:
+- The performance of the MFPLD model, including the keyword-based detection and text classification components, will be monitored on an ongoing basis by the MF Lender Risk Management team.
+- The team will track key metrics such as true positive rate, false positive rate, and F1-score to identify any areas for improvement.
+- The Fair Lending team will regularly review the biased language categories and mapping dictionary to ensure they remain up-to-date and comprehensive.
+
+Impact Assessment:
+- Whenever a model adjustment is made, the MF Lender Risk Management team will conduct a thorough impact assessment to evaluate the effectiveness of the change.
+- This assessment will include comparing the model's performance before and after the adjustment, as well as analyzing the impact on the overall efficiency and accuracy of the prohibited language detection process.
+- The results of the impact assessment will be documented and used to determine whether further adjustments or refinements are necessary.
+
+7.3 Adjustment Closure and Removal
+
+The MFPLD model adjustments are intended to be ongoing, as the model needs to adapt to changes in fair lending laws, regulations, and industry best practices. However, in the event that a specific adjustment is no longer necessary or has become obsolete, the following steps will be taken:
+
+1. Identify the adjustment that is no longer required.
+2. Evaluate the impact of removing the adjustment and document the findings.
+3. Obtain approval from the MF Lender Risk Management team and the Fair Lending team to remove the adjustment.
+4. Implement the removal of the adjustment and ensure the MFPLD model's performance is not adversely affected.
+5. Document the closure of the adjustment and update the model's documentation accordingly.
+
+By following this process, the MFPLD model can be maintained and improved over time, ensuring that it continues to be an effective and reliable solution for detecting prohibited language in multifamily appraisal and related documents.
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+
+### 7. Model Adjustments (MD)
+
+#### Overview
+
+Model adjustments are critical interventions to enhance model performance, ensure alignment with evolving industry practices, and address emergent data trends. These adjustments can be both qualitative, such as changes in the bias categories or the addition of new biased phrases, and quantitative, such as modifications to the global similarity threshold or parameter tuning. Each adjustment is meticulously documented, including its rationale, implementation timeline, and impact assessment.
+
+#### Adjustment Registration
+
+Each model adjustment is assigned a unique registration ID, facilitating systematic tracking, evaluation, and reporting. This ID is crucial for audit trails, allowing stakeholders to review the adjustment's purpose, execution, and effectiveness.
+
+#### List of Adjustments
+
+1. **Adjustment ID**: MD-QA202401
+   - **Type**: Qualitative
+   - **Description**: Addition of new biased phrases to address emerging linguistic trends in appraisal documents.
+   - **Rationale**: To enhance the model's sensitivity to nuanced expressions of bias that have become prevalent in recent appraisals.
+   - **Implementation Timeline**: Q2 2024
+   - **Monitoring and Impact Assessment**: Continuous performance monitoring post-implementation, with a scheduled review after six months to assess impact on bias detection accuracy.
+
+2. **Adjustment ID**: MD-QT202402
+   - **Type**: Quantitative
+   - **Description**: Adjustment of the global similarity threshold from 0.50 to 0.55.
+   - **Rationale**: Analysis indicated that a higher threshold could reduce false positives without significantly impacting true positive rates.
+   - **Implementation Timeline**: Q3 2024
+   - **Monitoring and Impact Assessment**: Evaluation of model precision and recall metrics post-adjustment, with an initial impact report due one quarter post-implementation.
+
+#### Adjustment Types and Timeline
+
+- **Qualitative Adjustments**: Include modifications to bias categories, biased phrases, or appraisal document processing rules. These are typically implemented in response to qualitative feedback or linguistic research findings.
+- **Quantitative Adjustments**: Involve changes to model parameters, thresholds, or embedding techniques, often driven by quantitative performance analyses.
+
+Adjustments are planned according to the model's review cycle, typically on an annual basis, unless urgent modifications are necessitated by significant shifts in appraisal practices or regulatory guidelines.
+
+#### Monitoring and Impact Assessment
+
+For each adjustment, a detailed monitoring and impact assessment plan is developed, outlining the key performance indicators (KPIs) to be tracked, the data collection methodology, and the analysis approach. This plan ensures that the effects of adjustments are thoroughly evaluated, both in terms of model performance and alignment with operational objectives.
+
+#### Closure / Removal Plan
+
+The model adjustment lifecycle includes a provision for the eventual closure or removal of adjustments, based on criteria such as:
+
+- Fulfillment of the adjustment's intended purpose.
+- Integration of the adjustment's effects into a subsequent model version.
+- Evolution of industry practices rendering the adjustment obsolete.
+
+A structured review process, conducted annually, evaluates each adjustment against these criteria, determining whether continuation, modification, or removal is warranted.
+
+This comprehensive framework for model adjustments ensures that the bias detection model remains effective, relevant, and aligned with industry standards, while also providing a clear, auditable trail of model evolution and enhancement efforts.
+
+7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
+
+White Paper: Multifamily Prohibited Language Detection (MFPLD) Model
+
+8. Model Governance (MG)
+
+8.1 Performance Monitoring Plan
+
+The MFPLD model is not subject to the formal Model Performance Tracking (MPT) requirements, as it is not a critical model for Fannie Mae's core financial reporting or risk management processes. However, the MF Lender Risk Management team will implement a comprehensive performance monitoring plan to ensure the continued effectiveness and reliability of the MFPLD model.
+
+The performance monitoring plan for the MFPLD model includes the following elements:
+
+Frequency of Testing:
+- The model's performance will be reviewed on a quarterly basis, with additional ad-hoc reviews conducted as needed (e.g., after significant updates to the biased language categories or mapping dictionary).
+
+Metrics to be Assessed:
+- The key performance metrics to be monitored include:
+  - True positive rate for the keyword-based detection stage
+  - F1-score for the text classification stage
+  - Overall accuracy in detecting prohibited language
+  - False positive and false negative rates
+
+Thresholds for Model Deterioration:
+- The model's performance will be considered to have deteriorated if any of the following thresholds are breached:
+  - True positive rate drops below 85% for the keyword-based detection
+  - F1-score drops below 0.80 for the text classification stage
+  - Overall accuracy in detecting prohibited language falls below 90%
+  - False positive rate exceeds 15% or false negative rate exceeds 20%
+
+Monitoring and Reporting:
+- The performance monitoring results will be reported to the MF Lender Risk Management team and the Fair Lending team on a quarterly basis.
+- Any significant performance issues or deterioration will be immediately escalated, and remedial actions will be taken to address the identified problems.
+
+By implementing this comprehensive performance monitoring plan, the MFPLD model can be closely tracked and adjusted as needed to maintain its effectiveness in detecting prohibited language in multifamily appraisal and related documents.
+
+8.2 Model Issues/Findings
+
+The initial development and testing of the MFPLD model did not uncover any significant issues or findings that could not be adequately addressed. The key issues and findings that were addressed during this version of the model are as follows:
+
+1. Refinement of Biased Language Categories and Mapping Dictionary:
+   - Issue: The initial list of biased language categories and corresponding phrases provided by the Fair Lending team was found to be incomplete, leading to some false negatives in the model's performance.
+   - Resolution: The Fair Lending team reviewed and expanded the biased language categories and mapping dictionary to ensure comprehensive coverage of prohibited language.
+
+2. Optimization of Global Similarity Threshold:
+   - Issue: The initial global similarity threshold of 0.50 resulted in a higher-than-desired false positive rate, leading to unnecessary manual review by the MF Lender Risk Management team.
+   - Resolution: The global similarity threshold was adjusted to 0.55 based on the analysis of the similarity score distributions, which improved the balance between true positives and false positives.
+
+3. Refinement of Text Classification Model:
+   - Issue: The initial text classification model exhibited a relatively high false negative rate, missing some instances of prohibited language.
+   - Resolution: The text classification model was fine-tuned using additional training data, resulting in improved performance with an F1-score of 0.88 on the held-out test dataset.
+
+All identified issues have been successfully resolved, and the MFPLD model is now ready for deployment and ongoing monitoring as described in the performance monitoring plan. Any future issues or findings will be documented and addressed through the model adjustment and governance processes outlined in this white paper.
+
+------------------------------------------------------------------------------------------------------------------
+
+### 8. Model Governance (MD)
+
+#### 8.1 Performance Monitoring Plan
+
+The performance monitoring plan for the bias detection model in mortgage appraisal documents is designed to ensure the model's continued effectiveness, accuracy, and alignment with industry standards and practices. This plan is not subject to the Model Performance Tracking Standard but follows a rigorous internal framework to maintain the highest levels of model integrity and performance.
+
+**Monitoring Frequency and Metrics:**
+
+- **Frequency**: Model performance will be monitored quarterly, with additional ad-hoc reviews triggered by significant changes in appraisal practices, regulatory guidelines, or model performance metrics.
+- **Metrics**: Key metrics include precision, recall, F1 score, and the rate of false positives/negatives. These metrics are chosen for their relevance in assessing the model's ability to accurately identify biased language in appraisal documents.
+- **Thresholds**: Specific thresholds for each metric have been established, based on historical performance data and industry benchmarks. A deviation of 5% from these thresholds will trigger an in-depth review and potential model adjustment.
+
+**Ongoing Monitoring Report Template**:
+
+While the detailed monitoring report adheres to an internal template, it encompasses aspects such as:
+- Comparison of current performance metrics against historical data and thresholds.
+- Analysis of model performance across different document types and bias categories.
+- Identification and analysis of any new types of bias or linguistic trends emerging in appraisal documents.
+
+This structured approach to performance monitoring ensures that the model remains a reliable and effective tool for detecting bias in mortgage appraisals.
+
+#### 8.2 Model Issues/Findings
+
+**Closed Issues in This Version**:
+
+- **Issue 1**: Previously identified discrepancies in the detection of subtle biases related to geographic location have been addressed through the refinement of the biased phrase dictionary and adjustment of embedding techniques.
+- **Issue 2**: An enhancement in the preprocessing algorithm has resolved the issue of document structure variability impacting model performance.
+
+**Open Issues**:
+
+- **Issue 1**: The challenge of detecting biases in highly technical or nuanced property descriptions remains an area for improvement. Ongoing research and model training efforts are focused on this issue, with a targeted resolution in the next model update.
+- **Issue 2**: The impact of document length on model performance has been identified as a potential area of concern, particularly for exceptionally long appraisal documents. A comprehensive analysis is underway to assess whether additional preprocessing steps or model adjustments are necessary.
+
+Each closed issue has contributed to the refinement and enhancement of the model, ensuring its continued relevance and effectiveness. Open issues are actively managed, with research and development efforts aimed at their resolution in future model updates. This transparent and proactive approach to addressing model issues and findings is a cornerstone of the model's governance framework, ensuring its ongoing reliability and integrity.
+
+88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+
+
+White Paper: Multifamily Prohibited Language Detection (MFPLD) Model
+
+9. Future Research
+
+The MFPLD model has been designed as a robust and adaptable solution to address the current challenges faced by Fannie Mae's MF Lender Risk Management team in detecting prohibited language in multifamily appraisal and related documents. However, as the model is deployed and used over time, there may be opportunities for further research and enhancements to improve its performance and expand its capabilities.
+
+Future research directions for the MFPLD model include:
+
+1. Advanced Natural Language Processing Techniques:
+   - Explore the use of more advanced NLP models, such as transformer-based language models (e.g., BERT, GPT-3), to further enhance the accuracy of sentence embeddings and the detection of nuanced biased language.
+   - Investigate the potential of few-shot or zero-shot learning techniques to expand the model's ability to detect emerging forms of prohibited language without the need for extensive retraining.
+
+2. Multimodal Bias Detection:
+   - Expand the model's capabilities to detect biased language not only in textual documents but also in other forms of related content, such as images, graphs, or charts included in the appraisal and related documents.
+   - Leverage computer vision and multimodal learning techniques to holistically analyze the entire document for potential biases.
+
+3. Explainable AI:
+   - Enhance the model's interpretability and explainability, allowing the MF Lender Risk Management team to better understand the reasoning behind the model's decisions and the specific biased language that was detected.
+   - Explore the use of techniques like attention visualization, feature importance analysis, or rule extraction to provide more transparent insights into the model's inner workings.
+
+4. Predictive Analytics:
+   - Investigate the potential of using the MFPLD model's outputs to develop predictive analytics capabilities, helping the MF Lender Risk Management team to identify properties or appraisers that may be at a higher risk of using prohibited language.
+   - Such predictive insights could enable proactive interventions and targeted training to address bias issues before they manifest in the appraisal process.
+
+Release Priorities:
+
+The initial release of the MFPLD model will focus on the core functionality of detecting prohibited language in multifamily appraisal and related documents, as described in the previous sections of this white paper. This release will establish a solid foundation for the model's deployment and ongoing use by the MF Lender Risk Management team.
+
+Future release priorities for the MFPLD model will be determined based on the feedback and performance monitoring insights gathered from the initial deployment, as well as the evolving needs and priorities of Fannie Mae's multifamily lending business. The research directions outlined above will be evaluated and prioritized based on their potential impact and the available resources and development capacity.
+
+By continuously exploring new research avenues and expanding the MFPLD model's capabilities, Fannie Mae can stay at the forefront of fair lending practices and ensure that the collateral valuation process for multifamily properties remains equitable and unbiased.
+
+--------------------------------------------------------------------------------------------------------------------------------------
+
+### 9. Future Research
+
+The continuous evolution of the bias detection model in mortgage appraisal documents is crucial to maintaining its relevance, effectiveness, and alignment with industry standards and societal expectations. Future research directions and release priorities are shaped by the dual objectives of enhancing model accuracy and expanding its scope to address emerging challenges in bias detection. This section outlines the strategic areas of focus for future development and refinement of the model.
+
+#### Enhancing Linguistic Sensitivity
+
+**Objective**: Improve the model's ability to detect subtle and nuanced expressions of bias that may not be explicitly covered by the current biased phrase dictionary.
+
+**Approach**: Incorporating advanced NLP techniques, such as contextual embeddings and language models trained on domain-specific corpora, to capture the evolving language of bias in real estate appraisals.
+
+#### Expanding Bias Categories
+
+**Objective**: Address emerging categories of bias that reflect changes in societal norms and regulatory focus, ensuring comprehensive coverage across all potential areas of bias in appraisals.
+
+**Approach**: Conducting ongoing reviews of literature, legal cases, and industry guidelines related to bias in real estate, coupled with stakeholder consultations, to identify and incorporate new bias categories into the model.
+
+#### Model Interpretability
+
+**Objective**: Enhance the transparency and interpretability of the model's decision-making processes, facilitating easier review and validation of its findings by users.
+
+**Approach**: Integrating explainability features and tools that provide insights into how the model arrives at its conclusions, particularly in terms of bias detection and categorization.
+
+#### Data Diversity and Inclusivity
+
+**Objective**: Ensure the model effectively addresses bias in a diverse range of property types and geographic locations, encompassing a broad spectrum of appraisal documents.
+
+**Approach**: Diversifying the training and testing datasets to include a wider array of property types, appraisal contexts, and geographic regions. This effort includes actively seeking out datasets from underserved and underrepresented communities.
+
+#### Technological Advancements
+
+**Objective**: Leverage advancements in machine learning and natural language processing to continually improve the model's performance and efficiency.
+
+**Approach**: Keeping abreast of emerging technologies and methodologies in NLP and AI, assessing their applicability to the model, and integrating those that offer significant benefits in terms of accuracy, speed, or scalability.
+
+#### Release Priorities
+
+1. **Short-Term**: Focus on immediate improvements in linguistic sensitivity and the integration of explainability features to enhance model transparency.
+2. **Medium-Term**: Expand bias categories and refine the model's ability to handle a diverse range of appraisal documents, emphasizing inclusivity and comprehensiveness.
+3. **Long-Term**: Incorporate cutting-edge AI and NLP technologies to ensure the model remains at the forefront of bias detection methodologies, setting industry standards for accuracy and reliability.
+
+The outlined future research directions and release priorities underscore a commitment to continuous improvement and adaptation. By proactively addressing the dynamic nature of language, societal norms, and technological advancements, the model will continue to serve as a vital tool in the fight against bias in mortgage appraisals, promoting fairness and objectivity in property valuation processes.
+
+
+9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
+
+White Paper: Multifamily Prohibited Language Detection (MFPLD) Model
+
+Appendix (A)
+
+A. Model Code & Dataset Location
+
+The MFPLD model development code and estimation data are stored in a secure, centralized repository accessible to the authorized members of the MF Lender Risk Management team and the model development team. The specific location and access instructions are as follows:
+
+Model Development Code:
+- Location: Fannie Mae's internal Git repository, project "MFPLD-Model"
+- Access: Granted to members of the MF Lender Risk Management team and the model development team
+
+Estimation Data:
+- Location: Fannie Mae's internal data warehouse, dataset "MF_Appraisal_Data"
+- Access: Granted to members of the MF Lender Risk Management team and the model development team
+
+Any code related to model adjustments will be stored in the same Git repository, with clear versioning and change tracking to ensure proper governance and auditability.
+
+B. Terminology and Acronyms
+
+MFPLD: Multifamily Prohibited Language Detection
+APLD: Automated Property Linguistic Detection
+NLP: Natural Language Processing
+IDE: Interactive Development Environment
+MF: Multifamily
+MLE: Maximum Likelihood Estimator
+OLS: Ordinary Least Squares
+LAR: Least Angle Regression
+LASSO: Least Absolute Shrinkage and Selection Operator
+MPT: Model Performance Tracking
+MO: Model Owner
+MD: Model Developer
+MU: Model User
+
+C. Additional Testing Materials (As Relevant)
+
+Not applicable for this white paper, as the key model testing results and analyses have been included in the main body of the document.
+
+D. References
+
+Bolukbasi, T., Chang, K. W., Zou, J. Y., Saligrama, V., & Kalai, A. T. (2016). Man is to computer programmer as woman is to homemaker? Debiasing word embeddings. In Advances in neural information processing systems (pp. 4349-4357).
+
+Howell, J., & Korver-Glenn, E. (2020). The Increasing Effect of Neighborhood Racial Composition on Housing Values, 1980–2015. Social Problems, 68(4), 1025-1044.
+
+Perry, A. M., Rothwell, J., & Harshbarger, D. (2018). The devaluation of assets in Black neighborhoods: The case of residential property. Brookings Institution.
+
+Reimers, N., & Gurevych, I. (2019). Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks. In Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing (EMNLP-IJCNLP) (pp. 3982-3992).
+
+Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., ... & Polosukhin, I. (2017). Attention is all you need. In Advances in neural information processing systems (pp. 5998-6008).
+
+Zhao, J., Wang, T., Yatskar, M., Ordonez, V., & Chang, K. W. (2017). Men also like shopping: Reducing gender bias amplification using corpus-level constraints. In Proceedings of the 2017 Conference on Empirical Methods in Natural Language Processing (pp. 2979-2989).
+
+E. Minor Model Change Memo
+
+Not applicable for this initial white paper, as there are no minor model changes to report. Any future minor updates will be documented in this section.
+
+--------------------------------------------------------------------------------------------------------------------
+### Appendix (MD)
+
+#### A. Model Code & Dataset Location
+
+- **Location of Model Development Code and Data**: The code and datasets used for model development are stored in our secure internal repository, accessible to authorized personnel. Specific paths and access protocols are detailed in our internal documentation system.
+- **IDE / Encapsulated Implementations**: Development was primarily conducted using Jupyter Notebooks, offering a versatile environment for code execution, visualization, and analysis. The location of encapsulated implementations for model adjustments is similarly stored within our secure repository.
+- **Access Instructions**: Access to these resources requires authorization. Team members must request access through our IT support system, specifying the reason for access. Upon approval, credentials and detailed instructions for accessing the repositories will be provided.
+
+#### B. Terminology and Acronyms
+
+- **NLP (Natural Language Processing)**: A branch of artificial intelligence that helps computers understand, interpret, and manipulate human language.
+- **Embedding**: A representation of text in a high-dimensional vector space, enabling similarity comparisons.
+- **Cosine Similarity**: A metric used to measure how similar two vectors are in an N-dimensional space, often used in text analysis.
+- **Bias Categories**: Predefined groups of biases identified for monitoring in the appraisal documents, such as gender, race, and location.
+- **Global Similarity Threshold**: A predetermined value that sentences must exceed in similarity score to be considered potentially biased.
+
+#### C. Additional Testing Materials
+
+As relevant, this section would contain detailed outcomes from extensive testing phases, including performance metrics across various document sets, sensitivity analyses, and specific case studies illustrating the model's ability to detect nuanced biases. This material is housed in supplementary documentation, available upon request from the model development team.
+
+#### D. References
+
+- **Internal Documents**:
+  - Model Development Guidelines.
+  - Bias Detection Model Performance Review Q3 2024.
+
+- **External Publications**:
+  - Devlin, J., Chang, M.-W., Lee, K., & Toutanova, K. (2018). BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding. *arXiv*.
+  - Capozza, D., Hendershott, P., & Mack, C. (2004). An Anatomy of Price Dynamics in Illiquid Markets: Analysis and Evidence from Local Housing Markets. *Real Estate Economics*, 32(1), 1-32.
+
+#### E. Minor Model Change Memo
+
+This section would document the specifics of minor updates to the model, such as adjustments to the biased phrase dictionary, updates to the global similarity threshold, or refinements in the preprocessing steps. Each entry includes a brief description of the change, the rationale behind it, and the expected impact on model performance. Major revisions are detailed in the body of the white paper to ensure comprehensive communication of significant enhancements or modifications.
+
+---
+
+This appendix serves as a comprehensive guide for accessing and understanding the resources, terminologies, and additional materials associated with the development and implementation of the bias detection model. It aims to facilitate a deeper understanding of the model's framework and operational context, ensuring transparency and accessibility for all stakeholders involved.
+
+
+
+
+
+
+
+
+
+
+
+
