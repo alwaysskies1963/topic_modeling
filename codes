@@ -1678,6 +1678,57 @@ print(word_to_lemmatized)
 
 
 
+-----------------------------------------------------------------------------------------
+import nltk
+from nltk.stem import WordNetLemmatizer
+import matplotlib.pyplot as plt
+from wordcloud import WordCloud
+import numpy as np
+from PIL import Image
+import matplotlib.pyplot as plt
 
+nltk.download('wordnet')
+
+def lemmatize_keywords(keywords):
+    lemmatizer = WordNetLemmatizer()
+    lemmatized_keywords = [lemmatizer.lemmatize(word) for word in keywords]
+    word_to_lemmatized = {word: lemmatized_word for word, lemmatized_word in zip(keywords, lemmatized_keywords)}
+    return word_to_lemmatized
+
+def get_sentiment(keywords):
+    sentiment = {}
+    for word in keywords:
+        if word in ['happy', 'joy', 'good', 'great']:
+            sentiment[word] = {'positive': 1, 'negative': 0}
+        elif word in ['sad', 'unhappy', 'bad', 'terrible']:
+            sentiment[word] = {'positive': 0, 'negative': 1}
+        else:
+            sentiment[word] = {'positive': 0, 'negative': 0}
+    return sentiment
+
+def create_wordclouds(keywords, sentiment):
+    positive_words = ' '.join([word for word in keywords if sentiment[word]['positive'] > 0])
+    negative_words = ' '.join([word for word in keywords if sentiment[word]['negative'] > 0])
+
+    wordcloud_positive = WordCloud().generate(positive_words)
+    wordcloud_negative = WordCloud().generate(negative_words)
+
+    plt.imshow(wordcloud_positive, interpolation='bilinear')
+    plt.axis("off")
+    plt.savefig('positive_wordcloud.png')
+    plt.imshow(wordcloud_negative, interpolation='bilinear')
+    plt.axis("off")
+    plt.savefig('negative_wordcloud.png')
+
+def main(keywords):
+    word_to_lemmatized = lemmatize_keywords(keywords)
+    sentiment = get_sentiment(keywords)
+    create_wordclouds(keywords, sentiment)
+    return word_to_lemmatized, sentiment
+
+keywords = ['happy', 'sad', 'joy', 'unhappy', 'good', 'bad', 'great', 'terrible']
+word_to_lemmatized, sentiment = main(keywords)
+print(word_to_lemmatized)
+print(sentiment)
 
 
