@@ -1732,3 +1732,130 @@ print(word_to_lemmatized)
 print(sentiment)
 
 
+-=================--------------------------========================-----------------------------------------------
+
+import nltk
+from nltk.stem import WordNetLemmatizer
+from textblob import TextBlob
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+
+# Ensure that the necessary nltk resources are downloaded
+nltk.download('wordnet')
+nltk.download('omw-1.4')
+
+def lemmatize_keywords(keywords):
+    lemmatizer = WordNetLemmatizer()
+    lemmatized_data = {}
+    for word in keywords:
+        lemmatized = lemmatizer.lemmatize(word)
+        sentiment = TextBlob(word).sentiment.polarity
+        sentiment_label = 'positive' if sentiment > 0 else 'negative' if sentiment < 0 else 'neutral'
+        lemmatized_data[word] = {'lemmatized': lemmatized, 'sentiment': sentiment_label}
+    return lemmatized_data
+
+def color_func(word, font_size, position, orientation, random_state=None, **kwargs):
+    return "hsl(240, 100%%, %d%%)" % (100 - int(font_size / 2))
+
+def create_advanced_word_clouds(lemmatized_data):
+    positive_words = ' '.join(word for word, data in lemmatized_data.items() if data['sentiment'] == 'positive')
+    negative_words = ' '.join(word for word, data in lemmatized_data.items() if data['sentiment'] == 'negative')
+
+    # Generate and save word clouds
+    wordcloud_pos = WordCloud(width=800, height=400, background_color='white',
+                              max_words=50, color_func=lambda *args, **kwargs: "darkgreen").generate(positive_words)
+    wordcloud_neg = WordCloud(width=800, height=400, background_color='white',
+                              max_words=50, color_func=color_func).generate(negative_words)
+
+    plt.figure(figsize=(16, 8))
+
+    plt.subplot(1, 2, 1)
+    plt.imshow(wordcloud_pos, interpolation='bilinear')
+    plt.title('Positive Sentiment Word Cloud')
+    plt.axis('off')
+
+    plt.subplot(1, 2, 2)
+    plt.imshow(wordcloud_neg, interpolation='bilinear')
+    plt.title('Negative Sentiment Word Cloud')
+    plt.axis('off')
+
+    plt.savefig('advanced_sentiment_word_clouds.png')
+    plt.show()
+
+# Example usage
+keywords = ['happy', 'sad', 'joy', 'anger', 'delight', 'miserable', 'thrilled', 'depressed']
+lemmatized_data = lemmatize_keywords(keywords)
+create_advanced_word_clouds(lemmatized_data)
+---------------------------------------------------------------------------------------------
+
+
+import numpy as np
+from PIL import Image
+import nltk
+from nltk.stem import WordNetLemmatizer
+from textblob import TextBlob
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+
+# Ensure that the necessary nltk resources are downloaded
+nltk.download('wordnet')
+nltk.download('omw-1.4')
+
+def create_shape_mask(shape_char):
+    # Create a base image with a white background
+    size = (400, 400)
+    image = Image.new('RGB', size, "white")
+    draw = ImageDraw.Draw(image)
+    
+    # Draw the shapes on the image
+    if shape_char == '+':
+        draw.line((size[0]//2, 0, size[0]//2, size[1]), fill="black", width=10)
+        draw.line((0, size[1]//2, size[0], size[1]//2), fill="black", width=10)
+    elif shape_char == '-':
+        draw.line((0, size[1]//2, size[0], size[1]//2), fill="black", width=10)
+    
+    # Convert to a numpy array to use as a mask
+    return np.array(image.convert('L'))
+
+def lemmatize_keywords(keywords):
+    lemmatizer = WordNetLemmatizer()
+    lemmatized_data = {}
+    for word in keywords:
+        lemmatized = lemmatizer.lemmatize(word)
+        sentiment = TextBlob(word).sentiment.polarity
+        sentiment_label = 'positive' if sentiment > 0 else 'negative' if sentiment < 0 else 'neutral'
+        lemmatized_data[word] = {'lemmatized': lemmatized, 'sentiment': sentiment_label}
+    return lemmatized_data
+
+def create_advanced_word_clouds(lemmatized_data):
+    positive_mask = create_shape_mask('+')
+    negative_mask = create_shape_mask('-')
+
+    positive_words = ' '.join(word for word, data in lemmatized_data.items() if data['sentiment'] == 'positive')
+    negative_words = ' '.join(word for word, data in lemmatized_data.items() if data['sentiment'] == 'negative')
+
+    wordcloud_pos = WordCloud(width=400, height=400, background_color='white', mask=positive_mask,
+                              contour_width=1, contour_color='green').generate(positive_words)
+    wordcloud_neg = WordCloud(width=400, height=400, background_color='white', mask=negative_mask,
+                              contour_width=1, contour_color='red').generate(negative_words)
+
+    plt.figure(figsize=(10, 5))
+
+    plt.subplot(1, 2, 1)
+    plt.imshow(wordcloud_pos, interpolation='bilinear')
+    plt.title('Positive Sentiment Word Cloud')
+    plt.axis('off')
+
+    plt.subplot(1, 2, 2)
+    plt.imshow(wordcloud_neg, interpolation='bilinear')
+    plt.title('Negative Sentiment Word Cloud')
+    plt.axis('off')
+
+    plt.savefig('shaped_sentiment_word_clouds.png')
+    plt.show()
+
+# Example usage
+keywords = ['happy', 'sad', 'joy', 'anger', 'delight', 'miserable', 'thrilled', 'depressed']
+lemmatized_data = lemmatize_keywords(keywords)
+create_advanced_word_clouds(lemmatized_data)
+
