@@ -1859,3 +1859,76 @@ keywords = ['happy', 'sad', 'joy', 'anger', 'delight', 'miserable', 'thrilled', 
 lemmatized_data = lemmatize_keywords(keywords)
 create_advanced_word_clouds(lemmatized_data)
 
+----------------------------------------------------------------------------------------------------------------------
+
+
+import nltk
+from nltk.stem import PorterStemmer
+from textblob import TextBlob
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+
+# Ensure that the necessary nltk resources are downloaded
+nltk.download('punkt')
+
+def stem_and_analyze_keywords(keywords):
+    stemmer = PorterStemmer()
+    stem_data = {}
+    word_to_stem = {}
+
+    for word in keywords:
+        stem = stemmer.stem(word)
+        if stem not in stem_data:
+            stem_data[stem] = {'frequency': 1, 'example_word': word, 'sentiment': 0}
+        else:
+            stem_data[stem]['frequency'] += 1
+
+        # Sentiment calculation for the original word, averaged if multiple entries
+        current_sentiment = TextBlob(word).sentiment.polarity
+        stem_data[stem]['sentiment'] += (current_sentiment - stem_data[stem]['sentiment']) / stem_data[stem]['frequency']
+        word_to_stem[word] = stem
+
+    # Assign sentiment labels based on the final average sentiment per stem
+    for stem in stem_data:
+        if stem_data[stem]['sentiment'] > 0:
+            stem_data[stem]['sentiment'] = 'positive'
+        elif stem_data[stem]['sentiment'] < 0:
+            stem_data[stem]['sentiment'] = 'negative'
+        else:
+            stem_data[stem]['sentiment'] = 'neutral'
+
+    return stem_data
+
+def create_advanced_word_clouds(stem_data):
+    positive_words = {}
+    negative_words = {}
+
+    for stem, data in stem_data.items():
+        if data['sentiment'] == 'positive':
+            positive_words[data['example_word']] = data['frequency']
+        elif data['sentiment'] == 'negative':
+            negative_words[data['example_word']] = data['frequency']
+
+    # Generate and save word clouds
+    wordcloud_pos = WordCloud(width=800, height=400, background_color='white').generate_from_frequencies(positive_words)
+    wordcloud_neg = WordCloud(width=800, height=400, background_color='white').generate_from_frequencies(negative_words)
+
+    plt.figure(figsize=(10, 5))
+
+    plt.subplot(1, 2, 1)
+    plt.imshow(wordcloud_pos, interpolation='bilinear')
+    plt.title('Positive Sentiment Word Cloud')
+    plt.axis('off')
+
+    plt.subplot(1, 2, 2)
+    plt.imshow(wordcloud_neg, interpolation='bilinear')
+    plt.title('Negative Sentiment Word Cloud')
+    plt.axis('off')
+
+    plt.savefig('advanced_sentiment_word_clouds.png')
+    plt.show()
+
+# Example usage
+keywords = ['happiness', 'happy', 'saddened', 'sad', 'joyful', 'joy', 'angered', 'angry']
+stem_data = stem_and_analyze_keywords(keywords)
+create_advanced_word_clouds(stem_data)
