@@ -1,0 +1,41 @@
+Thank you for providing the context and your request. I understand that you'd like to address the concerns raised about the lack of certain procedures in the model development process, particularly those mentioned as "out of scope" in the validation report. Let's craft a respectful and positive response to these concerns, which can be used to update the white paper or communicate with the reviewers.
+Here's a suggested response:
+We appreciate the thorough review of our Multifamily Prohibited Language Detection (MF-PLD) model and the valuable feedback provided. We acknowledge the concerns raised about the currently out-of-scope procedures, and we're committed to addressing these important aspects of model maintenance and improvement. Here's our plan to address each of these concerns:
+
+Collecting "ground truth" data:
+We recognize the importance of having accurate, human-validated data to assess and improve our model's performance. We are developing a systematic process for collecting ground truth data from our users in the MF Lender Risk Management team. This will involve:
+
+
+Implementing a feedback mechanism within the user interface where reviewers can flag false positives and false negatives.
+Establishing a regular review cycle where a sample of model outputs is manually validated by subject matter experts.
+Creating a secure database to store and manage this ground truth data for future model improvements.
+
+
+Adding & removing "biased phrases":
+To ensure our model remains current and effective, we're establishing a dynamic process for updating the biased language categories and phrases. This will include:
+
+
+Regular consultations with the Fair Lending team to review and update the list of biased phrases.
+Implementing a version control system for our biased language database to track changes over time.
+Developing a formal proposal and approval process for adding or removing phrases, ensuring all changes are well-documented and justified.
+
+
+Adjusting thresholds for desired false positive rate:
+We understand the need for fine-tuning our model's performance. We're working on:
+
+
+Developing a systematic approach to analyze the trade-offs between false positive and false negative rates at various thresholds.
+Creating a process for periodic threshold adjustments based on performance metrics and user feedback.
+Implementing A/B testing capabilities to assess the impact of threshold changes before full deployment.
+
+
+Re-training component models:
+To keep our model up-to-date with the latest language trends and organizational needs, we're establishing a framework for regular model updates:
+
+
+Setting up an automated pipeline for retraining the model with new data at scheduled intervals.
+Developing a robust testing framework to validate retrained models before deployment.
+Creating documentation and procedures for model versioning and rollback if needed.
+
+We're committed to implementing these procedures in a phased approach, prioritizing based on impact and resource availability. We'll be updating our project roadmap to include these enhancements and will provide regular progress updates to all stakeholders.
+We believe these additions will significantly strengthen our MF-PLD model, ensuring its continued effectiveness and alignment with fair lending principles. We welcome any further feedback or suggestions as we work to implement these improvements.
