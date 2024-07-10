@@ -1,1 +1,528 @@
 
+
+import openpyxl
+import pandas as pd
+
+# Load the workbook
+workbook = openpyxl.load_workbook('your_file.xlsm', data_only=True)
+
+# Access different sheets
+sheet_names = workbook.sheetnames
+for sheet_name in sheet_names:
+    sheet = workbook[sheet_name]
+    # Process each sheet as needed
+
+
+-----------------------------
+
+class PropertyComponent:
+    def __init__(self, name, risk_rating, comments, repair_costs, images):
+        self.name = name
+        self.risk_rating = risk_rating
+        self.comments = comments
+        self.repair_costs = repair_costs
+        self.images = images
+
+class Unit(PropertyComponent):
+    def __init__(self, unit_number, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.unit_number = unit_number
+
+class Building(PropertyComponent):
+    def __init__(self, building_number, units, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.building_number = building_number
+        self.units = units
+
+class Property:
+    def __init__(self, name, buildings):
+        self.name = name
+        self.buildings = buildings
+
+
+
+
+
+-------------------------
+
+import os
+import shutil
+
+def organize_data(property):
+    base_path = f"./organized_data/{property.name}"
+    for building in property.buildings:
+        for unit in building.units:
+            for component in ['kitchen', 'bathroom', 'living_room']:  # Add more as needed
+                component_path = f"{base_path}/building_{building.building_number}/unit_{unit.unit_number}/{component}"
+                os.makedirs(component_path, exist_ok=True)
+                # Save relevant data and images to this folder
+
+---------------------------
+
+
+from tensorflow.keras.applications import ResNet50
+from tensorflow.keras.preprocessing import image
+from transformers import pipeline
+
+# Load pre-trained models
+image_model = ResNet50(weights='imagenet', include_top=False)
+nlp_model = pipeline("sentiment-analysis")
+
+def validate_risk_score(component):
+    # Process images
+    img_features = []
+    for img_path in component.images:
+        img = image.load_img(img_path, target_size=(224, 224))
+        x = image.img_to_array(img)
+        x = np.expand_dims(x, axis=0)
+        img_features.append(image_model.predict(x))
+    
+    # Process text
+    text_sentiment = nlp_model(component.comments)[0]['score']
+    
+    # Combine features and predict risk score
+    combined_features = np.concatenate([np.mean(img_features, axis=0), [text_sentiment]])
+    predicted_score = your_custom_model.predict(combined_features)
+    
+    return abs(predicted_score - component.risk_rating) < threshold
+
+============================
+
+from ultralytics import YOLO
+
+# Load a pretrained YOLOv8 model
+model = YOLO('yolov8x.pt')
+
+# Fine-tune the model on your custom dataset
+results = model.train(data='path/to/your/dataset.yaml', epochs=100, imgsz=640)
+
+# Run inference on an image
+results = model('path/to/image.jpg')
+
+# Process results
+for r in results:
+    boxes = r.boxes  # Bounding boxes
+    masks = r.masks  # Segmentation masks
+    probs = r.probs  # Class probabilities
+
+---------------------------
+
+from multimodal_model import load_model  # Hypothetical import
+
+# Load the multimodal model
+model = load_model("gpt4v")  # or "flamingo", etc.
+
+def validate_inspection(image_paths, inspector_comments, risk_score):
+    # Prepare the prompt
+    prompt = f"Analyze these property inspection images and the inspector's comments: '{inspector_comments}'. Does the visual evidence support the given risk score of {risk_score}? Explain your reasoning."
+
+    # Process images and text
+    result = model.generate(images=image_paths, text=prompt)
+
+    # Analyze the model's response
+    if "The risk score appears accurate" in result:
+        return True, result
+    else:
+        return False, result
+
+# Example usage
+image_paths = ["kitchen.jpg", "bathroom.jpg", "living_room.jpg"]
+comments = "Noticed minor mold in bathroom, kitchen appliances outdated, living room in good condition."
+risk_score = 3  # On a scale of 1-5
+
+is_valid, explanation = validate_inspection(image_paths, comments, risk_score)
+print(f"Risk score valid: {is_valid}")
+print(f"Explanation: {explanation}")
+
+====================================
+
+
+
+import torch
+import torchvision
+from torchvision.models.detection import maskrcnn_resnet50_fpn
+from torchvision.models import resnet50
+from torchvision.transforms import functional as F
+from PIL import Image
+import matplotlib.pyplot as plt
+import numpy as np
+
+def load_image(image_path):
+    image = Image.open(image_path).convert("RGB")
+    return image
+
+def preprocess_image(image):
+    image = F.to_tensor(image)
+    return image.unsqueeze(0)
+
+# Load and use Mask R-CNN
+def use_mask_rcnn(image_path):
+    # Load pre-trained Mask R-CNN model
+    model = maskrcnn_resnet50_fpn(pretrained=True)
+    model.eval()
+
+    # Load and preprocess the image
+    image = load_image(image_path)
+    input_tensor = preprocess_image(image)
+
+    # Run inference
+    with torch.no_grad():
+        prediction = model(input_tensor)
+
+    # Process results (example: print bounding boxes and labels)
+    boxes = prediction[0]['boxes'].tolist()
+    labels = prediction[0]['labels'].tolist()
+    scores = prediction[0]['scores'].tolist()
+    masks = prediction[0]['masks']
+
+    print("Mask R-CNN Results:")
+    for box, label, score in zip(boxes, labels, scores):
+        if score > 0.5:  # You can adjust this threshold
+            print(f"Label: {label}, Score: {score:.2f}, Box: {box}")
+
+    # You can further process masks here if needed
+
+# Load and use ResNet
+def use_resnet(image_path):
+    # Load pre-trained ResNet model
+    model = resnet50(pretrained=True)
+    model.eval()
+
+    # Load and preprocess the image
+    image = load_image(image_path)
+    input_tensor = preprocess_image(image)
+
+    # Run inference
+    with torch.no_grad():
+        output = model(input_tensor)
+
+    # Process results
+    probabilities = torch.nn.functional.softmax(output[0], dim=0)
+    top_prob, top_catid = torch.topk(probabilities, 1)
+
+    print("ResNet Results:")
+    print(f"Top category: {top_catid.item()}, Probability: {top_prob.item():.2f}")
+
+# Example usage
+image_path = "path/to/your/image.jpg"
+use_mask_rcnn(image_path)
+use_resnet(image_path)
+
+
+------------------------
+
+
+def use_mask_rcnn_for_property_inspection(image_path):
+    # Assume model is fine-tuned for property inspection
+    model = maskrcnn_resnet50_fpn(num_classes=your_num_classes)
+    model.load_state_dict(torch.load('path_to_your_finetuned_model.pth'))
+    model.eval()
+
+    image = load_image(image_path)
+    input_tensor = preprocess_image(image)
+
+    with torch.no_grad():
+        prediction = model(input_tensor)
+
+    boxes = prediction[0]['boxes'].tolist()
+    labels = prediction[0]['labels'].tolist()
+    scores = prediction[0]['scores'].tolist()
+
+    property_issues = []
+    for box, label, score in zip(boxes, labels, scores):
+        if score > 0.5:
+            issue = your_class_list[label]
+            property_issues.append({
+                'issue': issue,
+                'confidence': score,
+                'location': box
+            })
+
+    return property_issues
+-----------------
+
+================
+
+
+pip install ultralytics
+
+from ultralytics import YOLO
+import cv2
+import numpy as np
+
+def load_image(image_path):
+    return cv2.imread(image_path)
+
+def process_image_with_yolo(image_path, model_path='yolov8n.pt'):
+    # Load a pretrained YOLOv8 model
+    model = YOLO(model_path)
+
+    # Load the image
+    image = load_image(image_path)
+
+    # Run inference on the image
+    results = model(image)
+
+    # Process and visualize results
+    for result in results:
+        boxes = result.boxes.cpu().numpy()
+        for box in boxes:
+            x1, y1, x2, y2 = box.xyxy[0].astype(int)
+            conf = box.conf[0]
+            cls = int(box.cls[0])
+
+            cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
+            cv2.putText(image, f'{model.names[cls]} {conf:.2f}',
+                        (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+
+    # Display the image
+    cv2.imshow('YOLOv8 Detection', image)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+    return results
+
+# Example usage
+image_path = "path/to/your/property_image.jpg"
+results = process_image_with_yolo(image_path)
+
+# Print detection results
+for r in results:
+    print(r.boxes)  # print the detection boxes
+    print(r.boxes.xyxy)  # print box coordinates
+    print(r.boxes.conf)  # print confidence scores
+    print(r.boxes.cls)   # print class indices
+
+
+from ultralytics import YOLO
+
+# Load a pretrained YOLOv8 model
+model = YOLO('yolov8n.pt')
+
+# Train the model on your custom dataset
+results = model.train(data='path/to/your/dataset.yaml', epochs=100, imgsz=640)
+
+# Evaluate the model's performance
+results = model.val()
+
+# Use the model for inference on new images
+results = model('path/to/new/image.jpg')
+
+
+from ultralytics import YOLO
+import cv2
+
+def inspect_property(image_path, model_path='path/to/your/finetuned_model.pt'):
+    # Load your fine-tuned model
+    model = YOLO(model_path)
+
+    # Run inference
+    results = model(image_path)
+
+    # Process results
+    issues_detected = []
+    for r in results:
+        boxes = r.boxes
+        for box in boxes:
+            x1, y1, x2, y2 = box.xyxy[0].tolist()
+            conf = box.conf[0].item()
+            cls = int(box.cls[0])
+            issue_type = model.names[cls]
+            
+            issues_detected.append({
+                'type': issue_type,
+                'confidence': conf,
+                'location': (x1, y1, x2, y2)
+            })
+
+    return issues_detected
+
+# Example usage
+image_path = "path/to/property_image.jpg"
+issues = inspect_property(image_path)
+
+for issue in issues:
+    print(f"Detected {issue['type']} with {issue['confidence']:.2f} confidence at location {issue['location']}")
+
+
+
+
+=============================
+
+
+pip install transformers pytorch-lightning torchvision
+
+import torch
+from transformers import VisualBertForQuestionAnswering, VisualBertTokenizer
+from torchvision.transforms import Resize, ToTensor, Normalize
+from PIL import Image
+
+def load_image(image_path):
+    image = Image.open(image_path).convert("RGB")
+    return image
+
+def preprocess_image(image):
+    transform = torch.nn.Sequential(
+        Resize((224, 224)),
+        ToTensor(),
+        Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+    )
+    return transform(image).unsqueeze(0)
+
+def analyze_property(image_path, question, model, tokenizer):
+    # Load and preprocess the image
+    image = load_image(image_path)
+    image_tensor = preprocess_image(image)
+
+    # Tokenize the question
+    inputs = tokenizer(question, return_tensors="pt", padding=True, truncation=True)
+
+    # Forward pass
+    with torch.no_grad():
+        outputs = model(input_ids=inputs.input_ids,
+                        attention_mask=inputs.attention_mask,
+                        visual_embeds=image_tensor)
+
+    # Get the predicted answer
+    predicted_answer = tokenizer.decode(outputs.logits.argmax().item())
+
+    return predicted_answer
+
+# Load pre-trained VisualBERT model and tokenizer
+model = VisualBertForQuestionAnswering.from_pretrained("uclanlp/visualbert-vqa")
+tokenizer = VisualBertTokenizer.from_pretrained("bert-base-uncased")
+
+# Example usage
+image_path = "path/to/your/property_image.jpg"
+question = "Is there any visible damage to the roof?"
+
+answer = analyze_property(image_path, question, model, tokenizer)
+print(f"Question: {question}")
+print(f"Answer: {answer}")
+
+
+def inspect_property(image_path, model, tokenizer):
+    inspection_results = {}
+    
+    questions = [
+        "Is there any visible damage to the roof?",
+        "What is the condition of the exterior paint?",
+        "Are there any signs of foundation issues?",
+        "Is the landscaping well-maintained?",
+        "Are there any visible plumbing issues?"
+    ]
+    
+    for question in questions:
+        answer = analyze_property(image_path, question, model, tokenizer)
+        inspection_results[question] = answer
+    
+    return inspection_results
+
+# Example usage
+image_path = "path/to/property_image.jpg"
+results = inspect_property(image_path, model, tokenizer)
+
+for question, answer in results.items():
+    print(f"Q: {question}")
+    print(f"A: {answer}\n")
+
+
+===============================
+
+
+pip install torch torchvision transformers vilbert-python
+
+import torch
+from torchvision.transforms import Compose, Resize, CenterCrop, ToTensor, Normalize
+from PIL import Image
+from vilbert.vilbert import VILBertForVLTasks
+from vilbert.vilbert_utils import BertTokenizer
+
+def load_image(image_path):
+    return Image.open(image_path).convert("RGB")
+
+def preprocess_image(image):
+    transform = Compose([
+        Resize((224, 224)),
+        CenterCrop(224),
+        ToTensor(),
+        Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+    ])
+    return transform(image).unsqueeze(0)
+
+def analyze_property(image_path, question, model, tokenizer):
+    # Load and preprocess the image
+    image = load_image(image_path)
+    image_tensor = preprocess_image(image)
+
+    # Tokenize the question
+    tokens = tokenizer.encode(question, add_special_tokens=True)
+    tokens = torch.tensor(tokens).unsqueeze(0)
+
+    # Prepare inputs
+    image_features = torch.zeros(1, 36, 2048)  # Placeholder for image features
+    image_locations = torch.zeros(1, 36, 4)    # Placeholder for image locations
+
+    # Forward pass
+    with torch.no_grad():
+        vil_prediction, vil_logit, vil_binary_prediction = model(
+            question=tokens,
+            features=image_features,
+            spatials=image_locations,
+            segment_ids=None,
+            input_mask=None,
+            image_mask=None,
+            task="VQA"
+        )
+
+    # Process the output (this will depend on your specific task and model output)
+    # For this example, we'll just return the raw logits
+    return vil_logit
+
+# Load pre-trained ViLBERT model and tokenizer
+model = VILBertForVLTasks.from_pretrained("bert-base-uncased")
+tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
+
+# Example usage
+image_path = "path/to/your/property_image.jpg"
+question = "Is there any visible damage to the roof?"
+
+logits = analyze_property(image_path, question, model, tokenizer)
+print(f"Question: {question}")
+print(f"Logits: {logits}")
+
+
+def inspect_property(image_path, model, tokenizer):
+    inspection_results = {}
+    
+    questions = [
+        "Is there any visible damage to the roof?",
+        "What is the condition of the exterior paint?",
+        "Are there any signs of foundation issues?",
+        "Is the landscaping well-maintained?",
+        "Are there any visible plumbing issues?"
+    ]
+    
+    for question in questions:
+        logits = analyze_property(image_path, question, model, tokenizer)
+        # Process logits to get a meaningful answer (this will depend on your specific setup)
+        answer = process_logits(logits)
+        inspection_results[question] = answer
+    
+    return inspection_results
+
+def process_logits(logits):
+    # This is a placeholder function. You'll need to implement this based on your model's output format
+    # and your specific task (e.g., classification, question answering)
+    return "Answer based on logits"
+
+# Example usage
+image_path = "path/to/property_image.jpg"
+results = inspect_property(image_path, model, tokenizer)
+
+for question, answer in results.items():
+    print(f"Q: {question}")
+    print(f"A: {answer}\n")
+
+
+
