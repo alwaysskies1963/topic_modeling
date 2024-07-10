@@ -20,6 +20,8 @@ from openpyxl.drawing.image import Image
 import os
 import re
 from collections import defaultdict
+from PIL import Image as PILImage
+import io
 
 def extract_xlsm_data(file_path):
     # Create output directories
@@ -70,9 +72,14 @@ def extract_xlsm_data(file_path):
                 classified_info['comments'].append(text)
 
         # Extract images
-        for image in sheet._images:
-            img = Image(image.ref)
-            img.save(f'output/images/{sheet_name}_image_{image.anchor}.png')
+        for idx, image in enumerate(sheet._images):
+            if isinstance(image, Image):
+                try:
+                    image_data = image.ref
+                    img = PILImage.open(io.BytesIO(image_data))
+                    img.save(f'output/images/{sheet_name}_image_{idx}.png')
+                except Exception as e:
+                    print(f"Error saving image from {sheet_name}, image {idx}: {str(e)}")
 
     # Save classified information
     for category, items in classified_info.items():
@@ -86,7 +93,6 @@ file_path = 'path_to_your_xlsm_file.xlsm'
 tables, classified_info = extract_xlsm_data(file_path)
 
 print("Extraction complete. Check the 'output' directory for results.")
-
 -----------------------------
 
 class PropertyComponent:
