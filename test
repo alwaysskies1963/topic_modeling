@@ -12,6 +12,80 @@ for sheet_name in sheet_names:
     sheet = workbook[sheet_name]
     # Process each sheet as needed
 
+---------------------------
+
+import pandas as pd
+import openpyxl
+from openpyxl.drawing.image import Image
+import os
+import re
+from collections import defaultdict
+
+def extract_xlsm_data(file_path):
+    # Create output directories
+    os.makedirs('output/text', exist_ok=True)
+    os.makedirs('output/images', exist_ok=True)
+    os.makedirs('output/dataframes', exist_ok=True)
+
+    # Load the workbook
+    wb = openpyxl.load_workbook(file_path, data_only=True)
+
+    # Dictionary to store classified information
+    classified_info = defaultdict(list)
+
+    for sheet_name in wb.sheetnames:
+        sheet = wb[sheet_name]
+        
+        # Extract tables and convert to dataframes
+        tables = {}
+        for table in sheet._tables:
+            df = pd.read_excel(file_path, sheet_name=sheet_name, engine='openpyxl', skiprows=table.ref.min_row - 1, nrows=table.ref.max_row - table.ref.min_row + 1)
+            tables[table.name] = df
+            df.to_csv(f'output/dataframes/{sheet_name}_{table.name}.csv', index=False)
+            
+            # Classify information
+            for col in df.columns:
+                if 'comment' in col.lower():
+                    classified_info['comments'].extend(df[col].dropna().tolist())
+                elif 'risk' in col.lower():
+                    classified_info['risk_ratings'].extend(df[col].dropna().tolist())
+                elif 'cost' in col.lower() or 'repair' in col.lower():
+                    classified_info['cost_repair'].extend(df[col].dropna().tolist())
+
+        # Extract text data
+        text_data = []
+        for row in sheet.iter_rows(values_only=True):
+            text_data.extend([str(cell) for cell in row if cell is not None])
+        
+        with open(f'output/text/{sheet_name}_text.txt', 'w', encoding='utf-8') as f:
+            f.write('\n'.join(text_data))
+        
+        # Classify text data
+        for text in text_data:
+            if re.search(r'\d+(\.\d{2})?', text):  # Possible cost
+                classified_info['cost_repair'].append(text)
+            elif any(keyword in text.lower() for keyword in ['repair', 'fix', 'replace']):
+                classified_info['repair'].append(text)
+            elif len(text.split()) > 5:  # Assume longer texts are comments
+                classified_info['comments'].append(text)
+
+        # Extract images
+        for image in sheet._images:
+            img = Image(image.ref)
+            img.save(f'output/images/{sheet_name}_image_{image.anchor}.png')
+
+    # Save classified information
+    for category, items in classified_info.items():
+        with open(f'output/text/classified_{category}.txt', 'w', encoding='utf-8') as f:
+            f.write('\n'.join(items))
+
+    return tables, classified_info
+
+# Usage
+file_path = 'path_to_your_xlsm_file.xlsm'
+tables, classified_info = extract_xlsm_data(file_path)
+
+print("Extraction complete. Check the 'output' directory for results.")
 
 -----------------------------
 
