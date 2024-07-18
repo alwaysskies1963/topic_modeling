@@ -1,4 +1,240 @@
 
+import openpyxl
+from openpyxl_image_loader import SheetImageLoader
+import os
+import json
+from PIL import Image
+import io
+
+def extract_image_metadata(sheet, output_dir):
+    image_loader = SheetImageLoader(sheet)
+    data = {}
+    
+    for row in sheet.iter_rows(min_row=2, values_only=True):
+        title, mf_address, overall_rating, percentage_occupied, num_photos = row[:5]
+        
+        # Assuming images start from column F (6th column)
+        for col in range(6, sheet.max_column, 2):
+            cell = sheet.cell(row=row[0], column=col)
+            if cell.value is not None:
+                image = image_loader.get(cell.coordinate)
+                if image:
+                    photo_number = sheet.cell(row=row[0], column=col+1).value
+                    general_label = sheet.cell(row=row[0]+1, column=col+1).value
+                    description = sheet.cell(row=row[0]+2, column=col+1).value
+                    
+                    # Extract image metadata
+                    img_byte_arr = io.BytesIO()
+                    image.save(img_byte_arr, format='PNG')
+                    img_byte_arr = img_byte_arr.getvalue()
+                    
+                    pil_image = Image.open(io.BytesIO(img_byte_arr))
+                    metadata = {
+                        "format": pil_image.format,
+                        "mode": pil_image.mode,
+                        "size": pil_image.size,
+                    }
+                    
+                    # Save image
+                    image_filename = f"{title}_{photo_number}.png"
+                    image_path = os.path.join(output_dir, image_filename)
+                    image.save(image_path)
+                    
+                    # Store data
+                    if title not in data:
+                        data[title] = {
+                            "MF_address": mf_address,
+                            "overall_rating": overall_rating,
+                            "percentage_occupied": percentage_occupied,
+                            "num_photos": num_photos,
+                            "photos": []
+                        }
+                    
+                    data[title]["photos"].append({
+                        "photo_number": photo_number,
+                        "general_label": general_label,
+                        "description": description,
+                        "image_filename": image_filename,
+                        "metadata": metadata
+                    })
+    
+    return data
+
+def main():
+    # Load the workbook and select the "Photos" sheet
+    workbook = openpyxl.load_workbook('your_spreadsheet.xlsx')
+    sheet = workbook['Photos']
+    
+    # Create output directory
+    output_dir = 'outputs/image_metadata_output'
+    os.makedirs(output_dir, exist_ok=True)
+    
+    # Extract data and save images
+    data = extract_image_metadata(sheet, output_dir)
+    
+    # Save data as JSON
+    with open(os.path.join(output_dir, 'metadata.json'), 'w') as f:
+        json.dump(data, f, indent=2)
+    
+    print(f"Extraction complete. Data and images saved in {output_dir}")
+
+if __name__ == "__main__":
+    main()
+
+-----------------------------------------
+
+import os
+import json
+from openpyxl import load_workbook
+from openpyxl.drawing.image import Image as OpenpyxlImage
+from PIL import Image as PilImage
+from openpyxl.utils import get_column_letter
+
+# Function to save images
+def save_images(output_dir, image, image_name):
+    image_path = os.path.join(output_dir, f"{image_name}.png")
+    image.save(image_path)
+    return image_path
+
+# Function to extract images and metadata
+def extract_images_and_metadata(sheet, output_dir):
+    data = {
+        "title": sheet["A1"].value,
+        "MF_address": sheet["A2"].value,
+        "Overall_rating": sheet["A3"].value,
+        "Percentage_occupied": sheet["A4"].value,
+        "Number_of_photos": sheet["A5"].value,
+        "photos": []
+    }
+    
+    row = 6  # Assuming images and their metadata start from row 6
+    col = 1  # Assuming images are in the first column
+
+    while True:
+        cell = sheet.cell(row=row, column=col)
+        if not cell.value:
+            break  # Exit loop if there is no more data
+
+        img = None
+        for image in sheet._images:
+            if image.anchor._from.row == row - 1:  # Images are usually anchored to the row above their cell
+                img = PilImage.open(image.ref)
+                break
+
+        if img:
+            image_name = f"image_{row - 5}"
+            image_path = save_images(output_dir, img, image_name)
+            
+            metadata = {
+                "photo_number": sheet.cell(row=row, column=col + 1).value,
+                "general_label": sheet.cell(row=row, column=col + 2).value,
+                "detailed_description": sheet.cell(row=row, column=col + 3).value,
+                "image_path": image_path
+            }
+            data["photos"].append(metadata)
+        
+        row += 1
+
+    return data
+
+# Load the Excel workbook
+file_path = 'path_to_your_file.xlsm'
+wb = load_workbook(filename=file_path, data_only=True)
+sheet = wb["Photos"]
+
+# Create output directory
+output_dir = f"outputs/{os.path.splitext(os.path.basename(file_path))[0]}"
+os.makedirs(output_dir, exist_ok=True)
+
+# Extract images and metadata
+data = extract_images_and_metadata(sheet, output_dir)
+
+# Save metadata to a JSON file
+metadata_file = os.path.join(output_dir, "metadata.json")
+with open(metadata_file, "w") as f:
+    json.dump(data, f, indent=4)
+
+print("Data extraction and saving completed successfully.")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 import openpyxl
 import pandas as pd
