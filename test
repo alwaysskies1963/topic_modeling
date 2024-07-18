@@ -161,7 +161,81 @@ print("Data extraction and saving completed successfully.")
 
 
 
+================================================================================
 
+image metadata
+--------------------------------------------------
+
+import openpyxl
+from openpyxl_image_loader import SheetImageLoader
+from PIL import Image
+import io
+import os
+import datetime
+
+def extract_image_metadata(excel_file, output_folder):
+    # Get Excel file modification time
+    excel_mod_time = datetime.datetime.fromtimestamp(os.path.getmtime(excel_file))
+    
+    # Load the workbook
+    workbook = openpyxl.load_workbook(excel_file)
+    
+    # Iterate through all sheets
+    for sheet_name in workbook.sheetnames:
+        sheet = workbook[sheet_name]
+        image_loader = SheetImageLoader(sheet)
+        
+        # Iterate through all cells in the sheet
+        for row in sheet.iter_rows():
+            for cell in row:
+                if image_loader.image_in(cell.coordinate):
+                    # Extract image
+                    image = image_loader.get(cell.coordinate)
+                    
+                    # Save image
+                    image_filename = f"{sheet_name}_{cell.coordinate}.png"
+                    image_path = os.path.join(output_folder, image_filename)
+                    image.save(image_path)
+                    
+                    # Extract metadata
+                    with Image.open(io.BytesIO(image.data)) as img:
+                        metadata = {
+                            "filename": image_filename,
+                            "format": img.format,
+                            "mode": img.mode,
+                            "size": img.size,
+                            "cell": cell.coordinate,
+                            "sheet": sheet_name,
+                            "excel_last_modified": excel_mod_time.isoformat()
+                        }
+                        
+                        # If EXIF data is available, add it to metadata
+                        exif_data = img._getexif()
+                        if exif_data:
+                            # Extract DateTimeOriginal and DateTimeDigitized if available
+                            date_time_original = exif_data.get(36867)  # 36867 is the tag for DateTimeOriginal
+                            date_time_digitized = exif_data.get(36868)  # 36868 is the tag for DateTimeDigitized
+                            
+                            if date_time_original:
+                                metadata["image_date_time_original"] = date_time_original
+                            if date_time_digitized:
+                                metadata["image_date_time_digitized"] = date_time_digitized
+                            
+                            metadata["exif"] = exif_data
+                    
+                    # Save metadata (you can modify this to save in your preferred format)
+                    metadata_filename = f"{sheet_name}_{cell.coordinate}_metadata.txt"
+                    metadata_path = os.path.join(output_folder, metadata_filename)
+                    with open(metadata_path, 'w') as f:
+                        for key, value in metadata.items():
+                            f.write(f"{key}: {value}\n")
+                    
+                    print(f"Extracted image and metadata from {sheet_name}, cell {cell.coordinate}")
+
+# Usage
+excel_file = "path/to/your/excel/file.xlsx"
+output_folder = "path/to/output/folder"
+extract_image_metadata(excel_file, output_folder)
 
 
 
