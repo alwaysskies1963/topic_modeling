@@ -1,4 +1,72 @@
+====================================================
+textract
+------------------------------------------------------
+import pandas as pd
+import matplotlib.pyplot as plt
+from PIL import Image
+import boto3
+import io
 
+# Function to convert a DataFrame to an image
+def df_to_image(df, filename):
+    fig, ax = plt.subplots(figsize=(12, len(df) * 0.5))  # Adjust size as needed
+    ax.axis('tight')
+    ax.axis('off')
+    table = ax.table(cellText=df.values, colLabels=df.columns, cellLoc='center', loc='center')
+    fig.savefig(filename, bbox_inches='tight')
+    plt.close(fig)
+
+# Load Excel file
+excel_file = 'your_excel_file.xlsx'
+xls = pd.ExcelFile(excel_file)
+
+# Convert each sheet to an image
+image_files = []
+for sheet_name in xls.sheet_names:
+    df = pd.read_excel(xls, sheet_name=sheet_name)
+    image_file = f'{sheet_name}.png'
+    df_to_image(df, image_file)
+    image_files.append(image_file)
+
+# Initialize Textract client
+textract = boto3.client('textract')
+
+def extract_text_from_image(image_file):
+    with open(image_file, 'rb') as img_file:
+        img_bytes = img_file.read()
+
+    response = textract.detect_document_text(Document={'Bytes': img_bytes})
+
+    text = ""
+    for item in response["Blocks"]:
+        if item["BlockType"] == "LINE":
+            text += item["Text"] + "\n"
+
+    return text
+
+# Extract text from each image
+for image_file in image_files:
+    extracted_text = extract_text_from_image(image_file)
+    print(f"Extracted text from {image_file}:\n{extracted_text}")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=-=======================================================
 import openpyxl
 from openpyxl_image_loader import SheetImageLoader
 import os
