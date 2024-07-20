@@ -1,3 +1,21 @@
+import json
+from PIL.TiffImagePlugin import IFDRational
+
+def convert_unexpected_types(d):
+    expected_types = (list, tuple, str, int, float, type(None))
+    
+    if isinstance(d, dict):
+        return {k: convert_unexpected_types(v) for k, v in d.items()}
+    elif isinstance(d, list) or isinstance(d, tuple):
+        return [convert_unexpected_types(i) for i in d]
+    elif isinstance(d, IFDRational):
+        return float(d)
+    elif not isinstance(d, expected_types):
+        return str(d)  # Convert any other unexpected types to string
+    else:
+        return d
+-----------------------------------------
+
 def find_unexpected_type(d):
     expected_types = (list, tuple, str, int, float, type(None))
     
