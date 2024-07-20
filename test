@@ -1,3 +1,138 @@
+============================================
+import openpyxl
+import re
+
+def extract_information_from_sheet(sheet):
+    data = {}
+    for row in sheet.iter_rows(values_only=True):
+        if any(row):
+            for cell in row:
+                if cell:
+                    if re.search(r'Physical Condition Assessment and Deferred Maintenance', str(cell)):
+                        data['Physical Condition'] = {}
+                    elif re.search(r'Curb Appeal', str(cell)):
+                        data['Curb Appeal'] = {}
+                    elif re.search(r'Site', str(cell)):
+                        data['Site'] = {}
+                    elif re.search(r'Building / Mechanical Systems', str(cell)):
+                        data['Building / Mechanical Systems'] = {}
+                    elif re.search(r'Building Exteriors', str(cell)):
+                        data['Building Exteriors'] = {}
+                    elif re.search(r'Building Roofs', str(cell)):
+                        data['Building Roofs'] = {}
+                    elif re.search(r'Occupied Units / Space', str(cell)):
+                        data['Occupied Units / Space'] = {}
+                    elif re.search(r'Vacant Units / Space / Hotel Rooms', str(cell)):
+                        data['Vacant Units / Space / Hotel Rooms'] = {}
+                    elif re.search(r'Down Units / Space / Hotel Rooms', str(cell)):
+                        data['Down Units / Space / Hotel Rooms'] = {}
+                    elif re.search(r'Interior Common Areas', str(cell)):
+                        data['Interior Common Areas'] = {}
+                    elif re.search(r'Amenities', str(cell)):
+                        data['Amenities'] = {}
+                    elif re.search(r'Environmental', str(cell)):
+                        data['Environmental'] = {}
+                    elif re.search(r'Inspector Comments', str(cell)):
+                        last_key = list(data.keys())[-1]
+                        last_subkey = list(data[last_key].keys())[-1]
+                        data[last_key][last_subkey] = cell.split(": ")[1].strip()
+                    elif re.search(r'Rating', str(cell)):
+                        last_key = list(data.keys())[-1]
+                        data[last_key]['Rating'] = cell.split(": ")[1].strip()
+                    elif re.search(r'Trend', str(cell)):
+                        last_key = list(data.keys())[-1]
+                        data[last_key]['Trend'] = cell.split(": ")[1].strip()
+                    else:
+                        last_key = list(data.keys())[-1]
+                        data[last_key]['Inspector Comments'] = cell.strip()
+    return data
+
+def main():
+    # Load the workbook
+    workbook = openpyxl.load_workbook('/path/to/your/excel/file.xlsx')
+
+    # Select the relevant sheet
+    sheet = workbook['Sheet1']  # Change to the correct sheet name
+
+    # Extract information
+    extracted_data = extract_information_from_sheet(sheet)
+
+    # Print extracted information
+    for section, details in extracted_data.items():
+        print(f"{section}:")
+        for key, value in details.items():
+            print(f"  {key}: {value}")
+        print()
+
+if __name__ == "__main__":
+    main()
+
+
+-----------------------------------------------------------
+
+
+import openpyxl
+import re
+from openpyxl.utils import get_column_letter
+
+def parse_excel_form(file_path):
+    workbook = openpyxl.load_workbook(file_path)
+    sheet = workbook.active
+    
+    data = {}
+    
+    # Define the sections and their row ranges (adjust as needed)
+    sections = {
+        'Curb Appeal': (2, 5),
+        'Site': (6, 10),
+        'Building / Mechanical Systems': (11, 15),
+        'Building Exteriors': (16, 20),
+        'Building Roofs': (21, 25),
+        'Occupied Units / Space': (26, 30),
+        'Vacant Units / Space / Hotel Rooms': (31, 35),
+        'Down Units / Space / Hotel Rooms': (36, 40),
+        'Interior Common Areas': (41, 45),
+        'Amenities': (46, 50),
+        'Environmental': (51, 55)
+    }
+    
+    for section, (start_row, end_row) in sections.items():
+        section_data = {}
+        for row in range(start_row, end_row + 1):
+            cell_value = sheet[f'A{row}'].value
+            if cell_value:
+                if cell_value == 'Rating':
+                    rating = sheet[f'B{row}'].value
+                    section_data['Rating'] = rating
+                elif cell_value == 'Trend':
+                    trend = sheet[f'C{row}'].value
+                    section_data['Trend'] = trend
+                elif cell_value == 'Inspector Comments':
+                    comments = sheet[f'B{row}'].value
+                    section_data['Inspector Comments'] = comments
+        data[section] = section_data
+    
+    # Extract additional descriptions
+    exterior_desc = sheet['B56'].value
+    interior_desc = sheet['B57'].value
+    data['Exterior Additional Description'] = exterior_desc
+    data['Interior Additional Description'] = interior_desc
+    
+    return data
+
+# Usage
+file_path = 'path_to_your_excel_file.xlsx'
+parsed_data = parse_excel_form(file_path)
+
+# Print the extracted data
+for section, section_data in parsed_data.items():
+    print(f"\n{section}:")
+    for key, value in section_data.items():
+        print(f"  {key}: {value}")
+
+===========================================
+
+
 import json
 from PIL.TiffImagePlugin import IFDRational
 
