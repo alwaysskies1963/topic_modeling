@@ -1,20 +1,22 @@
-def contains_unexpected_type(d):
+def find_unexpected_type(d):
     expected_types = (list, tuple, str, int, float, type(None))
     
     if isinstance(d, dict):
         for key, value in d.items():
             if not isinstance(key, expected_types):
-                return True
-            if contains_unexpected_type(value):
-                return True
+                return type(key)
+            result = find_unexpected_type(value)
+            if result is not None:
+                return result
     elif isinstance(d, list) or isinstance(d, tuple):
         for item in d:
-            if contains_unexpected_type(item):
-                return True
+            result = find_unexpected_type(item)
+            if result is not None:
+                return result
     elif not isinstance(d, expected_types):
-        return True
+        return type(d)
     
-    return False
+    return None
 
 
 
