@@ -1,3 +1,73 @@
+import pandas as pd
+import re
+
+# Sample data frames for photos and physical condition sheet
+photos_df = pd.DataFrame({
+    'photo_number': [1, 2, 3, 4],
+    'general_label': ['exterior', 'interior', 'roof', 'deferred maintenance'],
+    'specific_description': ['front view of building', 'living room', 'roof shingles', 'broken window']
+})
+
+physical_condition_df = pd.DataFrame({
+    'category': ['Building Exteriors', 'Occupied Units / Space', 'Building Roofs', 'Deferred Maintenance Items'],
+    'subcategories': [
+        'Siding; Trim; Paint; Windows; Exterior Entry Ways; Stairs; Railings; Balconies; Patios; Gutters; Downspouts; Foundations; Doors; Façade; Structure (Beam/Joist)',
+        'HVAC; Ceiling; Floors; Walls; Painting; Wall Cover; Floor Cover; Tiles; Windows; Countertop; Cabinets; Appliances; Lighting; Electrical; Bathroom Accessories; Plumbing Fixtures; Storage; Basements / Attics',
+        'Roof Condition; Roof Access; Top Floor Ceilings; Shingles / Membrane; Skylights; Flashing; Parapet Walls; Mansard Roofs',
+        'Majority or minority of maintenance items with associated photo and cost'
+    ]
+})
+
+# Define keyword mapping
+keyword_mapping = {
+    'exterior': 'Building Exteriors',
+    'interior': 'Occupied Units / Space',
+    'roof': 'Building Roofs',
+    'neighborhood': 'Curb Appeal',
+    'routine maintenance': 'Routine Maintenance',
+    'deferred maintenance': 'Deferred Maintenance Items',
+    'life safety': 'Environmental'
+}
+
+subcategory_mapping = {
+    'HVAC': 'HVAC',
+    'paint': 'Painting',
+    'pool': 'Pool',
+    'window': 'Windows',
+    'roof shingles': 'Shingles / Membrane'
+}
+
+def map_photo_to_category(photo):
+    general_label = photo['general_label'].lower()
+    specific_description = photo['specific_description'].lower()
+    
+    # Map general label to category
+    category = keyword_mapping.get(general_label, 'Unknown Category')
+    
+    # Find matching subcategory
+    for keyword, subcategory in subcategory_mapping.items():
+        if re.search(keyword, specific_description):
+            return category, subcategory
+    
+    return category, 'General'
+
+# Apply mapping to photos data frame
+photos_df[['mapped_category', 'mapped_subcategory']] = photos_df.apply(map_photo_to_category, axis=1, result_type='expand')
+
+print(photos_df)
+
+
+
+
+
+
+
+
+
+
+
+
+
 ============================================
 import openpyxl
 import re
