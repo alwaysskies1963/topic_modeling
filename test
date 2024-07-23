@@ -1,3 +1,14 @@
+tomaarsen/setfit-absa-bge-small-en-v1.5-restaurants-polarity
+microsoft/deberta-xlarge-mnli
+distilbert-base-uncased-finetuned-sst-2-english
+lordtt13/emo-mobilebert
+juliensimon/reviews-sentiment-analysis
+sbcBI/sentiment_analysis_model
+yangheng/deberta-v3-base-absa-v1.1
+Funnyworld1412/ABSA_game_squad_busters-aspect
+
+
+
 import pandas as pd
 import re
 
