@@ -1,4 +1,1847 @@
+pca_category_issues = {
+    "Curb Appeal": {
+        "Comparison to Neighborhood": ["Appearance disparity with neighboring properties", "Negative neighborhood influences"],
+        "First Impression / Appearance": ["Unkempt landscaping", "Dirty or damaged exterior", "Poor signage", "Trash or debris presence"]
+    },
+    "Site": {
+        "Property Appearance": ["Poor landscaping", "Trash and debris", "Graffiti"],
+        "Signage": ["Damaged or unreadable signs", "Inadequate signage"],
+        "Ingress / Egress": ["Poorly marked entrances/exits", "Obstructed access points"],
+        "Landscaping": ["Dead or dying plants", "Overgrown vegetation", "Inadequate irrigation"],
+        "Site Lighting": ["Broken or inadequate lighting", "Poorly placed lighting"],
+        "Parking Lot": ["Potholes", "Cracks", "Standing water"],
+        "Striping": ["Faded or missing parking lot striping", "Illegible handicap markings"],
+        "Garage / Carports": ["Structural damage", "Poor lighting", "Inadequate security"],
+        "Irrigation System": ["Leaks", "Non-functional sprinklers", "Inefficient water use"],
+        "Drainage": ["Standing water", "Blocked drains", "Erosion"],
+        "Retaining Walls": ["Cracks", "Erosion", "Leaning walls"],
+        "Walkways": ["Cracks", "Uneven surfaces", "Inadequate lighting"],
+        "Fencing": ["Damage", "Rust", "Inadequate security fencing"],
+        "Refuse Containment & Cleanliness": ["Overflowing trash", "Poorly maintained refuse areas", "Inadequate pest control"],
+        "Hazardous Material Storage": ["Improper storage", "Leaks", "Inadequate signage"]
+    },
+    "Building / Mechanical Systems": {
+        "HVAC": ["Non-functional units", "Poor efficiency", "Leaks"],
+        "Electrical": ["Outdated wiring", "Inadequate capacity", "Code violations"],
+        "Boilers": ["Leaks", "Inefficiency", "Carbon monoxide risks"],
+        "Water Heaters": ["Leaks", "Insufficient hot water", "Poor efficiency"],
+        "Fire Protection": ["Non-functional alarms", "Inadequate fire extinguishers"],
+        "Sprinklers": ["Non-functional sprinklers", "Code violations", "Leaks"],
+        "Plumbing": ["Leaks", "Clogs", "Low water pressure"],
+        "Sewer": ["Backups", "Leaks", "Odors"],
+        "Solar Systems": ["Non-functional panels", "Poor efficiency", "Damage"],
+        "Elevators / Escalators": ["Frequent breakdowns", "Code violations", "Safety concerns"],
+        "Chiller Plant": ["Non-functional units", "Leaks", "Inefficiency"],
+        "Cooling Towers": ["Leaks", "Poor maintenance", "Legionella risk"],
+        "Building Oxygen Systems": ["Leaks", "Code violations", "Non-functional systems"],
+        "Intercom System": ["Non-functional units", "Poor sound quality", "Inadequate coverage"],
+        "PA System": ["Non-functional units", "Poor sound quality", "Inadequate coverage"],
+        "Security Systems": ["Non-functional cameras", "Inadequate coverage", "Poor lighting"]
+    },
+    "Building Exteriors": {
+        "Siding": ["Cracks", "Warps", "Peeling paint"],
+        "Trim": ["Rot", "Peeling paint", "Damage"],
+        "Paint": ["Peeling", "Faded", "Graffiti"],
+        "Windows": ["Broken panes", "Poor seals", "Inadequate insulation"],
+        "Exterior Entry Ways": ["Poor lighting", "Damaged doors", "Inadequate security"],
+        "Stairs": ["Cracks", "Loose steps", "Inadequate railings"],
+        "Railings": ["Loose", "Rusty", "Inadequate height"],
+        "Balconies": ["Structural damage", "Water damage", "Inadequate railings"],
+        "Patios": ["Cracks", "Uneven surfaces", "Poor drainage"],
+        "Gutters": ["Clogs", "Leaks", "Poor attachment"],
+        "Downspouts": ["Clogs", "Leaks", "Poor drainage"],
+        "Foundations": ["Cracks", "Settling", "Water intrusion"],
+        "Doors": ["Damage", "Poor seals", "Inadequate security"],
+        "Façade": ["Cracks", "Staining", "Water damage"],
+        "Structure (Beam/Joist)": ["Cracks", "Rot", "Termite damage"]
+    },
+    "Building Roofs": {
+        "Roof Condition": ["Leaks", "Cracks", "Missing shingles"],
+        "Roof Access": ["Inadequate access points", "Safety concerns"],
+        "Top Floor Ceilings": ["Water stains", "Cracks", "Sagging"],
+        "Shingles / Membrane": ["Missing shingles", "Tears", "Blisters"],
+        "Skylights": ["Leaks", "Cracks", "Condensation"],
+        "Flashing": ["Leaks", "Corrosion", "Loose flashing"],
+        "Parapet Walls": ["Cracks", "Water damage", "Leaning"],
+        "Mansard Roofs": ["Leaks", "Cracks", "Water damage"]
+    },
+    "Occupied Units / Space": {
+        "HVAC": ["Non-functional units", "Leaks", "Inefficiency"],
+        "Ceiling": ["Cracks", "Water stains", "Sagging"],
+        "Floors": ["Cracks", "Stains", "Uneven surfaces"],
+        "Walls": ["Cracks", "Peeling paint", "Water damage"],
+        "Painting": ["Peeling", "Faded", "Inconsistent"],
+        "Wall Cover": ["Tears", "Peeling", "Stains"],
+        "Floor Cover": ["Tears", "Stains", "Worn areas"],
+        "Tiles": ["Cracks", "Loose tiles", "Missing grout"],
+        "Windows": ["Broken panes", "Poor seals", "Inadequate insulation"],
+        "Countertop": ["Cracks", "Stains", "Burn marks"],
+        "Cabinets": ["Loose hinges", "Peeling finish", "Damage"],
+        "Appliances": ["Non-functional", "Outdated", "Inefficient"],
+        "Lighting": ["Non-functional fixtures", "Inadequate lighting", "Code violations"],
+        "Electrical": ["Outdated wiring", "Inadequate outlets", "Code violations"],
+        "Bathroom Accessories": ["Loose fixtures", "Damage", "Inadequate storage"],
+        "Plumbing Fixtures": ["Leaks", "Clogs", "Outdated fixtures"],
+        "Storage": ["Inadequate space", "Poorly maintained"],
+        "Basements / Attics": ["Water damage", "Poor ventilation", "Pest infestation"]
+    },
+    "Vacant Units / Space / Hotel Rooms": {
+        "HVAC": ["Non-functional units", "Leaks", "Inefficiency"],
+        "Ceiling": ["Cracks", "Water stains", "Sagging"],
+        "Floors": ["Cracks", "Stains", "Uneven surfaces"],
+        "Walls": ["Cracks", "Peeling paint", "Water damage"],
+        "Painting": ["Peeling", "Faded", "Inconsistent"],
+        "Wall Cover": ["Tears", "Peeling", "Stains"],
+        "Floor Cover": ["Tears", "Stains", "Worn areas"],
+        "Tiles": ["Cracks", "Loose tiles", "Missing grout"],
+        "Windows": ["Broken panes", "Poor seals", "Inadequate insulation"],
+        "Countertop": ["Cracks", "Stains", "Burn marks"],
+        "Cabinets": ["Loose hinges", "Peeling finish", "Damage"],
+        "Appliances": ["Non-functional", "Outdated", "Inefficient"],
+        "Lighting": ["Non-functional fixtures", "Inadequate lighting", "Code violations"],
+        "Electrical": ["Outdated wiring", "Inadequate outlets", "Code violations"],
+        "Bathroom Accessories": ["Loose fixtures", "Damage", "Inadequate storage"],
+        "Plumbing Fixtures": ["Leaks", "Clogs", "Outdated fixtures"],
+        "Storage": ["Inadequate space", "Poorly maintained"],
+        "Basements / Attics": ["Water damage", "Poor ventilation", "Pest infestation"]
+    },
+    "Down Units / Space / Hotel Rooms": {
+        "HVAC": ["Non-functional units", "Leaks", "Inefficiency"],
+        "Ceiling": ["Cracks", "Water stains", "Sagging"],
+        "Floors": ["Cracks", "Stains", "Uneven surfaces"],
+        "Walls": ["Cracks", "Peeling paint", "Water damage"],
+        "Painting": ["Peeling", "Faded", "Inconsistent"],
+        "Wall Cover": ["Tears", "Peeling", "Stains"],
+        "Floor Cover": ["Tears", "Stains", "Worn areas"],
+        "Tiles": ["Cracks", "Loose tiles", "Missing grout"],
+        "Windows": ["Broken panes", "Poor seals", "Inadequate insulation"],
+        "Countertop": ["Cracks", "Stains", "Burn marks"],
+        "Cabinets": ["Loose hinges", "Peeling finish", "Damage"],
+        "Appliances": ["Non-functional", "Outdated", "Inefficient"],
+        "Lighting": ["Non-functional fixtures", "Inadequate lighting", "Code violations"],
+        "Electrical": ["Outdated wiring", "Inadequate outlets", "Code violations"],
+        "Bathroom Accessories": ["Loose fixtures", "Damage", "Inadequate storage"],
+        "Plumbing Fixtures": ["Leaks", "Clogs", "Outdated fixtures"],
+        "Storage": ["Inadequate space", "Poorly maintained"],
+        "Basements / Attics": ["Water damage", "Poor ventilation", "Pest infestation"]
+    },
+    "Interior Common Areas": {
+        "Mailboxes": ["Damage", "Inadequate security", "Poor placement"],
+        "Reception Area": ["Poor layout", "Inadequate lighting", "Worn furniture"],
+        "Lobby": ["Worn flooring", "Inadequate lighting", "Poor aesthetics"],
+        "Food Courts": ["Poor cleanliness", "Worn furniture", "Inadequate lighting"],
+        "Dining Areas": ["Worn flooring", "Inadequate lighting", "Poor furniture condition"],
+        "Kitchen": ["Outdated appliances", "Poor cleanliness", "Inadequate ventilation"],
+        "Halls": ["Worn flooring", "Poor lighting", "Cracked walls"],
+        "Stairways": ["Loose steps", "Inadequate railings", "Poor lighting"],
+        "Meeting Rooms": ["Worn furniture", "Inadequate lighting", "Poor layout"],
+        "Public Restrooms": ["Leaks", "Worn fixtures", "Poor cleanliness"],
+        "Storage": ["Inadequate space", "Poor organization", "Pest infestation"],
+        "Basement": ["Water damage", "Poor ventilation", "Pest infestation"],
+        "Healthcare Assistance Rooms": ["Worn equipment", "Poor layout", "Inadequate lighting"],
+        "Pharmacy / Medication Storage": ["Inadequate security", "Poor organization", "Temperature control issues"],
+        "Nurses Station": ["Worn furniture", "Poor layout", "Inadequate lighting"]
+    },
+    "Amenities": {
+        "Pool": ["Leaks", "Poor cleanliness", "Inadequate safety measures"],
+        "Clubhouse": ["Worn furniture", "Poor layout", "Inadequate lighting"],
+        "Gym": ["Worn equipment", "Poor ventilation", "Inadequate lighting"],
+        "Laundry Area / Rooms": ["Non-functional machines", "Poor cleanliness", "Inadequate space"],
+        "Playground": ["Worn equipment", "Safety hazards", "Poor cleanliness"],
+        "Wireless Access": ["Poor connectivity", "Inadequate coverage", "Outdated equipment"],
+        "Restaurant / Bar": ["Poor cleanliness", "Outdated equipment", "Inadequate lighting"],
+        "Business Center": ["Outdated equipment", "Inadequate lighting", "Poor layout"],
+        "Sport Courts": ["Cracks", "Worn surfaces", "Poor lighting"],
+        "Spa": ["Poor cleanliness", "Outdated equipment", "Inadequate ventilation"],
+        "Store": ["Poor layout", "Inadequate stock", "Worn fixtures"],
+        "Media Center": ["Outdated equipment", "Poor lighting", "Inadequate seating"]
+    },
+    "Environmental": {
+        "Reported spills or leaks": ["Potential contamination", "Inadequate cleanup", "Recurring issues"],
+        "Evidence of spills or leaks": ["Water damage", "Mold growth", "Structural damage"],
+        "Evidence of distressed vegetation": ["Soil contamination", "Poor irrigation", "Pest infestation"],
+        "Evidence of mold": ["Health hazards", "Poor ventilation", "Water damage"],
+        "Evidence of O&M non-compliance": ["Regulatory violations", "Inadequate maintenance", "Safety hazards"]
+    }
+}
 
+
+
+
+
+
+
+
+
+
+
+
+
+----------------------------------------------------
+
+
+{
+    "Curb Appeal": {
+        "Comparison to Neighborhood": [
+            "Outdated architectural style",
+            "Mismatched color scheme",
+            "Overgrown or neglected landscaping",
+            "Visible property damage",
+            "Poor exterior lighting"
+        ],
+        "First Impression / Appearance": [
+            "Peeling paint",
+            "Cracked or uneven walkways",
+            "Dirty or damaged windows",
+            "Overflowing trash containers",
+            "Visible pest problems"
+        ]
+    },
+    "Site": {
+        "Property Appearance": [
+            "Faded or damaged exterior paint",
+            "Overgrown vegetation",
+            "Litter or debris accumulation",
+            "Visible property damage"
+        ],
+        "Signage": [
+            "Outdated or damaged signs",
+            "Poor visibility or placement",
+            "Non-compliance with local regulations"
+        ],
+        "Ingress / Egress": [
+            "Poorly maintained driveways",
+            "Inadequate lighting at entry/exit points",
+            "Unclear or confusing traffic flow",
+            "Safety hazards at entry/exit points"
+        ],
+        "Landscaping": [
+            "Dead or dying plants",
+            "Invasive species presence",
+            "Erosion issues",
+            "Poor drainage causing water accumulation"
+        ],
+        "Site Lighting": [
+            "Insufficient illumination in common areas",
+            "Broken or damaged light fixtures",
+            "Outdated, energy-inefficient lighting",
+            "Poor placement causing glare or dark spots"
+        ],
+        "Parking Lot": [
+            "Potholes or cracks in pavement",
+            "Poor drainage causing water accumulation",
+            "Inadequate number of parking spaces",
+            "ADA compliance issues"
+        ],
+        "Striping": [
+            "Faded or unclear parking space lines",
+            "Missing or damaged directional arrows",
+            "Non-compliant handicap space markings"
+        ],
+        "Garage / Carports": [
+            "Structural damage or wear",
+            "Poor ventilation",
+            "Inadequate lighting",
+            "Water leakage or drainage issues"
+        ],
+        "Irrigation System": [
+            "Leaking or broken sprinkler heads",
+            "Inefficient water usage",
+            "Poor coverage leading to dry spots",
+            "Outdated control systems"
+        ],
+        "Drainage": [
+            "Clogged or damaged gutters and downspouts",
+            "Improper grading causing water pooling",
+            "Erosion around foundation",
+            "Inadequate storm water management"
+        ],
+        "Retaining Walls": [
+            "Cracks or bulges in the wall",
+            "Water seepage or efflorescence",
+            "Inadequate drainage behind the wall",
+            "Tilting or leaning of the wall"
+        ],
+        "Walkways": [
+            "Uneven or cracked surfaces",
+            "Trip hazards",
+            "Poor drainage causing ice formation in winter",
+            "Non-compliance with ADA requirements"
+        ],
+        "Fencing": [
+            "Rust or corrosion on metal fences",
+            "Rotting or warping of wooden fences",
+            "Loose or missing fence posts",
+            "Damage from impacts or weather"
+        ],
+        "Refuse Containment & Cleanliness": [
+            "Overflowing dumpsters",
+            "Poorly maintained trash areas",
+            "Inadequate pest control measures",
+            "Non-compliance with local waste management regulations"
+        ],
+        "Hazardous Material Storage": [
+            "Improper containment of chemicals",
+            "Lack of proper labeling",
+            "Inadequate ventilation in storage areas",
+            "Non-compliance with safety regulations"
+        ]
+    },
+    "Building / Mechanical Systems": {
+        "HVAC": [
+            "Outdated or inefficient systems",
+            "Poor temperature control",
+            "Excessive noise or vibration",
+            "Inadequate ventilation",
+            "Refrigerant leaks"
+        ],
+        "Electrical": [
+            "Outdated wiring or insufficient capacity",
+            "Faulty circuit breakers or fuse boxes",
+            "Poor grounding",
+            "Non-compliant electrical installations",
+            "Inadequate lighting in common areas"
+        ],
+        "Boilers": [
+            "Corrosion or scale buildup",
+            "Inefficient fuel consumption",
+            "Leaks in piping or tank",
+            "Faulty pressure relief valves",
+            "Non-compliance with safety regulations"
+        ],
+        "Water Heaters": [
+            "Inadequate capacity for building needs",
+            "Corrosion or sediment buildup",
+            "Leaks or water damage",
+            "Inefficient energy consumption",
+            "Expired warranty or end of useful life"
+        ],
+        "Fire Protection": [
+            "Outdated or non-functional smoke detectors",
+            "Inadequate fire extinguisher placement",
+            "Non-compliant fire escape routes",
+            "Lack of regular system testing and maintenance"
+        ],
+        "Sprinklers": [
+            "Corrosion in pipes or heads",
+            "Inadequate water pressure",
+            "Obstructed sprinkler heads",
+            "Outdated system design",
+            "Lack of regular testing and maintenance"
+        ],
+        "Plumbing": [
+            "Leaking pipes or fixtures",
+            "Low water pressure",
+            "Outdated or corroded piping materials",
+            "Inadequate insulation leading to freezing",
+            "Backflow prevention issues"
+        ],
+        "Sewer": [
+            "Tree root intrusion",
+            "Pipe collapse or breakage",
+            "Inadequate slope causing slow drainage",
+            "Outdated materials (e.g., clay pipes)",
+            "Lack of proper cleanouts"
+        ],
+        "Solar Systems": [
+            "Damaged or dirty solar panels",
+            "Inefficient energy conversion",
+            "Faulty inverters",
+            "Inadequate battery storage",
+            "Improper installation affecting roof integrity"
+        ],
+        "Elevators / Escalators": [
+            "Frequent breakdowns or malfunctions",
+            "Outdated control systems",
+            "Non-compliance with current safety standards",
+            "Excessive noise or vibration",
+            "Inadequate maintenance records"
+        ],
+        "Chiller Plant": [
+            "Inefficient energy consumption",
+            "Refrigerant leaks",
+            "Inadequate cooling capacity",
+            "Corrosion in condenser or evaporator",
+            "Outdated control systems"
+        ],
+        "Cooling Towers": [
+            "Scale or biological growth",
+            "Inadequate water treatment",
+            "Structural damage or corrosion",
+            "Inefficient fan operation",
+            "Non-compliance with Legionella prevention measures"
+        ],
+        "Building Oxygen Systems": [
+            "Leaks in oxygen lines",
+            "Inadequate backup systems",
+            "Non-compliance with medical gas regulations",
+            "Lack of proper alarm systems",
+            "Insufficient capacity for building needs"
+        ],
+        "Intercom System": [
+            "Poor audio quality",
+            "Outdated technology",
+            "Malfunctioning entry controls",
+            "Limited coverage in the building",
+            "Integration issues with other security systems"
+        ],
+        "PA System": [
+            "Poor sound quality or coverage",
+            "Outdated equipment",
+            "Inadequate emergency backup power",
+            "Non-compliance with emergency notification standards",
+            "Integration issues with fire alarm systems"
+        ],
+        "Security Systems": [
+            "Outdated surveillance cameras",
+            "Inadequate coverage of entry points",
+            "Malfunctioning access control systems",
+            "Poor integration with other building systems",
+            "Lack of regular security audits and updates"
+        ]
+    },
+    "Building Exteriors": {
+        "Siding": [
+            "Cracking, warping, or buckling",
+            "Fading or peeling paint",
+            "Water damage or rot (wooden siding)",
+            "Inadequate insulation",
+            "Pest infestation (e.g., termites in wooden siding)"
+        ],
+        "Trim": [
+            "Rotting or damaged wood",
+            "Peeling paint or varnish",
+            "Gaps allowing water infiltration",
+            "Misaligned or loose pieces",
+            "Pest damage"
+        ],
+        "Paint": [
+            "Peeling, flaking, or bubbling",
+            "Fading or discoloration",
+            "Mildew or algae growth",
+            "Inadequate surface preparation in previous paintings",
+            "Use of low-quality or incompatible paint"
+        ],
+        "Windows": [
+            "Drafts or air leaks",
+            "Condensation between panes (failed seals)",
+            "Cracked or broken glass",
+            "Difficult operation (sticking, not staying open)",
+            "Outdated, energy-inefficient models"
+        ],
+        "Exterior Entry Ways": [
+            "Worn or damaged thresholds",
+            "Inadequate weather stripping",
+            "Poor lighting",
+            "Non-compliance with ADA standards",
+            "Security vulnerabilities"
+        ],
+        "Stairs": [
+            "Loose or missing handrails",
+            "Uneven or worn treads",
+            "Poor lighting",
+            "Non-slip surface degradation",
+            "Water damage or rot in wooden stairs"
+        ],
+        "Railings": [
+            "Rust or corrosion in metal railings",
+            "Loose or wobbly posts",
+            "Splintering or rot in wooden railings",
+            "Non-compliance with current building codes",
+            "Paint chipping or peeling"
+        ],
+        "Balconies": [
+            "Water damage or rot in wooden structures",
+            "Rusting or corroding metal supports",
+            "Loose or damaged railings",
+            "Improper slope causing water pooling",
+            "Cracks or spalling in concrete balconies"
+        ],
+        "Patios": [
+            "Cracked or uneven surfaces",
+            "Poor drainage causing water accumulation",
+            "Settling or sinking",
+            "Weed growth between pavers",
+            "Fading or staining of surfaces"
+        ],
+        "Gutters": [
+            "Clogging with debris",
+            "Improper slope or sagging",
+            "Leaks at seams or corners",
+            "Detachment from the building",
+            "Inadequate capacity for heavy rainfall"
+        ],
+        "Downspouts": [
+            "Disconnection from gutters",
+            "Crushed or dented sections",
+            "Inadequate extension away from foundation",
+            "Leaks or holes",
+            "Improper drainage at ground level"
+        ],
+        "Foundations": [
+            "Cracks or settling",
+            "Water infiltration or dampness",
+            "Bowing or bulging walls",
+            "Inadequate waterproofing",
+            "Pest entry points"
+        ],
+        "Doors": [
+            "Warping or swelling",
+            "Inadequate weatherstripping",
+            "Difficult operation (sticking, alignment issues)",
+            "Outdated or inefficient models",
+            "Security vulnerabilities"
+        ],
+        "Façade": [
+            "Cracking or spalling in masonry",
+            "Efflorescence indicating water infiltration",
+            "Loose or missing mortar",
+            "Staining or discoloration",
+            "Structural issues (bowing, bulging)"
+        ],
+        "Structure (Beam/Joist)": [
+            "Sagging or deflection",
+            "Rot or insect damage in wooden members",
+            "Rust or corrosion in steel members",
+            "Inadequate load-bearing capacity",
+            "Water damage or mold growth"
+        ]
+    },
+    "Building Roofs": {
+        "Roof Condition": [
+            "Leaks or water stains",
+            "Blistering or bubbling of roofing material",
+            "Missing or damaged shingles/tiles",
+            "Ponding water",
+            "UV damage and weathering"
+        ],
+        "Roof Access": [
+            "Unsafe or non-compliant access points",
+            "Lack of fall protection systems",
+            "Deteriorated access ladders or stairs",
+            "Inadequate lighting for nighttime access",
+            "Obstructed or cluttered access paths"
+        ],
+        "Top Floor Ceilings": [
+            "Water stains indicating roof leaks",
+            "Sagging or damaged ceiling tiles",
+            "Mold or mildew growth",
+            "Inadequate insulation",
+            "Peeling paint or wallpaper"
+        ],
+        "Shingles / Membrane": [
+            "Curling or missing shingles",
+            "Blistering or splitting of membrane",
+            "Granule loss on shingles",
+            "Shrinkage of membrane",
+            "Punctures or tears"
+        ],
+        "Skylights": [
+            "Leaks around frames",
+            "Cracked or foggy glazing",
+            "Inadequate flashing",
+            "Condensation issues",
+            "Faded or yellowed plastic domes"
+        ],
+        "Flashing": [
+            "Corrosion or rust",
+            "Loose or missing sections",
+            "Improper installation around penetrations",
+            "Cracked caulking or sealant",
+            "Inadequate overlap"
+        ],
+        "Parapet Walls": [
+            "Cracking or spalling of masonry",
+            "Water infiltration leading to interior damage",
+            "Loose or missing coping stones",
+            "Inadequate height for safety regulations",
+            "Vegetation growth indicating moisture issues"
+        ],
+        "Mansard Roofs": [
+            "Damaged or missing tiles/shingles",
+            "Water infiltration at transitions",
+            "Inadequate ventilation",
+            "Rot in wooden structural elements",
+            "Pest infestation"
+        ]
+    },
+    "Occupied Units / Space": {
+        "HVAC": [
+            "Poor temperature control",
+            "Inadequate ventilation",
+            "Noisy operation",
+            "Inefficient energy consumption",
+            "Frequent breakdowns or maintenance issues"
+        ],
+        "Ceiling": [
+            "Water stains indicating leaks",
+            "Cracks or sagging",
+            "Peeling paint or wallpaper",
+            "Outdated popcorn texture",
+            "Inadequate insulation"
+        ],
+        "Floors": [
+            "Worn or damaged flooring materials",
+            "Uneven surfaces or squeaky boards",
+            "Water damage or warping",
+            "Outdated or unappealing styles",
+            "Lack of proper underlayment"
+        ],
+        "Walls": [
+            "Cracks or holes",
+            "Water damage or mold growth",
+            "Peeling paint or wallpaper",
+            "Poor sound insulation between units",
+            "Outdated textures or finishes"
+        ],
+        "Painting": [
+            "Peeling, flaking, or bubbling paint",
+            "Inconsistent or outdated colors",
+            "Use of low-quality paint prone to quick wear",
+            "Inadequate surface preparation",
+            "Paint odors indicating recent, possibly hasty repainting"
+        ],
+        "Wall Cover": [
+            "Peeling or bubbling wallpaper",
+            "Outdated patterns or styles",
+            "Water stains or mold behind wallpaper",
+            "Inconsistent or mismatched coverings",
+            "Poor application leading to visible seams"
+        ],
+"Floor Cover": [
+        "Worn or stained carpeting",
+        "Scratched or damaged hardwood",
+        "Cracked or chipped tiles",
+        "Peeling or bubbling vinyl",
+        "Outdated styles or colors"
+    ],
+    "Tiles": [
+        "Cracked or chipped tiles",
+        "Loose or missing grout",
+        "Water damage or mold in bathroom tiles",
+        "Uneven installation",
+        "Outdated styles or colors"
+    ],
+    "Windows": [
+        "Drafts or air leaks",
+        "Difficulty in opening or closing",
+        "Condensation between panes",
+        "Cracked or broken glass",
+        "Outdated, energy-inefficient models"
+    ],
+    "Countertop": [
+        "Scratches or chips",
+        "Burns or heat damage",
+        "Stains or discoloration",
+        "Separated seams",
+        "Outdated materials or styles"
+    ],
+    "Cabinets": [
+        "Worn or damaged finishes",
+        "Loose or misaligned doors and drawers",
+        "Water damage under sink areas",
+        "Outdated hardware",
+        "Inadequate storage space"
+    ],
+    "Appliances": [
+        "Outdated, energy-inefficient models",
+        "Malfunctioning or unreliable operation",
+        "Cosmetic damage (dents, scratches)",
+        "Unusual noises during operation",
+        "Inconsistent performance (e.g., uneven cooking in ovens)"
+    ],
+    "Lighting": [
+        "Insufficient illumination",
+        "Outdated or unappealing fixtures",
+        "Flickering or buzzing lights",
+        "Non-functional switches or outlets",
+        "Lack of energy-efficient bulbs"
+    ],
+    "Electrical": [
+        "Outdated wiring",
+        "Insufficient outlets",
+        "Non-GFCI outlets in wet areas",
+        "Frequently tripping circuit breakers",
+        "Visible wire damage or exposure"
+    ],
+    "Bathroom Accessories": [
+        "Loose or unstable towel racks or toilet paper holders",
+        "Corroded or tarnished fixtures",
+        "Inadequate storage solutions",
+        "Outdated styles",
+        "Non-functional exhaust fans"
+    ],
+    "Plumbing Fixtures": [
+        "Leaky faucets or showerheads",
+        "Low water pressure",
+        "Slow draining sinks or tubs",
+        "Toilets that run continuously or flush poorly",
+        "Outdated or inefficient water-consuming fixtures"
+    ],
+    "Storage": [
+        "Insufficient closet space",
+        "Damaged or non-functional closet doors",
+        "Lack of built-in storage solutions",
+        "Inadequate pantry space in kitchens",
+        "Poor lighting in storage areas"
+    ],
+    "Basements / Attics": [
+        "Water infiltration or dampness",
+        "Inadequate insulation",
+        "Poor ventilation leading to mold growth",
+        "Pest infestations",
+        "Structural issues (sagging floors, cracked walls)"
+    ]
+},
+"Vacant Units / Space / Hotel Rooms": {
+    "HVAC": [
+        "Lack of regular maintenance during vacancy",
+        "Stale air due to lack of use",
+        "Potential refrigerant leaks",
+        "Dust accumulation in ducts",
+        "Thermostat malfunctions"
+    ],
+    "Ceiling": [
+        "Water stains from undetected leaks",
+        "Sagging due to moisture accumulation",
+        "Peeling paint or wallpaper",
+        "Mold growth in high-humidity areas",
+        "Dust accumulation"
+    ],
+    "Floors": [
+        "Warping of wood floors due to humidity changes",
+        "Fading or discoloration from sunlight exposure",
+        "Pest damage during vacancy",
+        "Stains or odors from previous occupants",
+        "Settling or creaking in older buildings"
+    ],
+    "Walls": [
+        "Cracks from settling or temperature fluctuations",
+        "Fading paint or wallpaper",
+        "Mold growth in poorly ventilated areas",
+        "Pest infestations in walls",
+        "Nail holes or damage from previous occupants"
+    ],
+    "Painting": [
+        "Fading or yellowing due to lack of maintenance",
+        "Peeling or bubbling from moisture issues",
+        "Outdated colors deterring potential renters",
+        "Inconsistent touch-ups from previous occupancies",
+        "Paint odors in recently refurbished units"
+    ],
+    "Wall Cover": [
+        "Peeling wallpaper due to adhesive degradation",
+        "Fading or discoloration from sun exposure",
+        "Outdated patterns affecting marketability",
+        "Water stains from undetected leaks",
+        "Mold growth behind wallpaper in humid conditions"
+    ],
+    "Floor Cover": [
+        "Dust and dirt accumulation on carpets",
+        "Fading or sun damage to hardwood floors",
+        "Curling or lifting of vinyl flooring edges",
+        "Musty odors in carpets from lack of use",
+        "Pest damage to wood flooring during vacancy"
+    ],
+    "Tiles": [
+        "Cracked tiles from building settling",
+        "Loose tiles due to adhesive degradation",
+        "Mold in grout lines, especially in bathrooms",
+        "Stained or discolored grout",
+        "Chipped tiles from move-out damage"
+    ],
+    "Windows": [
+        "Seal failures leading to condensation between panes",
+        "Sticking or difficult operation from lack of use",
+        "Accumulated dirt and grime on glass and tracks",
+        "Faded or dry-rotted window treatments",
+        "Pest intrusion through poorly sealed windows"
+    ],
+    "Countertop": [
+        "Stains from previous occupants",
+        "Sun fading or discoloration",
+        "Scratches or chips from move-out",
+        "Water damage near sinks from leaks",
+        "Separation of seams in laminate countertops"
+    ],
+    "Cabinets": [
+        "Musty odors from lack of air circulation",
+        "Warping of wood in humid conditions",
+        "Loose hinges or handles from lack of maintenance",
+        "Faded finishes from sun exposure",
+        "Pest infestations in undisturbed spaces"
+    ],
+    "Appliances": [
+        "Dust accumulation affecting performance",
+        "Rust or corrosion from non-use",
+        "Seal degradation in refrigerators",
+        "Pest infestations in unused appliances",
+        "Odors from long-term lack of use"
+    ],
+    "Lighting": [
+        "Burnt-out bulbs unnoticed during vacancy",
+        "Outdated fixtures affecting marketability",
+        "Corrosion on exterior light fixtures",
+        "Pest nests in recessed lighting",
+        "Wiring issues from lack of use"
+    ],
+    "Electrical": [
+        "Tripped breakers unnoticed during vacancy",
+        "Degradation of wiring insulation",
+        "Dust accumulation in outlets and switches",
+        "Outdated electrical systems not meeting current codes",
+        "Pest damage to wiring"
+    ],
+    "Bathroom Accessories": [
+        "Corrosion or tarnishing of metal fixtures",
+        "Calcium buildup on showerheads and faucets",
+        "Dry P-traps leading to sewer gas odors",
+        "Cracked or degraded caulking around fixtures",
+        "Rust stains from leaky fixtures"
+    ],
+    "Plumbing Fixtures": [
+        "Dry seals in faucets and toilets",
+        "Stagnant water in pipes leading to odors",
+        "Mineral buildup from hard water",
+        "Leaks undetected during vacancy",
+        "Corrosion in older pipes"
+    ],
+    "Storage": [
+        "Musty odors in enclosed storage spaces",
+        "Pest infestations in undisturbed areas",
+        "Warping of wooden shelving in humid conditions",
+        "Dust and cobweb accumulation",
+        "Rusting of metal storage components"
+    ],
+    "Basements / Attics": [
+        "Mold growth from poor ventilation",
+        "Pest infestations in undisturbed spaces",
+        "Water damage from undetected leaks",
+        "Dust and debris accumulation",
+        "Deterioration of insulation"
+    ]
+},
+"Down Units / Space / Hotel Rooms": {
+    "HVAC": [
+        "Complete system failure requiring replacement",
+        "Extensive ductwork contamination",
+        "Severe refrigerant leaks",
+        "Electrical issues affecting HVAC operation",
+        "Mold growth throughout the system"
+    ],
+    "Ceiling": [
+        "Severe water damage requiring full replacement",
+        "Structural issues affecting ceiling integrity",
+        "Extensive mold growth",
+        "Asbestos-containing materials in older buildings",
+        "Collapsed sections due to water weight or structural failure"
+    ],
+    "Floors": [
+        "Severe water damage requiring subfloor replacement",
+        "Structural damage from pests or rot",
+        "Asbestos-containing materials in older flooring",
+        "Extensive mold growth under flooring",
+        "Uneven settling requiring major leveling work"
+    ],
+    "Walls": [
+        "Structural cracks requiring engineering intervention",
+        "Extensive mold or mildew infestations",
+        "Severe water damage affecting wall integrity",
+        "Pest damage requiring full replacement of drywall",
+        "Presence of hazardous materials (lead paint, asbestos)"
+    ],
+    "Painting": [
+        "Presence of lead-based paint requiring abatement",
+        "Extensive mold growth beneath paint layers",
+        "Severe peeling or bubbling affecting most surfaces",
+        "Water damage stains that bleed through new paint",
+        "Odor-sealed surfaces requiring complete stripping"
+    ],
+    "Wall Cover": [
+        "Extensive mold growth behind wallpaper",
+        "Severely damaged or outdated coverings requiring full removal",
+        "Water-damaged walls beneath coverings",
+        "Presence of hazardous materials in older wallpapers",
+        "Pest infestations damaging wall structures beneath coverings"
+    ],
+    "Floor Cover": [
+        "Severe water damage requiring full replacement",
+        "Extensive mold growth beneath flooring",
+        "Asbestos-containing materials in older floor coverings",
+        "Structural damage to subfloor",
+        "Severe pest damage to wood flooring"
+    ],
+    "Tiles": [
+        "Extensive water damage causing tile delamination",
+        "Presence of asbestos in older tile or adhesives",
+        "Severe cracks or damage requiring full replacement",
+        "Mold growth in subfloor requiring removal of all tiles",
+        "Structural issues affecting tile installation integrity"
+    ],
+    "Windows": [
+        "Broken or shattered glass posing safety hazards",
+        "Severe frame damage allowing water intrusion",
+        "Presence of lead paint in older window frames",
+        "Extensive seal failures in most windows",
+        "Structural issues affecting window opening functionality"
+    ],
+    "Countertop": [
+        "Severe water damage requiring full replacement",
+        "Extensive mold growth beneath countertops",
+        "Presence of hazardous materials in older countertops",
+        "Structural damage affecting countertop stability",
+        "Severe burn or chemical damage compromising integrity"
+    ],
+    "Cabinets": [
+        "Severe water damage causing warping and mold",
+        "Extensive pest damage requiring full replacement",
+        "Presence of lead paint in older cabinets",
+        "Structural failures affecting cabinet stability",
+        "Severe smoke damage requiring replacement"
+    ],
+    "Appliances": [
+        "Multiple appliance failures requiring full suite replacement",
+        "Severe pest infestations in appliances",
+        "Extensive water damage affecting electrical components",
+        "Presence of hazardous materials in older appliances",
+        "Fire or smoke damage to multiple appliances"
+    ],
+    "Lighting": [
+        "Outdated wiring posing fire hazards",
+        "Extensive water damage to electrical systems",
+        "Presence of hazardous materials in older fixtures",
+        "Structural issues affecting fixture installation",
+        "Severe pest damage to wiring and fixtures"
+    ],
+    "Electrical": [
+        "Outdated electrical systems not up to code",
+        "Severe water damage to wiring and panels",
+        "Fire damage to electrical systems",
+        "Extensive pest damage to wiring",
+        "Presence of aluminum wiring in older buildings"
+    ],
+    "Bathroom Accessories": [
+        "Severe corrosion or damage requiring full replacement",
+        "Extensive mold growth on and around accessories",
+        "Structural issues affecting secure mounting",
+        "Presence of hazardous materials in older accessories",
+        "Water damage compromising wall integrity behind accessories"
+    ],
+    "Plumbing Fixtures": [
+        "Severe corrosion or damage requiring full replacement",
+        "Extensive leaks causing structural damage",
+        "Presence of lead in older pipes and fixtures",
+        "Severe scale buildup requiring pipe replacement",
+        "Mold growth inside plumbing systems"
+    ],
+    "Storage": [
+        "Severe water damage to built-in storage units",
+        "Extensive mold growth in enclosed storage spaces",
+        "Structural failures affecting stability of storage units",
+        "Presence of hazardous materials in older storage systems",
+        "Severe pest infestations damaging storage areas"
+    ],
+    "Basements / Attics": [
+        "Severe water intrusion requiring extensive waterproofing",
+        "Structural damage affecting building stability",
+        "Extensive mold growth requiring professional remediation",
+        "Presence of asbestos or other hazardous materials",
+        "Severe pest infestations causing structural damage"
+    ]
+},
+"Interior Common Areas": {
+    "Mailboxes": [
+        "Outdated or damaged mailbox systems",
+        "Security issues (broken locks, easy access)",
+        "Rust or corrosion on metal components",
+        "Non-compliance with postal regulations",
+        "Inadequate lighting in mailbox areas"
+    ],
+    "Reception Area": [
+        "Worn or outdated furnishings",
+        "Poor lighting or ventilation",
+        "Damaged flooring (worn carpets, chipped tiles)",
+        "Inadequate security measures",
+        "Non-compliance with ADA requirements"
+    ],
+    "Lobby": [
+        "Worn or outdated decor",
+        "Inadequate seating or waiting areas",
+        "Poor lighting or acoustics",
+        "Damaged or worn flooring",
+        "Lack of proper signage or wayfinding"
+    ],
+    "Food Courts": [
+        "Insufficient seating capacity",
+        "Poor ventilation leading to lingering food odors",
+        "Worn or damaged tables and chairs",
+        "Inadequate waste management systems",
+        "Non-compliance with health and safety regulations"
+    ],
+    "Dining Areas": [
+        "Outdated or worn furniture",
+        "Poor lighting or ambiance",
+        "Inadequate noise control",
+        "Worn flooring (stained carpets, damaged tiles)",
+        "Insufficient electrical outlets for modern needs"
+    ],
+    "Kitchen": [
+        "Outdated or malfunctioning appliances",
+        "Poor ventilation systems",
+        "Non-compliance with health and safety codes",
+        "Inadequate storage or prep areas",
+        "Worn or damaged countertops and cabinets"
+    ],
+    "Halls": [
+        "Worn or damaged flooring",
+        "Inadequate lighting",
+        "Peeling or damaged wall coverings",
+        "Lack of proper fire safety equipment",
+        "Narrow passages not
+
+
+
+
+===============================================
+### Summary of Physical and Environmental Issues in Multifamily Property Valuation
+
+Multifamily properties face a variety of physical and environmental issues that can significantly impact their valuation. These issues span across different parts of the property, including curb appeal, site conditions, building systems, exteriors, roofs, interior spaces, common areas, amenities, and environmental concerns. Addressing these issues is crucial for maintaining property value, ensuring tenant satisfaction, and complying with legal standards.
+
+### Major Physical Issues
+
+1. **Structural Issues**
+   - **Cracks**: Cracks in foundations, walls, ceilings, and floors can indicate structural problems and lead to further damage.
+   - **Leaks**: Leaks in roofing, plumbing, and windows can cause water damage, mold growth, and structural deterioration.
+   - **Water Damage**: Resulting from leaks, poor drainage, or flooding, leading to weakened structures and potential mold growth.
+
+2. **Mold**
+   - **Mold Growth**: Often caused by moisture from leaks, poor ventilation, or high humidity, leading to health hazards and structural damage.
+
+3. **Roof Issues**
+   - **Roof Condition**: Includes leaks, missing shingles, and damage to roofing materials, leading to water ingress and structural issues.
+   - **Flashing and Skylights**: Poorly installed or maintained flashing and skylights can cause leaks and water damage.
+
+4. **Exterior Issues**
+   - **Siding and Paint**: Cracks, peeling paint, and damaged siding affect the building’s appearance and can lead to water intrusion.
+   - **Windows and Doors**: Broken panes, poor seals, and inadequate insulation can lead to energy inefficiency and water ingress.
+   - **Foundations**: Cracks and settling foundations pose significant structural risks.
+
+5. **Interior Issues**
+   - **HVAC Systems**: Non-functional or inefficient HVAC systems affect tenant comfort and energy costs.
+   - **Electrical Systems**: Outdated wiring and inadequate capacity can lead to safety hazards and code violations.
+   - **Plumbing**: Leaks, clogs, and low water pressure can cause water damage and tenant dissatisfaction.
+   - **Flooring and Walls**: Cracked tiles, peeling paint, and damaged flooring impact the property’s aesthetics and tenant experience.
+
+6. **Common Area and Amenity Issues**
+   - **Lighting**: Inadequate or broken lighting affects safety and tenant comfort.
+   - **Elevators**: Frequent breakdowns and safety issues with elevators affect accessibility and tenant satisfaction.
+   - **Pool and Gym**: Poor maintenance, cleanliness, and safety measures in amenities affect tenant experience and can pose health risks.
+
+7. **Site and Landscaping Issues**
+   - **Drainage**: Poor drainage systems lead to standing water, erosion, and potential foundation damage.
+   - **Parking and Walkways**: Cracked and uneven surfaces pose safety hazards and affect the property’s appearance.
+   - **Fencing and Retaining Walls**: Damage and deterioration can compromise security and structural integrity.
+
+8. **Environmental Issues**
+   - **Hazardous Materials**: Improper storage or presence of hazardous materials like asbestos, lead paint, and radon pose health risks and legal liabilities.
+   - **Spills and Leaks**: Evidence of spills, leaks, and distressed vegetation indicates potential contamination and environmental non-compliance.
+
+Addressing these physical and environmental issues is crucial for maintaining the value, safety, and appeal of multifamily properties. Regular inspections, maintenance, and prompt repairs are key strategies in managing these issues effectively.
+
+
+------------------------
+
+
+# Summary of Major Physical Issues in Multifamily Properties
+
+1. Structural Problems:
+   - Foundation cracks or settling
+   - Roof damage or leaks
+   - Wall cracks or bowing
+   - Sagging floors or ceilings
+
+2. Water Damage and Moisture Issues:
+   - Mold and mildew growth
+   - Water stains on walls, ceilings, or floors
+   - Dampness in basements or crawl spaces
+   - Plumbing leaks
+
+3. HVAC and Mechanical System Failures:
+   - Inefficient or malfunctioning heating/cooling systems
+   - Outdated electrical systems
+   - Plumbing issues (low water pressure, leaks, clogs)
+   - Elevator malfunctions in multi-story buildings
+
+4. Environmental Hazards:
+   - Presence of asbestos
+   - Lead-based paint
+   - Radon gas
+   - Pest infestations (termites, rodents, bed bugs)
+
+5. Safety and Code Compliance Issues:
+   - Outdated or non-functional fire safety systems
+   - Inadequate emergency exits
+   - Non-compliance with ADA requirements
+   - Unsafe balconies or staircases
+
+6. Exterior Deterioration:
+   - Damaged or worn siding
+   - Crumbling masonry or brickwork
+   - Damaged windows or doors
+   - Deteriorating parking lots or walkways
+
+7. Indoor Air Quality Problems:
+   - Poor ventilation
+   - Presence of volatile organic compounds (VOCs)
+   - Dust and allergen accumulation
+   - Secondhand smoke issues
+
+8. Energy Efficiency Concerns:
+   - Poor insulation
+   - Drafty windows and doors
+   - Inefficient appliances and fixtures
+   - Outdated, energy-consuming lighting systems
+
+9. Cosmetic and Finish Issues:
+   - Peeling paint or wallpaper
+   - Worn or outdated flooring
+   - Damaged or outdated kitchen and bathroom fixtures
+   - General wear and tear in high-traffic areas
+
+10. Site and Landscaping Problems:
+    - Poor drainage leading to water accumulation
+    - Overgrown or dying vegetation
+    - Deteriorating retaining walls
+    - Inadequate outdoor lighting for safety
+
+These issues can significantly impact the value, safety, and marketability of multifamily properties. Regular inspections and proactive maintenance are crucial to identify and address these problems before they escalate.
+
+
+
+
+88888888888888888888888888888888888888888888888888888888888888888888888
+
+
+Certainly! Image processing techniques can detect a variety of physical and environmental issues in multifamily properties. Here is a list of issues that can be identified through analyzing images:
+
+### Curb Appeal
+- **Comparison to Neighborhood**: Differences in overall appearance compared to surrounding properties.
+- **First Impression / Appearance**: Unkempt landscaping, dirty or damaged exterior, poor signage, and presence of trash or debris.
+
+### Site
+- **Property Appearance**: Poor landscaping, trash and debris, and graffiti.
+- **Signage**: Damaged or unreadable signs, inadequate signage.
+- **Ingress / Egress**: Poorly marked entrances/exits, obstructed access points.
+- **Landscaping**: Dead or dying plants, overgrown vegetation.
+- **Site Lighting**: Broken or inadequate lighting.
+- **Parking Lot**: Potholes, cracks, standing water.
+- **Striping**: Faded or missing parking lot striping.
+- **Garage / Carports**: Structural damage, poor lighting.
+- **Irrigation System**: Visible leaks, non-functional sprinklers.
+- **Drainage**: Standing water, blocked drains.
+- **Retaining Walls**: Cracks, erosion, leaning walls.
+- **Walkways**: Cracks, uneven surfaces.
+- **Fencing**: Damage, rust.
+- **Refuse Containment & Cleanliness**: Overflowing trash, poorly maintained refuse areas.
+- **Hazardous Material Storage**: Visual evidence of improper storage, leaks.
+
+### Building / Mechanical Systems
+- **HVAC**: Visible leaks, rust, and damage to units.
+- **Electrical**: Visible outdated or damaged wiring.
+- **Boilers**: Visible leaks, rust, and damage.
+- **Water Heaters**: Visible leaks, rust, and damage.
+- **Fire Protection**: Non-functional alarms and sprinklers, visible damage to equipment.
+- **Plumbing**: Visible leaks, damaged pipes.
+- **Solar Systems**: Non-functional panels, visible damage.
+- **Elevators / Escalators**: Visible damage, poor condition.
+- **Chiller Plant**: Visible leaks, rust, and damage.
+- **Cooling Towers**: Visible leaks, rust, and damage.
+- **Building Oxygen Systems**: Visible damage and leaks.
+- **Intercom System**: Visible damage, poor condition.
+- **PA System**: Visible damage, poor condition.
+- **Security Systems**: Non-functional cameras, inadequate coverage.
+
+### Building Exteriors
+- **Siding**: Cracks, warps, peeling paint.
+- **Trim**: Rot, peeling paint, damage.
+- **Paint**: Peeling, faded.
+- **Windows**: Broken panes, poor seals.
+- **Exterior Entry Ways**: Poor lighting, damaged doors.
+- **Stairs**: Cracks, loose steps.
+- **Railings**: Loose, rusty.
+- **Balconies**: Structural damage, water damage.
+- **Patios**: Cracks, uneven surfaces.
+- **Gutters**: Clogs, leaks.
+- **Downspouts**: Clogs, leaks.
+- **Foundations**: Cracks, settling.
+- **Doors**: Damage, poor seals.
+- **Façade**: Cracks, staining.
+- **Structure (Beam/Joist)**: Cracks, rot.
+
+### Building Roofs
+- **Roof Condition**: Leaks, cracks, missing shingles.
+- **Roof Access**: Inadequate access points.
+- **Top Floor Ceilings**: Water stains, cracks.
+- **Shingles / Membrane**: Missing shingles, tears.
+- **Skylights**: Leaks, cracks.
+- **Flashing**: Leaks, corrosion.
+- **Parapet Walls**: Cracks, water damage.
+- **Mansard Roofs**: Leaks, cracks.
+
+### Occupied, Vacant, and Down Units / Space / Hotel Rooms
+- **HVAC**: Non-functional units, visible leaks.
+- **Ceiling**: Cracks, water stains.
+- **Floors**: Cracks, stains, uneven surfaces.
+- **Walls**: Cracks, peeling paint.
+- **Painting**: Peeling, faded.
+- **Wall Cover**: Tears, peeling.
+- **Floor Cover**: Tears, stains.
+- **Tiles**: Cracks, loose tiles.
+- **Windows**: Broken panes, poor seals.
+- **Countertop**: Cracks, stains.
+- **Cabinets**: Loose hinges, peeling finish.
+- **Appliances**: Non-functional, outdated.
+- **Lighting**: Non-functional fixtures.
+- **Electrical**: Visible outdated wiring.
+- **Bathroom Accessories**: Loose fixtures, damage.
+- **Plumbing Fixtures**: Visible leaks, clogs.
+- **Storage**: Inadequate space, poor condition.
+- **Basements / Attics**: Water damage, poor ventilation.
+
+### Interior Common Areas
+- **Mailboxes**: Visible damage.
+- **Reception Area**: Poor layout, worn furniture.
+- **Lobby**: Worn flooring, poor lighting.
+- **Food Courts**: Poor cleanliness, worn furniture.
+- **Dining Areas**: Worn flooring, poor lighting.
+- **Kitchen**: Outdated appliances, poor cleanliness.
+- **Halls**: Worn flooring, poor lighting.
+- **Stairways**: Loose steps, inadequate railings.
+- **Meeting Rooms**: Worn furniture, poor lighting.
+- **Public Restrooms**: Visible leaks, worn fixtures.
+- **Storage**: Inadequate space, poor organization.
+- **Basement**: Water damage, poor ventilation.
+- **Healthcare Assistance Rooms**: Worn equipment, poor layout.
+- **Pharmacy / Medication Storage**: Inadequate security.
+- **Nurses Station**: Worn furniture, poor layout.
+
+### Amenities
+- **Pool**: Leaks, poor cleanliness.
+- **Clubhouse**: Worn furniture, poor layout.
+- **Gym**: Worn equipment, poor ventilation.
+- **Laundry Area / Rooms**: Non-functional machines.
+- **Playground**: Worn equipment, safety hazards.
+- **Wireless Access**: Poor connectivity.
+- **Restaurant / Bar**: Poor cleanliness, outdated equipment.
+- **Business Center**: Outdated equipment, poor layout.
+- **Sport Courts**: Cracks, worn surfaces.
+- **Spa**: Poor cleanliness, outdated equipment.
+- **Store**: Poor layout, inadequate stock.
+- **Media Center**: Outdated equipment, poor lighting.
+
+### Environmental
+- **Reported Spills or Leaks**: Visible contamination.
+- **Evidence of Spills or Leaks**: Water damage, mold growth.
+- **Evidence of Distressed Vegetation**: Soil contamination, poor irrigation.
+- **Evidence of Mold**: Visible mold growth.
+- **Evidence of O&M Non-compliance**: Visible regulatory violations, inadequate maintenance.
+
+Image processing techniques can help identify these issues by analyzing photos and videos taken of the property, enhancing the ability to detect and address problems promptly.
+-------------------------------------------------------
+
+# Property Issues Detectable by Image Processing Techniques
+
+1. Structural Problems:
+   - Cracks in walls, floors, or ceilings
+   - Sagging or uneven surfaces
+   - Visible foundation issues
+   - Roof damage or missing shingles
+
+2. Water Damage and Moisture Issues:
+   - Water stains on walls, ceilings, or floors
+   - Visible mold or mildew growth
+   - Peeling paint or wallpaper due to moisture
+   - Warped or buckled flooring
+
+3. Exterior Deterioration:
+   - Damaged or worn siding
+   - Crumbling masonry or brickwork
+   - Chipped or peeling paint on exterior surfaces
+   - Damaged or deteriorating windows and doors
+
+4. Roof Issues:
+   - Missing, damaged, or curling shingles
+   - Sagging roof lines
+   - Moss or algae growth on the roof
+   - Damaged or missing gutters and downspouts
+
+5. Pest Infestations:
+   - Visible signs of termite damage
+   - Evidence of rodent activity
+   - Presence of insects or their nests
+
+6. Safety Hazards:
+   - Broken or missing railings
+   - Damaged stairs or steps
+   - Obstructed emergency exits
+   - Visible electrical hazards (exposed wiring, etc.)
+
+7. Parking and Pavement Issues:
+   - Cracks or potholes in parking lots or driveways
+   - Faded or missing parking space lines
+   - Damaged or missing curbs
+   - Poor drainage indicated by water pooling
+
+8. Landscaping Problems:
+   - Overgrown vegetation
+   - Dead or dying trees or shrubs
+   - Bare or patchy lawns
+   - Erosion issues
+
+9. Amenity Deterioration:
+   - Damaged playground equipment
+   - Cracked or damaged pool surfaces
+   - Deteriorating tennis or basketball courts
+   - Worn or damaged outdoor furniture
+
+10. Cosmetic Issues:
+    - Peeling or faded paint
+    - Worn or stained carpeting
+    - Damaged or outdated fixtures
+    - Visible wear and tear in common areas
+
+11. Environmental Concerns:
+    - Visible asbestos-containing materials
+    - Signs of lead paint (in older buildings)
+    - Evidence of improper waste management
+
+12. Accessibility Issues:
+    - Lack of wheelchair ramps
+    - Narrow doorways
+    - High thresholds
+    - Inaccessible amenities
+
+13. Security Concerns:
+    - Broken locks or gates
+    - Damaged security cameras
+    - Inadequate lighting in parking areas or walkways
+    - Unsecured access points
+
+14. HVAC and Utility Issues:
+    - Visible damage to external HVAC units
+    - Leaking or damaged water heaters
+    - Corroded or damaged utility meters
+    - Sagging or damaged power lines
+
+15. Fire Safety Problems:
+    - Missing or damaged smoke detectors
+    - Obstructed fire exits
+    - Outdated or missing fire extinguishers
+    - Damaged fire sprinkler systems
+
+Image processing can detect these issues through techniques such as edge detection, texture analysis, color analysis, and pattern recognition. However, it's important to note that while image processing can identify potential issues, many problems may require on-site inspection for accurate diagnosis and assessment.
+999999999999999999999999999999999999999999
+
+
+
+# Major Property Issues and Detection Code
+
+import cv2
+import numpy as np
+from sklearn.cluster import KMeans
+
+def detect_cracks(image):
+    """Detect cracks in walls or surfaces."""
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    edges = cv2.Canny(gray, 50, 150, apertureSize=3)
+    lines = cv2.HoughLinesP(edges, 1, np.pi/180, 100, minLineLength=100, maxLineGap=10)
+    return lines is not None and len(lines) > 0
+
+def detect_water_damage(image):
+    """Detect water stains or damage."""
+    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    lower_brown = np.array([10, 100, 20])
+    upper_brown = np.array([20, 255, 200])
+    mask = cv2.inRange(hsv, lower_brown, upper_brown)
+    return np.sum(mask) > 1000  # Adjust threshold as needed
+
+def detect_mold(image):
+    """Detect potential mold growth."""
+    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    lower_green = np.array([40, 40, 40])
+    upper_green = np.array([80, 255, 255])
+    mask = cv2.inRange(hsv, lower_green, upper_green)
+    return np.sum(mask) > 500  # Adjust threshold as needed
+
+def detect_roof_damage(image):
+    """Detect potential roof damage or missing shingles."""
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    edges = cv2.Canny(gray, 50, 150, apertureSize=3)
+    contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    return len(contours) > 10  # Adjust threshold as needed
+
+def detect_peeling_paint(image):
+    """Detect peeling or chipping paint."""
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    blurred = cv2.GaussianBlur(gray, (5, 5), 0)
+    edges = cv2.Canny(blurred, 50, 150)
+    return np.sum(edges) > 10000  # Adjust threshold as needed
+
+def detect_pest_infestation(image):
+    """Detect signs of pest infestation."""
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+    contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    small_objects = [c for c in contours if 10 < cv2.contourArea(c) < 100]
+    return len(small_objects) > 5  # Adjust threshold as needed
+
+def main(image_path):
+    image = cv2.imread(image_path)
+    if image is None:
+        print("Error: Could not read the image.")
+        return
+
+    issues = []
+    if detect_cracks(image):
+        issues.append("Potential cracks detected")
+    if detect_water_damage(image):
+        issues.append("Potential water damage detected")
+    if detect_mold(image):
+        issues.append("Potential mold growth detected")
+    if detect_roof_damage(image):
+        issues.append("Potential roof damage detected")
+    if detect_peeling_paint(image):
+        issues.append("Potential peeling paint detected")
+    if detect_pest_infestation(image):
+        issues.append("Potential signs of pest infestation detected")
+
+    if issues:
+        print("Detected issues:")
+        for issue in issues:
+            print(f"- {issue}")
+    else:
+        print("No major issues detected in the image.")
+
+if __name__ == "__main__":
+    main("path_to_your_image.jpg")
+
+
+00000000000000000000000000000000000000000000000000000000
+
+
+
+
+Structural Issues
+
+Cracks in foundations, walls, ceilings, and floors
+Leaks in roofing, plumbing, and windows
+Water damage
+Mold
+
+Visible mold growth caused by moisture
+Roof Issues
+
+Roof condition (leaks, missing shingles, damaged materials)
+Flashing and skylights (leaks, cracks)
+Exterior Issues
+
+Siding (cracks, warps, peeling paint)
+Windows and doors (broken panes, poor seals)
+Foundations (cracks, settling)
+Interior Issues
+
+HVAC systems (visible leaks, rust)
+Electrical systems (outdated or damaged wiring)
+Plumbing (visible leaks, damaged pipes)
+Flooring and walls (cracked tiles, peeling paint)
+Common Area and Amenity Issues
+
+Lighting (broken or inadequate lighting)
+Elevators (visible damage, poor condition)
+Pool and gym (poor maintenance, cleanliness)
+Site and Landscaping Issues
+
+Drainage (standing water, blocked drains)
+Parking and walkways (cracks, uneven surfaces)
+Fencing (damage, rust)
+Environmental Issues
+
+Hazardous materials (improper storage, leaks)
+Spills and leaks (visible contamination, mold growth)
+Distressed vegetation (soil contamination, poor irrigation)
+
+
+-------------------------------------
+
+import cv2
+import numpy as np
+from skimage import filters, morphology
+from skimage.color import rgb2gray
+from skimage.measure import label, regionprops
+import matplotlib.pyplot as plt
+
+# Load image
+image = cv2.imread('property_image.jpg')
+
+# Convert image to grayscale
+gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+# Detect Cracks
+def detect_cracks(image):
+    edges = filters.sobel(image)
+    binary = edges > filters.threshold_otsu(edges)
+    cleaned = morphology.remove_small_objects(binary, min_size=50)
+    return cleaned
+
+# Detect Mold (assuming mold appears darker in color)
+def detect_mold(image):
+    gray = rgb2gray(image)
+    thresh = filters.threshold_otsu(gray)
+    mold = gray < thresh * 0.8
+    cleaned = morphology.remove_small_objects(mold, min_size=100)
+    return cleaned
+
+# Detect Water Damage (darker patches)
+def detect_water_damage(image):
+    gray = rgb2gray(image)
+    thresh = filters.threshold_otsu(gray)
+    water_damage = gray < thresh * 0.9
+    cleaned = morphology.remove_small_objects(water_damage, min_size=200)
+    return cleaned
+
+# Display results
+def display_results(original, detected, title):
+    plt.figure(figsize=(10, 5))
+    plt.subplot(1, 2, 1)
+    plt.title('Original Image')
+    plt.imshow(cv2.cvtColor(original, cv2.COLOR_BGR2RGB))
+    plt.axis('off')
+    
+    plt.subplot(1, 2, 2)
+    plt.title(title)
+    plt.imshow(detected, cmap='gray')
+    plt.axis('off')
+    plt.show()
+
+# Detect and display cracks
+cracks = detect_cracks(gray_image)
+display_results(image, cracks, 'Detected Cracks')
+
+# Detect and display mold
+mold = detect_mold(image)
+display_results(image, mold, 'Detected Mold')
+
+# Detect and display water damage
+water_damage = detect_water_damage(image)
+display_results(image, water_damage, 'Detected Water Damage')
+
+# Detect Leaks (darker patches, similar to water damage detection)
+def detect_leaks(image):
+    return detect_water_damage(image)
+
+# Example usage:
+# Load another image for leaks detection
+leak_image = cv2.imread('leak_image.jpg')
+leaks = detect_leaks(leak_image)
+display_results(leak_image, leaks, 'Detected Leaks')
+
+
+
+55555555555555555555555555555555555555555555555555555
+
+import cv2
+import numpy as np
+
+# Define a function to detect cracks in foundations, walls, ceilings, and floors
+def detect_cracks(image):
+    # Convert the image to grayscale
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    
+    # Apply thresholding to enhance the cracks
+    _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+    
+    # Find contours of the cracks
+    contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    
+    # Iterate through the contours and draw rectangles around the cracks
+    for contour in contours:
+        x, y, w, h = cv2.boundingRect(contour)
+        cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
+    
+    return image
+
+# Define a function to detect leaks in roofing, plumbing, and windows
+def detect_leaks(image):
+    # Convert the image to HSV color space
+    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    
+    # Define the range of colors for water
+    lower_water = np.array([100, 50, 50])
+    upper_water = np.array([140, 255, 255])
+    
+    # Threshold the HSV image to get only water colors
+    mask = cv2.inRange(hsv, lower_water, upper_water)
+    
+    # Find contours of the water
+    contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    
+    # Iterate through the contours and draw rectangles around the water
+    for contour in contours:
+        x, y, w, h = cv2.boundingRect(contour)
+        cv2.rectangle(image, (x, y), (x+w, y+h), (0, 0, 255), 2)
+    
+    return image
+
+# Define a function to detect water damage
+def detect_water_damage(image):
+    # Convert the image to grayscale
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    
+    # Apply thresholding to enhance the water damage
+    _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+    
+    # Find contours of the water damage
+    contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    
+    # Iterate through the contours and draw rectangles around the water damage
+    for contour in contours:
+        x, y, w, h = cv2.boundingRect(contour)
+        cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
+    
+    return image
+
+# Define a function to detect mold
+def detect_mold(image):
+    # Convert the image to HSV color space
+    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    
+    # Define the range of colors for mold
+    lower_mold = np.array([20, 100, 100])
+    upper_mold = np.array([40, 255, 255])
+    
+    # Threshold the HSV image to get only mold colors
+    mask = cv2.inRange(hsv, lower_mold, upper_mold)
+    
+    # Find contours of the mold
+    contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    
+    # Iterate through the contours and draw rectangles around the mold
+    for contour in contours:
+        x, y, w, h = cv2.boundingRect(contour)
+        cv2.rectangle(image, (x, y), (x+w, y+h), (0, 0, 255), 2)
+    
+    return image
+
+# Define a function to detect roof issues
+def detect_roof_issues(image):
+    # Convert the image to grayscale
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    
+    # Apply thresholding to enhance the roof issues
+    _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+    
+    # Find contours of the roof issues
+    contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    
+    # Iterate through the contours and draw rectangles around the roof issues
+    for contour in contours:
+        x, y, w, h = cv2.boundingRect(contour)
+        cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
+    
+    return image
+
+# Define a function to detect exterior issues
+def detect_exterior_issues(image):
+    # Convert the image to grayscale
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    
+    # Apply thresholding to enhance the exterior issues
+    _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+    
+    # Find contours of the exterior issues
+    contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    
+    # Iterate through the contours and draw rectangles around the exterior issues
+    for contour in contours:
+        x, y, w, h = cv2.boundingRect(contour)
+        cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
+    
+    return image
+
+# Define a function to detect interior issues
+def detect_interior_issues(image):
+    # Convert the image to grayscale
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    
+    # Apply thresholding to enhance the interior issues
+    _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+    
+    # Find contours of the interior issues
+    contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    
+    # Iterate through the contours and draw rectangles around the interior issues
+    for contour in contours:
+        x, y, w, h = cv2.boundingRect(contour)
+        cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
+    
+    return image
+
+# Define a function to detect common area and amenity issues
+def detect_common_area_issues(image):
+    # Convert the image to grayscale
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    
+    # Apply thresholding to enhance the common area issues
+    _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+    
+    # Find contours of the common area issues
+    contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    
+    # Iterate through the contours and draw rectangles around the common area issues
+    for contour in contours:
+        x, y, w, h = cv2.boundingRect(contour)
+        cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
+    
+    return image
+
+# Define a function to detect site and landscaping issues
+def detect_site_issues(image):
+    # Convert the image to grayscale
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    
+    # Apply thresholding to enhance the site issues
+    _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+    
+    # Find contours of the site issues
+    contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    
+    # Iterate through the contours and draw rectangles around the site issues
+    for contour in contours:
+        x, y, w, h = cv2.boundingRect(contour)
+        cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
+    
+    return image
+
+# Define a function to detect environmental issues
+def detect_environmental_issues(image):
+    # Convert the image to grayscale
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    
+    # Apply thresholding to enhance the environmental issues
+    _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+    
+    # Find contours of the environmental issues
+    contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    
+    # Iterate through the contours and draw rectangles around the environmental issues
+    for contour in contours:
+        x, y, w, h = cv2.boundingRect(contour)
+        cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
+    
+    return image
+
+# Load the image
+image = cv2.imread('image.jpg')
+
+# Detect structural issues
+image
+....
+
+# Define a function to detect peeling paint on walkways
+def detect_peeling_paint(image):
+    # Convert the image to grayscale
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    
+    # Apply thresholding to enhance the peeling paint
+    _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+    
+    # Find contours of the peeling paint
+    contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    
+    # Iterate through the contours and draw rectangles around the peeling paint
+    for contour in contours:
+        x, y, w, h = cv2.boundingRect(contour)
+        cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
+    
+    return image
+
+# Define a function to detect damaged concrete walkways
+def detect_damaged_concrete(image):
+    # Convert the image to grayscale
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    
+    # Apply thresholding to enhance the damaged concrete
+    _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+    
+    # Find contours of the damaged concrete
+    contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    
+    # Iterate through the contours and draw rectangles around the damaged concrete
+    for contour in contours:
+        x, y, w, h = cv2.boundingRect(contour)
+        cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
+    
+    return image
+
+# Define a function to detect damaged entrance doors
+def detect_damaged_doors(image):
+    # Convert the image to grayscale
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    
+    # Apply thresholding to enhance the damaged doors
+    _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+    
+    # Find contours of the damaged doors
+    contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    
+    # Iterate through the contours and draw rectangles around the damaged doors
+    for contour in contours:
+        x, y, w, h = cv2.boundingRect(contour)
+        cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
+    
+    return image
+
+# Define a function to detect water damage
+def detect_water_damage(image):
+    # Convert the image to HSV color space
+    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    
+    # Define the range of colors for water
+    lower_water = np.array([100, 50, 50])
+    upper_water = np.array([140, 255, 255])
+    
+    # Threshold the HSV image to get only water colors
+    mask = cv2.inRange(hsv, lower_water, upper_water)
+    
+    # Find contours of the water
+    contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    
+    # Iterate through the contours and draw rectangles around the water
+    for contour in contours:
+        x, y, w, h = cv2.boundingRect(contour)
+        cv2.rectangle(image, (x, y), (x+w, y+h), (0, 0, 255), 2)
+    
+    return image
+
+# Load the image
+image = cv2.imread('image.jpg')
+
+# Detect peeling paint on walkways
+image = detect_peeling_paint(image)
+
+# Detect damaged concrete walkways
+image = detect_damaged_concrete(image)
+
+# Detect damaged entrance doors
+image = detect_damaged_doors(image)
+
+# Detect water damage
+image = detect_water_damage(image)
+
+# Display the output
+cv2.imshow('Output', image)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
 ===================================================
 
 
