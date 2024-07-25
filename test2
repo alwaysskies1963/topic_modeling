@@ -2,12 +2,82 @@
 
 
 
+import spacy
+from fuzzywuzzy import fuzz
+from spacy.tokens import Span
+
+def load_model_and_create_issue_list():
+    # Load the pre-trained English model
+    nlp = spacy.load("en_core_web_sm")
+    
+    # Define patterns for property issues
+    issues = [
+        "roof leak", "water damage", "mold", "cracks", "foundation issues",
+        "electrical problems", "plumbing issues", "pest infestation",
+        "structural damage", "hvac problems", "window damage", "door issues"
+    ]
+    
+    return nlp, issues
+
+def fuzzy_extract_issues(text, nlp, issues, threshold=80):
+    doc = nlp(text)
+    matches = []
+    
+    for token in doc:
+        for issue in issues:
+            ratio = fuzz.partial_ratio(token.text.lower(), issue.lower())
+            if ratio >= threshold:
+                start = token.i
+                end = start + len(issue.split())
+                span = doc[start:end]
+                matches.append((span, issue, ratio))
+    
+    # Sort matches by ratio (highest first) and remove overlaps
+    matches.sort(key=lambda x: x[2], reverse=True)
+    final_matches = []
+    for match in matches:
+        if not any(match[0].overlap(m[0]) for m in final_matches):
+            final_matches.append(match)
+    
+    # Add matches as entities to the doc
+    for span, issue, _ in final_matches:
+        doc.ents = list(doc.ents) + [Span(doc, span.start, span.end, label="PROPERTY_ISSUE")]
+    
+    return [(ent.text, ent.label_, issues[min(range(len(issues)), key=lambda i: fuzz.ratio(ent.text.lower(), issues[i].lower()))]) for ent in doc.ents]
+
+def process_comments(comments, threshold=80):
+    nlp, issues = load_model_and_create_issue_list()
+    results = []
+    
+    for comment in comments:
+        extracted_issues = fuzzy_extract_issues(comment, nlp, issues, threshold)
+        results.append({"comment": comment, "issues": extracted_issues})
+    
+    return results
+
+# Example usage
+comments = [
+    "The roof is leaking badly near the chimney.",
+    "Found mold groth in the basement due to poor ventilation.",
+    "The windows in the living room show signs of watter damage.",
+    "Noticed some cracks in the fondation on the north side of the house.",
+    "The HVAC sistem is making strange noises and not cooling effectively.",
+    "Electrical wiring looks outdated and could be a potential hazard."
+]
+
+results = process_comments(comments)
+
+for result in results:
+    print(f"Comment: {result['comment']}")
+    print("Detected issues:")
+    for issue in result['issues']:
+        print(f"  - Detected: '{issue[0]}', Label: {issue[1]}, Matched to: '{issue[2]}'")
+    print()
 
 
 
 
-
-
+----------------------------------
 
 import spacy
 from spacy.matcher import PhraseMatcher
