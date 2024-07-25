@@ -1,3 +1,76 @@
+
+
+
+
+
+
+
+
+
+
+
+import spacy
+from spacy.matcher import PhraseMatcher
+from spacy.tokens import Span
+
+def load_model_and_create_matcher():
+    # Load the pre-trained English model
+    nlp = spacy.load("en_core_web_sm")
+    
+    # Create a PhraseMatcher
+    matcher = PhraseMatcher(nlp.vocab, attr="LOWER")
+    
+    # Define patterns for property issues
+    patterns = [
+        "roof leak", "water damage", "mold", "cracks", "foundation issues",
+        "electrical problems", "plumbing issues", "pest infestation",
+        "structural damage", "hvac problems", "window damage", "door issues"
+    ]
+    
+    # Add patterns to the matcher
+    patterns = [nlp.make_doc(text) for text in patterns]
+    matcher.add("PROPERTY_ISSUE", patterns)
+    
+    return nlp, matcher
+
+def extract_issues(text, nlp, matcher):
+    doc = nlp(text)
+    matches = matcher(doc)
+    
+    for match_id, start, end in matches:
+        span = Span(doc, start, end, label="PROPERTY_ISSUE")
+        doc.ents = list(doc.ents) + [span]
+    
+    return [(ent.text, ent.label_) for ent in doc.ents]
+
+def process_comments(comments):
+    nlp, matcher = load_model_and_create_matcher()
+    results = []
+    
+    for comment in comments:
+        issues = extract_issues(comment, nlp, matcher)
+        results.append({"comment": comment, "issues": issues})
+    
+    return results
+
+# Example usage
+comments = [
+    "The roof is leaking badly near the chimney.",
+    "Found mold growth in the basement due to poor ventilation.",
+    "The windows in the living room show signs of water damage.",
+    "Noticed some cracks in the foundation on the north side of the house.",
+    "The HVAC system is making strange noises and not cooling effectively."
+]
+
+results = process_comments(comments)
+
+for result in results:
+    print(f"Comment: {result['comment']}")
+    print("Detected issues:", result['issues'])
+    print()
+-------------------------------------
+
+
 pca_category_issues = {
     "Curb Appeal": {
         "Comparison to Neighborhood": ["Appearance disparity with neighboring properties", "Negative neighborhood influences"],
