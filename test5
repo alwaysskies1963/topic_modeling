@@ -1,0 +1,28 @@
+def chunk_list(lst, chunk_size):
+    # Split the list into chunks of size chunk_size
+    for i in range(0, len(lst), chunk_size):
+        yield lst[i:i + chunk_size]
+
+# Sample lists of objects
+list1 = [obj1, obj2, obj3, obj4, obj5, obj6, obj7]  # Replace with your actual objects
+list2 = [objA, objB, objC, objD, objE, objF, objG]  # Replace with your actual objects
+
+# Desired chunk size
+chunk_size = 5
+
+# Chunk both lists
+chunks1 = list(chunk_list(list1, chunk_size))
+chunks2 = list(chunk_list(list2, chunk_size))
+
+# Print or process the chunks as needed
+for chunk1, chunk2 in zip(chunks1, chunks2):
+    print("Chunk from list1:", chunk1)
+    print("Chunk from list2:", chunk2)
+
+# If the lists are not of equal length, handle remaining chunks
+if len(chunks1) > len(chunks2):
+    for chunk in chunks1[len(chunks2):]:
+        print("Remaining chunk from list1:", chunk)
+elif len(chunks2) > len(chunks1):
+    for chunk in chunks2[len(chunks1):]:
+        print("Remaining chunk from list2:", chunk)
