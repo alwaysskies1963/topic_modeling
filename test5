@@ -1,3 +1,55 @@
+
+import matplotlib.pyplot as plt
+from PIL import Image
+import math
+
+def display_images_from_paths(image_paths):
+    """
+    Reads and displays images from a list of file paths in an optimized grid layout.
+
+    Parameters:
+    - image_paths (list): A list of image file paths.
+
+    Returns:
+    - None
+    """
+    # Load the images and determine their sizes
+    images = [Image.open(path) for path in image_paths]
+    sizes = [img.size for img in images]  # (width, height) for each image
+
+    # Determine the maximum width and height among all images
+    max_width = max(width for width, height in sizes)
+    max_height = max(height for width, height in sizes)
+
+    # Determine the number of images
+    num_images = len(images)
+
+    # Calculate the optimal number of rows and columns
+    cols = math.ceil(math.sqrt(num_images))
+    rows = math.ceil(num_images / cols)
+
+    # Create a figure with subplots
+    fig, axes = plt.subplots(rows, cols, figsize=(cols * (max_width / 100), rows * (max_height / 100)))
+    axes = axes.flatten()  # Flatten the axes array for easy iteration
+
+    # Loop over the images and plot each one
+    for i, img in enumerate(images):
+        axes[i].imshow(img)
+        axes[i].axis('off')  # Hide the axes
+
+    # Hide any remaining empty subplots
+    for j in range(i + 1, len(axes)):
+        axes[j].axis('off')
+
+    # Display the images
+    plt.tight_layout()
+    plt.show()
+----------------------------------------------
+
+
+
+
+
 import matplotlib.pyplot as plt
 import math
 
