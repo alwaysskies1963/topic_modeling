@@ -1,3 +1,67 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Example DataFrame
+data = {
+    'property_part': ['A', 'B', 'C', 'A', 'B', 'C', 'A', 'B', 'C'],
+    'year_built': [1900, 1980, 1995, 1920, 1960, 2000, 1885, 1990, 2020],
+    'inspector_rating': [5, 4, 3, 2, 1, 5, 4, 3, 2],
+    'model_rating': [4, 4, 5, 2, 1, 3, 5, 2, 3]
+}
+df = pd.DataFrame(data)
+
+# Step 1: Create bins for year_built
+bins = [1885, 1950, 1990, 2023]
+labels = ['1885-1950', '1951-1990', '1991-2023']
+df['year_built_bin'] = pd.cut(df['year_built'], bins=bins, labels=labels)
+
+# Step 2: Calculate the inconsistency (absolute difference between ratings)
+df['rating_difference'] = abs(df['inspector_rating'] - df['model_rating'])
+
+# Step 3: Create a binary column indicating if ratings are inconsistent (difference > 0)
+df['inconsistent'] = df['rating_difference'] > 0
+
+# Step 4: Group by year_built_bin and calculate the percentage of inconsistencies
+inconsistency_rate = df.groupby('year_built_bin')['inconsistent'].mean() * 100
+
+# Step 5: Plot the inconsistency rates
+plt.figure(figsize=(8, 6))
+sns.barplot(x=inconsistency_rate.index, y=inconsistency_rate.values, palette="viridis")
+plt.title('Inconsistency Rates between Inspector and Model Ratings by Year Built Bins')
+plt.xlabel('Year Built Bins')
+plt.ylabel('Inconsistency Rate (%)')
+plt.ylim(0, 100)
+plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def convert_none_to_empty(d):
     if isinstance(d, dict):
         return {k: convert_none_to_empty(v) for k, v in d.items()}
