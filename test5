@@ -38,6 +38,60 @@ plt.show()
 
 
 
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Example DataFrame
+data = {
+    'property_part': ['A', 'B', 'C', 'A', 'B', 'C', 'A', 'B', 'C'],
+    'year_built': [1900, 1980, 1995, 1920, 1960, 2000, 1885, 1990, 2020],
+    'inspector_rating': [5, 4, 3, 2, 1, 5, 4, 3, 2],
+    'model_rating': [4, 4, 5, 2, 1, 3, 5, 2, 3]
+}
+df = pd.DataFrame(data)
+
+# Step 1: Create bins for year_built
+bins = [1885, 1950, 1990, 2023]
+labels = ['1885-1950', '1951-1990', '1991-2023']
+df['year_built_bin'] = pd.cut(df['year_built'], bins=bins, labels=labels)
+
+# Step 2: Calculate the inconsistency (absolute difference between ratings)
+df['rating_difference'] = abs(df['inspector_rating'] - df['model_rating'])
+
+# Step 3: Create a binary column indicating if ratings are inconsistent (difference > 0)
+df['inconsistent'] = df['rating_difference'] > 0
+
+# Step 4: Create the secondary variable for property risk (True if model_rating > inspector_rating)
+df['property_risk_higher'] = df['model_rating'] > df['inspector_rating']
+
+# Step 5: Group by year_built_bin and calculate the percentage of inconsistencies
+inconsistency_rate = df.groupby('year_built_bin')['inconsistent'].mean() * 100
+
+# Step 6: Group by year_built_bin and calculate the percentage of properties with higher risk based on model_rating
+risk_higher_rate = df.groupby('year_built_bin')['property_risk_higher'].mean() * 100
+
+# Step 7: Plot the inconsistency rates
+plt.figure(figsize=(12, 6))
+
+# Plot inconsistency rates
+plt.subplot(1, 2, 1)
+sns.barplot(x=inconsistency_rate.index, y=inconsistency_rate.values, palette="viridis")
+plt.title('Inconsistency Rates by Year Built Bins')
+plt.xlabel('Year Built Bins')
+plt.ylabel('Inconsistency Rate (%)')
+plt.ylim(0, 100)
+
+# Plot property risk higher rates
+plt.subplot(1, 2, 2)
+sns.barplot(x=risk_higher_rate.index, y=risk_higher_rate.values, palette="coolwarm")
+plt.title('Higher Property Risk (Model Rating > Inspector Rating) by Year Built Bins')
+plt.xlabel('Year Built Bins')
+plt.ylabel('Higher Property Risk Rate (%)')
+plt.ylim(0, 100)
+
+plt.tight_layout()
+plt.show()
 
 
 
