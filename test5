@@ -89,7 +89,9 @@ plt.title('Higher Property Risk (Model Rating > Inspector Rating) by Year Built 
 plt.xlabel('Year Built Bins')
 plt.ylabel('Higher Property Risk Rate (%)')
 plt.ylim(0, 100)
-
+# Add labels inside the bars
+for i, value in enumerate(risk_higher_rate.values):
+    barplot2.text(i, value - 5, f'{value:.1f}%', color='white', ha='center')
 plt.tight_layout()
 plt.show()
 
