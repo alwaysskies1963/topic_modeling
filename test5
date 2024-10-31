@@ -1,3 +1,27 @@
+def chunk_dict(data, chunk_size):
+    """
+    Divides a dictionary into smaller dictionaries of a given chunk size.
+
+    Parameters:
+    data (dict): The original dictionary to divide.
+    chunk_size (int): The maximum number of items each chunk should contain.
+
+    Returns:
+    list: A list of dictionaries, each containing up to `chunk_size` items.
+    """
+    it = iter(data.items())
+    return [dict(list(data_chunk)) for data_chunk in iter(lambda: list(itertools.islice(it, chunk_size)), [])]
+
+
+
+
+
+
+
+
+
+
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
