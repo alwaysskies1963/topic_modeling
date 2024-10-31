@@ -1,3 +1,40 @@
+import re
+import pandas as pd
+import ast
+
+def text_to_dataframe(text):
+    # Step 1: Remove extra whitespace
+    cleaned_text = ' '.join(text.split())
+    
+    # Step 2: Extract the list of dictionaries using regular expression
+    match = re.search(r'\[(.*?)\]', cleaned_text)
+    if match:
+        list_of_dicts_text = match.group(0)  # Extracts the list part with brackets
+        
+        # Step 3: Safely evaluate the list of dictionaries
+        try:
+            list_of_dicts = ast.literal_eval(list_of_dicts_text)
+            if isinstance(list_of_dicts, list):
+                # Step 4: Convert to DataFrame
+                df = pd.DataFrame(list_of_dicts)
+                return df
+            else:
+                print("Error: Extracted data is not a list.")
+                return None
+        except (SyntaxError, ValueError) as e:
+            print(f"Error parsing dictionaries: {e}")
+            return None
+    else:
+        print("Error: No list of dictionaries found in text.")
+        return None
+
+
+
+
+
+
+
+
 def chunk_dict(data, chunk_size):
     """
     Divides a dictionary into smaller dictionaries of a given chunk size.
